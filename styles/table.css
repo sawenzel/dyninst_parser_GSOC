@@ -1,0 +1,91 @@
+.reviews {
+    margin: 30px 0;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    color: #606C81;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.reviews td, .reviews th {
+    font-size: 1em;
+}
+
+td.rating {
+    font-size: 1.5em;
+    padding: 2% 2.5% 2% 2.5%;
+    width: 6%;
+    min-width: 40px;
+}
+
+td.content {
+    padding: 10px 10px 10px 10px;
+    overflow: hidden;
+}
+
+td.date {
+    padding: 20px 20px 20px 30px;
+    font-size: 1.1em;
+    width: 15%;
+}
+
+.reviews tr.odd td {
+    background-color: #F3F4F6;
+}
+
+.reviews tr.even td {
+    background-color: #E8EAED;
+}
+
+div.bgColor1 {
+    background-color: #FE0006;
+}
+
+div.bgColor2 {
+    background-color: #FF8C00;
+}
+
+div.bgColor3 {
+    background-color: #FFD300;
+}
+
+div.bgColor4 {
+    background-color: #B8E701;
+}
+
+div.bgColor5 {
+    background-color: #00EA0F;
+}
+
+td.color1 {
+    color: #DC4128;
+}
+
+td.color2 {
+    color: #EF6C00;
+}
+
+td.color3 {
+    color: #FFC431;
+}
+
+td.color4 {
+    color: #91C848;
+}
+
+td.color5 {
+    color: #00A851;
+}
+
+.content-title {
+    color: #16429B;
+    font-weight: bold;
+}
+
+span.content-glyphicon {
+    color: #0233BD;
+}
+
+div.popover {
+    font-size: 0.85em;
+}

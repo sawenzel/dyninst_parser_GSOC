@@ -1,0 +1,63 @@
+<style>
+ul{
+  list-style-type: none;
+  margin-left: -20px;
+}
+*{
+  font-family: Courier;
+}
+</style>
+
+<div style="float:left">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <th colspan="2">
+        <pagination total-items="tableItems.length" ng-model="currentPage" max-size="5"
+        boundary-links="true"
+        items-per-page="numPerPage" class="pagination-sm" style="margin: 0px !important;">
+      </pagination>
+      <!--search box-->
+      <form ng-submit="filterTableData()">
+        <input type="text" ng-model="textFilter" placeholder="search" ng-change="checkFilterEmpty()">
+      </form>
+    </th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="entry in tableItems | filter : paginate track by $index">
+      <td style="width:1px">
+        {{entry.address}}
+      </td>
+      <td>
+        <a class="clickable" ng-click="setAssembly(entry.name)">{{entry.name}}</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div ng-show="selectedFunction" class="panel panel-default" style="float:left; background: #F5F5F5; margin-left: 10px">
+  <div class="panel-heading">{{selectedFunction}}</div>
+  <div class="panel-body">
+    <ul>
+      <div style="font-family: Courier">
+        <li ng-repeat="line in assembly">
+          {{line.address}} : <code class="language-assembly" lang="assembly">{{line.name}}</code>
+          <span ng-click="setAssembly2(line.dest)" class="clickable label label-primary" ng-show="line.dest">({{line.dest}})</span>
+        </li>
+      </div>
+    </ul>
+  </div>
+</div>
+
+<div ng-show="selectedFunction2" class="panel panel-default" style="float:left; background: #F5F5F5; margin-left: 10px">
+  <div class="panel-heading">{{selectedFunction2}}</div>
+  <div class="panel-body">
+    <ul>
+      <div style="font-family: Courier">
+        <li ng-repeat="line in assembly2">
+          {{line.address}} : <code class="language-assembly" lang="assembly">{{line.name}}</code> <span class="label label-primary" ng-show="line.dest">({{line.dest}})</span>
+        </li>
+      </div>
+    </ul>
+  </div>
+</div>
