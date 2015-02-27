@@ -17,9 +17,7 @@ ul{
         items-per-page="numPerPage" class="pagination-sm" style="margin: 0px !important;">
       </pagination>
       <!--search box-->
-      <form ng-submit="filterTableData()">
-        <input type="text" ng-model="textFilter" placeholder="search" ng-change="checkFilterEmpty()">
-      </form>
+        <input type="text" ng-change="filterTableData()" ng-model="textFilter" placeholder="search" ng-change="checkFilterEmpty()">
     </th>
   </thead>
   <tbody>
