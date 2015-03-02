@@ -30,6 +30,6 @@ int main(int argc, char *argv[]){
 	auto fit = all.begin();
 	for(int i=0; fit != all.end(); ++fit, i++){
 		Function *f = *fit;
-		cout << "address: " << hex << f->addr() << ", name: " << f->name() << endl;
+		cout << "{address: \"" << hex << f->addr() << "\", name: \"" << f->name() << "\"}," << endl;
 	}
 }
