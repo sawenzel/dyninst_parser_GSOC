@@ -13,5 +13,5 @@ Copy boost directory where libdyninst was installed:
 
 3.libelf, libdwarf:  
 ```sudo apt-get install libelf-dev```   
-Build libdwarf from sources and copy the dynamic library libdwarf.so in /usr/lib:    
+Build libdwarf from sources and copy the dynamic library libdwarf.so (/dwarf-20130207/libdwarf/libdwarf.so) in /usr/lib:    
 http://askubuntu.com/questions/502749/install-libdwarf-so-on-ubuntu
