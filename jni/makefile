@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 all: headers compile_functions run
-=======
-all: headers compile_assembly run
->>>>>>> 8f10ac99db74586898296fd32dd941bfc1b11adf
 headers: Parser.java
 	javac Parser.java
 	javah -jni Parser
@@ -17,8 +13,4 @@ compile_assembly: get_assembly.cc
 run:
 	java -Djava.library.path=. Parser
 clean:
-<<<<<<< HEAD
-	rm -f *.0 *.so Parser.h Parser.class
-=======
-	rm -f *.0 *.so
->>>>>>> 8f10ac99db74586898296fd32dd941bfc1b11adf
+	rm -f *.o *.so Parser.class Parser.h
