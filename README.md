@@ -2,7 +2,7 @@
 gsoc 2015
 
 1.libdyninst:  
-Installing libdyninst and libdyninst-dev 8.1:  
+Installing libdyninst and libdyninst-dev 8.1.2:  
 http://www.dyninst.org/downloads/dyninst-8.x  
 
 2.boost:  
