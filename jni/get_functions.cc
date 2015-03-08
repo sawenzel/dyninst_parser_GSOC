@@ -1,11 +1,9 @@
-#include <jni.h>
-#include "hello.h"
-#include <stdio.h>
-#include <map>
-#include <vector>
-#include <unordered_map>
-#include <sstream>
-#include <memory>
+#include<stdio.h>
+#include<map>
+#include<vector>
+#include<unordered_map>
+#include<sstream>
+#include<memory>
 #include "CodeObject.h"
 #include "CFG.h"
 
@@ -13,18 +11,13 @@ using namespace std;
 using namespace Dyninst;
 using namespace ParseAPI;
 
-JNIEXPORT void JNICALL Java_hello_sayHello
-	(JNIEnv * env, jobject obj, jstring javaString)
-{
-	char *nativeString = (char*) (env)->GetStringUTFChars(javaString, 0);
-	printf("\nI'M ALIVE!!: parsing %s...\n", nativeString);
-
+int main(int argc, char *argv[]){
 	vector<Function *> funcs;
 	SymtabCodeSource *sts;
 	CodeObject *co;
 	CodeRegion *cr;
 
-	sts = new SymtabCodeSource(nativeString);
+	sts = new SymtabCodeSource(argv[1]);
 	co = new CodeObject(sts);
 
 	//parse the binary given as a command line arg
