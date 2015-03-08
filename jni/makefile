@@ -1,14 +1,16 @@
-all: headers compile run
-functions:
-	gcc -std=c++0x get_functions.cc -o parser -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -L/usr/include/dwarf.h -ldwarf
-headers:
-	javac hello.java
-	javah -jni hello
-compile:
-	#g++ -fPIC -I /usr/lib/jvm/java-7-openjdk-amd64/include/ -c hello.c
-	#g++ -shared hello.o -o libhello.so
-	g++ -fPIC -std=c++0x -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -c hello.c -L/usr/include/dwarf.h -ldwarf
+all: headers compile_functions run
+headers: Parser.java
+	javac Parser.java
+	javah -jni Parser
+compile_functions: get_functions.cc
+	g++ -fPIC -std=c++0x -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -c get_functions.cc -L/usr/include/dwarf.h -ldwarf
 	#-lparseAPI to resolve mangled c++ naming
-	g++ -shared hello.o -o libhello.so -lparseAPI
+	g++ -shared get_functions.o -o libdyninstParser.so -lparseAPI
+compile_assembly: get_assembly.cc
+	g++ -fPIC -std=c++0x -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -c get_assembly.cc -L/usr/include/dwarf.h -ldwarf
+	#-lparseAPI to resolve mangled c++ naming
+	g++ -shared get_assembly.o -o libdyninstParser.so -lparseAPI
 run:
-	java -Djava.library.path=. hello
+	java -Djava.library.path=. Parser
+clean:
+	rm -f *.0 *.so Parser.h Parser.class
