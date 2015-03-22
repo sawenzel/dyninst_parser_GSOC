@@ -28,8 +28,9 @@ int main(int argc, char *argv[]){
 	for(int i=0; fit != all.end(); ++fit, i++){
 		Function *f = *fit;
 
-		if(strcmp(f->name().c_str(), "func3") != 0 && strcmp(f->name().c_str(), "func2") != 0 && strcmp(f->name().c_str(), "func1") != 0 && strcmp(f->name().c_str(), "main") != 0)
+		if(strcmp(f->name().c_str(), "func1") != 0 && strcmp(f->name().c_str(), "func2") != 0 && strcmp(f->name().c_str(), "func3") != 0 && strcmp(f->name().c_str(), "main") != 0 && strcmp(f->name().c_str(), "printf") != 0)
 			continue;
+
 		cout << "\t subgraph cluster_" << i
 			<< " { \n\t\t label=\""
 			<< f->name()

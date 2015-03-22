@@ -1,12 +1,24 @@
 #include<stdio.h>
 
-int funct(int x){
-	if(x == 3)
-		return 0;
-	else return 1 + funct(x-1);
+void func1(int *x){
+	*x = 0;
 }
 
-int main(int argc, char *argv[]){
-	printf("%d", funct(5));
-	return funct(3);
+int func2(int x){
+	return x * 2;
+}
+
+int func3(int x){
+	if(x == 0)
+		return 0;
+	else
+		return func2(x);
+}
+
+int main(void){
+	int x = 1;
+	printf("%d ", func3(x));
+	func1(&x);
+	printf("%d ", func3(x));
+	return 0;
 }
