@@ -6,7 +6,6 @@
  .controller('GraphCtrl', function ($rootScope, $scope) {
  	$rootScope.currentController = 'graph';
 
- 	$scope.list = ["i", "like", "turltes"];
  	$scope.source = [
  	{address: "400564", instr: "push RBP, RSP"},
  	{address: "400565", instr: "mov RBP, RSP"},
@@ -25,5 +24,4 @@
  	{address: "40058e", instr: "leave "},
  	{address: "40058f", instr: "ret near [RSP]"}
  	];
-
 });

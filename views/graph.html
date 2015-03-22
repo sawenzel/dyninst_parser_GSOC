@@ -15,81 +15,83 @@
   </style>
 
   <p><textarea id="input">
-   digraph G {
+digraph G {
+   subgraph cluster_1 { 
+     label="printf"; 
+     color=blue;
+    "400410" [shape=box]
+    "400410" [label = "printf\n400410"];
+    "400410";
+  }
+  "400410" -> "ffffffffffffffff"
+
    subgraph cluster_9 { 
-   label="func1"; 
-   color=blue;
-   "40052d" [shape=box]
-   "40052d" [label = "func1\n40052d"];
-   "40052d";
- }
- "40052d" -> "ffffffffffffffff" [color=green]
- "40052d" -> "40057f" [color=green]
- "40052d" -> "400551" [color=green]
- "40052d" -> "4005bd" [color=green]
+     label="func1"; 
+     color=blue;
+    "40052d" [shape=box]
+    "40052d" [label = "func1\n40052d"];
+    "40052d";
+  }
+  "40052d" -> "ffffffffffffffff" [color=green]
+  "40052d" -> "4005a9" [color=green]
 
- subgraph cluster_10 { 
- label="func2"; 
- color=blue;
- "40053c" [shape=box]
- "40053c" [label = "func2\n40053c"];
- "40053c";
- "400551";
- "400562";
-}
-"40053c" -> "40052d" [color=blue]
-"40053c" -> "400551"
-"400551" -> "400410" [color=blue]
-"400551" -> "400562"
-"400562" -> "ffffffffffffffff" [color=green]
-"400562" -> "4005d8" [color=green]
+   subgraph cluster_10 { 
+     label="func2"; 
+     color=blue;
+    "400541" [shape=box]
+    "400541" [label = "func2\n400541"];
+    "400541";
+  }
+  "400541" -> "ffffffffffffffff" [color=green]
+  "400541" -> "400571" [color=green]
 
-subgraph cluster_11 { 
-label="func3"; 
-color=blue;
-"400564" [shape=box]
-"400564" [label = "func3\n400564"];
-"400564";
-"400575";
-"40057f";
-"400581";
-"40058e";
-}
-"400564" -> "400581"
-"400564" -> "400575"
-"400575" -> "40052d" [color=blue]
-"400575" -> "40057f"
-"40057f" -> "40058e"
-"400581" -> "400564" [color=blue]
-"400581" -> "40058e"
-"40058e" -> "ffffffffffffffff" [color=green]
-"40058e" -> "40058e" [color=green]
+   subgraph cluster_11 { 
+     label="func3"; 
+     color=blue;
+    "40054f" [shape=box]
+    "40054f" [label = "func3\n40054f"];
+    "40054f";
+    "400560";
+    "400567";
+    "400571";
+  }
+  "40054f" -> "400567"
+  "40054f" -> "400560"
+  "400560" -> "400571"
+  "400567" -> "400541" [color=blue]
+  "400567" -> "400571"
+  "400571" -> "ffffffffffffffff" [color=green]
+  "400571" -> "40058c" [color=green]
+  "400571" -> "4005b3" [color=green]
 
-subgraph cluster_12 { 
-label="main"; 
-color=blue;
-"400590" [shape=box]
-"400590" [label = "main\n400590"];
-"400590";
-"4005b3";
-"4005bd";
-"4005ce";
-"4005d8";
-"4005ec";
-}
-"400590" -> "400410" [color=blue]
-"400590" -> "4005b3"
-"4005b3" -> "40052d" [color=blue]
-"4005b3" -> "4005bd"
-"4005bd" -> "400410" [color=blue]
-"4005bd" -> "4005ce"
-"4005ce" -> "40053c" [color=blue]
-"4005ce" -> "4005d8"
-"4005d8" -> "400410" [color=blue]
-"4005d8" -> "4005ec"
-"4005ec" -> "ffffffffffffffff" [color=green]
+   subgraph cluster_12 { 
+     label="main"; 
+     color=blue;
+    "400573" [shape=box]
+    "400573" [label = "main\n400573"];
+    "400573";
+    "40058c";
+    "40059d";
+    "4005a1";
+    "4005a9";
+    "4005b3";
+    "4005c4";
+  }
+  "400573" -> "40054f" [color=blue]
+  "400573" -> "40058c"
+  "40058c" -> "400410" [color=blue]
+  "40058c" -> "40059d"
+  "40059d" -> "4005a1"
+  "4005a1" -> "40052d" [color=blue]
+  "4005a1" -> "4005a9"
+  "4005a9" -> "40054f" [color=blue]
+  "4005a9" -> "4005b3"
+  "4005b3" -> "400410" [color=blue]
+  "4005b3" -> "4005c4"
+  "4005c4" -> "ffffffffffffffff" [color=green]
 
 }
+
 </textarea></p>
 
 <p><button id="generate" class="btn btn-default">Generate</button></p>
