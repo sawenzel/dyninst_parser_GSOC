@@ -1,0 +1,148 @@
+<style>
+ul{
+  list-style-type: none;
+  margin-left: -20px;
+}
+*{
+  font-family: Courier;
+}
+
+#input {
+  width: 500px;
+  height: 300px;
+}
+</style>
+
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+
+  <style type="text/css">
+
+  h2 {
+    margin: 0.5em 0 0.1em;
+    text-align: center;
+  }
+  .top {
+    text-align: center;
+  }
+  .textInput {
+    display: block;
+    width: 30%;
+    float: left;
+    margin:0px 30px;
+  }
+  textarea {
+    width:300px;
+    height:600px;
+  }
+  label:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .spacer {
+    margin-left: 10px;
+  }
+  .viewType {
+    font-size: 16px;
+    clear: both;
+    text-align: center;
+    padding: 1em;
+  }
+  #diffoutput {
+    width: 100%;
+  }
+  </style>
+
+  <script type="text/javascript">
+
+  function diffUsingJS(viewType) {
+    "use strict";
+    var byId = function (id) { return document.getElementById(id); },
+    base = difflib.stringAsLines(byId("baseText").value),
+    newtxt = difflib.stringAsLines(byId("newText").value),
+    sm = new difflib.SequenceMatcher(base, newtxt),
+    opcodes = sm.get_opcodes(),
+    diffoutputdiv = byId("diffoutput"),
+    contextSize = byId("contextSize").value;
+
+    diffoutputdiv.innerHTML = "";
+    contextSize = contextSize || null;
+
+    diffoutputdiv.appendChild(diffview.buildView({
+      baseTextLines: base,
+      newTextLines: newtxt,
+      opcodes: opcodes,
+      baseTextName: "Function 1",
+      newTextName: "Function 2",
+      contextSize: contextSize,
+      viewType: viewType
+    }));
+  }
+  </script>
+</head>
+
+<body>
+
+  <h2>Select two functions and choose diff method</h2>
+  <br>
+  <br>
+  <br>
+  <div style="float:left">
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <th>
+          <pagination total-items="tableItems.length" ng-model="currentPage" max-size="5"
+          boundary-links="true"
+          items-per-page="numPerPage" class="pagination-sm" style="margin: 0px !important;">
+        </pagination>
+        <!--search box-->
+        <br>      
+        <input type="text" ng-change="filterTableData()" ng-model="textFilter" placeholder="search" ng-change="checkFilterEmpty()">
+      </th>
+      <th>
+        Diff
+      </th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="entry in tableItems | filter : paginate track by $index">
+        <td class="clickable" ng-click="switchDiff(entry)">
+          <span>{{entry.name}}</span>
+        </td>
+        <td class="clickable" ng-click="switchDiff(entry)">
+         <input class="clickable" type="checkbox" ng-checked="diffFunctions.indexOf(entry.name) > -1" ng-click="switchDiff(entry)">
+       </td>
+     </tr>
+   </tbody>
+ </table>
+</div>
+
+<div style="float:right">
+  <div class="top" style="text-align:center; width:100%">
+    <strong>Context size (optional):</strong>
+    <input type="text" id="contextSize" value=""/>
+  </div>
+  <br>
+  <div>
+    <div style="display: inline-block; margin: 0 20px">
+      <h4 style="color:#0000FF">{{diffFunctions[0]}}</h4>
+      <textarea ng-model="text1" id="baseText"></textarea>
+    </div>
+    <div style="display: inline-block; margin: 0 20px">
+      <h4 style="color:#0000FF">{{diffFunctions[1]}}</h4>
+      <textarea ng-model="text2" id="newText"></textarea>
+    </div>
+  </div>
+  <div class="viewType top">
+    <button type="button" class="btn btn-success" name="_viewtype" id="sidebyside" onclick="diffUsingJS(0);"> <label for="sidebyside">Side by Side Diff</label></button>
+    <button type="button" class="btn btn-success" name="_viewtype" id="inline" onclick="diffUsingJS(1);"> <label for="inline">Inline Diff</label></button>
+  </div>
+  <div id="diffoutput"></div>
+</body>
+</html>
+</div>
+
+<!-- by https://github.com/cemerick/jsdifflib#diff-js -->

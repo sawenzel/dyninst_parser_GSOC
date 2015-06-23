@@ -141,17 +141,18 @@ h4 {
 }
 
 input[type=checkbox] {
-    display: none;
+    /*display: none;*/
+    transform: scale(1.5);
 }
 
 input[type=checkbox] + label {
-    background: url('../images/checkbox_unchecked.png') no-repeat;
+    /*background: url('../images/checkbox_unchecked.png') no-repeat;*/
     height: 25px;
     padding: 0 0 0 25px;
 }
 
 input[type=checkbox]:checked + label {
-    background: url('../images/checkbox_checked.png') no-repeat;
+    /*background: url('../images/checkbox_checked.png') no-repeat;*/
     height: 25px;
     padding: 0 0 0 25px;
 }
@@ -162,14 +163,12 @@ input[type=radio] {
 }
 
 input[type=radio] + label {
-    background: url('../images/radio_unchecked.png') no-repeat;
     height: 25px;
     padding: 0 0 0 22px;
     margin-right: 15px;
 }
 
 input[type=radio]:checked + label {
-    background: url('../images/radio_checked.png') no-repeat;
     height: 25px;
     padding: 0 0 0 22px;
     margin-right: 15px;

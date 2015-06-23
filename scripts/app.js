@@ -23,5 +23,6 @@ angular
             $routeProvider.
                 when('/graph', {templateUrl: 'views/graph.html', controller: 'GraphCtrl'}).
                 when('/asm', {templateUrl: 'views/asm.html', controller: 'AsmCtrl'}).
+                when('/diff', {templateUrl: 'views/diff.html', controller: 'DiffCtrl'}).
                 otherwise({redirectTo: '/asm'});
         }]);

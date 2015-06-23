@@ -3,8 +3,9 @@
  * Created by mindroc on 10/8/14.
  */
  angular.module('candyUiApp')
- .controller('AsmCtrl', function ($rootScope, $scope) {
- 	$rootScope.currentController = 'asm';
+ .controller('DiffCtrl', function ($rootScope, $scope) {
+ 	$rootScope.currentController = 'diff';
+
 
  	$scope.source = [
  	{address: "4003e0", name: "_init"},
@@ -28,6 +29,8 @@
 
  	$scope.tableItems = $scope.source;
 
+
+
  	$scope.assemblyDict = {	
  		"_init" : [
  		{address:"4003e0", name: "sub RSP, 8"},
@@ -38,7 +41,7 @@
  		{address:"4003f5", name: "add RSP, 8"},
  		{address:"4003f9", name: "ret near [RSP]"},
  		],
-
+ 		
  		"printf" : [
  		{address:"400410", name: "jmp [RIP + 200c02]"},
  		{address:"400416", name: "push 0, RSP"},
@@ -71,7 +74,7 @@
  		{address:"400485", name: "pop RBP, RSP"},
  		{address:"400486", name: "ret near [RSP]"},
  		],
-
+ 		
  		"__libc_start_main" : [
  		{address:"400420", name: "jmp [RIP + 200bfa]"},
  		{address:"400426", name: "push 1, RSP"},
@@ -101,7 +104,7 @@
  		{address:"400485", name: "pop RBP, RSP"},
  		{address:"400486", name: "ret near [RSP]"},
  		],
-
+ 		
  		"__gmon_start__" : [
  		{address:"400430", name: "jmp [RIP + 200bf2]"},
  		{address:"400436", name: "push 2, RSP"},
@@ -128,7 +131,7 @@
  		{address:"400485", name: "pop RBP, RSP"},
  		{address:"400486", name: "ret near [RSP]"},
  		],
-
+ 		
  		"_start" : [
  		{address:"400440", name: "xor EBP, EBP"},
  		{address:"400442", name: "mov R9, RDX"},
@@ -152,7 +155,7 @@
  		{address:"400485", name: "pop RBP, RSP"},
  		{address:"400486", name: "ret near [RSP]"},
  		],
-
+ 		
  		"deregister_tm_clones" : [
  		{address:"400470", name: "mov RAX, 601047"},
  		{address:"400475", name: "push RBP, RSP"},
@@ -163,7 +166,7 @@
  		{address:"400485", name: "pop RBP, RSP"},
  		{address:"400486", name: "ret near [RSP]"},
  		],
-
+ 		
  		"register_tm_clones" : [
  		{address:"4004a0", name: "mov RAX, 601040"},
  		{address:"4004a5", name: "push RBP, RSP"},
@@ -178,7 +181,7 @@
  		{address:"4004c2", name: "pop RBP, RSP"},
  		{address:"4004c3", name: "ret near [RSP]"},
  		],
-
+ 		
  		"__do_global_dtors_aux" : [
  		{address:"4004e0", name: "cmp [RIP + 200b59], 0"},
  		{address:"4004e7", name: "jnz 11 + RIP + 2"},
@@ -189,7 +192,7 @@
  		{address:"4004f3", name: "mov [RIP + 200b46], 1"},
  		{address:"4004fa", name: "REP ret near [RSP]"},
  		],
-
+ 		
  		"frame_dummy" : [
  		{address:"400500", name: "cmp [RIP + 200918], 0"},
  		{address:"400508", name: "jz 1e + RIP + 2"},
@@ -212,7 +215,7 @@
  		{address:"40053f", name: "pop RBP, RSP"},
  		{address:"400540", name: "ret near [RSP]"},
  		],
-
+ 		
  		"func1" : [
  		{address:"40052d", name: "push RBP, RSP"},
  		{address:"40052e", name: "mov RBP, RSP"},
@@ -222,7 +225,7 @@
  		{address:"40053f", name: "pop RBP, RSP"},
  		{address:"400540", name: "ret near [RSP]"},
  		],
-
+ 		
  		"func2" : [
  		{address:"400541", name: "push RBP, RSP"},
  		{address:"400542", name: "mov RBP, RSP"},
@@ -232,7 +235,7 @@
  		{address:"40054d", name: "pop RBP, RSP"},
  		{address:"40054e", name: "ret near [RSP]"},
  		],
-
+ 		
  		"func3" : [
  		{address:"40054f", name: "push RBP, RSP"},
  		{address:"400550", name: "mov RBP, RSP"},
@@ -248,7 +251,7 @@
  		{address:"400571", name: "leave "},
  		{address:"400572", name: "ret near [RSP]"},
  		],
-
+ 		
  		"main" : [
  		{address:"400573", name: "push RBP, RSP"},
  		{address:"400574", name: "mov RBP, RSP"},
@@ -275,7 +278,7 @@
  		{address:"4005c9", name: "leave "},
  		{address:"4005ca", name: "ret near [RSP]"},
  		],
-
+ 		
  		"__libc_csu_init" : [
  		{address:"4005d0", name: "push R15, RSP"},
  		{address:"4005d2", name: "mov R15, EDI"},
@@ -312,11 +315,11 @@
  		{address:"400632", name: "pop R15, RSP"},
  		{address:"400634", name: "ret near [RSP]"},
  		],
-
+ 		
  		"__libc_csu_fini" : [
  		{address:"400640", name: "REP ret near [RSP]"},
  		],
-
+ 		
  		"_fini" : [
  		{address:"400644", name: "sub RSP, 8"},
  		{address:"400648", name: "add RSP, 8"},
@@ -324,8 +327,49 @@
  		],
  	}	
 
+ 	$scope.text1 = "";
+ 	$scope.text2 = "";
+
+ 	$scope.diffFunctions = [];
+
+ 	$scope.switchDiff = function(entry) {
+ 		var index = $scope.diffFunctions.indexOf(entry.name);
+ 		if(index == -1)
+ 			$scope.diffFunctions.push(entry.name);
+ 		else{
+ 			$scope.diffFunctions.splice(index, 1);
+ 		}
+
+ 		if($scope.diffFunctions.length > 2)
+ 			$scope.diffFunctions.shift();
+ 	 		
+ 		$scope.fillForms();
+ 	}
+
+ 	$scope.fillForms = function(func1, func2){
+ 		$scope.text1 = "";
+ 		$scope.text2 = "";
+
+ 		func1 = $scope.diffFunctions[0];
+ 		func2 = $scope.diffFunctions[1];
+
+ 		for(var key in $scope.assemblyDict[func1]){
+ 			var obj = $scope.assemblyDict[func1][key];
+ 			$scope.text1 += obj["name"] + "\n";
+ 		}
+ 		for(var key in $scope.assemblyDict[func2]){
+ 			var obj = $scope.assemblyDict[func2][key];
+ 			$scope.text2 += obj["name"] + "\n";
+ 		}
+ 	}
+
+ 	angular.element(document).ready(function () {
+ 		
+ 	});
+
  	$scope.numPerPage = 20;
  	$scope.currentPage = 1;
+
 
  	$scope.paginate = function (value) {
  		var begin, end, index;
