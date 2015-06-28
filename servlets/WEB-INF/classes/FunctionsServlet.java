@@ -1,0 +1,115 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
+
+import com.google.gson.Gson;
+
+public class FunctionsServlet extends HttpServlet {
+	private native String parse(String fileName);
+
+	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-functions/";
+
+	static {
+		System.loadLibrary("dyninstParser");
+	}
+
+	class Instr {
+		String address, name;
+
+		public Instr(String address, String name) {
+			this.address = address;
+			this.name = name;
+		}
+	}
+
+	private ArrayList<Instr> result;
+
+	private static String getMd5(String path) throws IOException {
+		FileInputStream fis = new FileInputStream(new File(path));
+		String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
+		fis.close();
+
+		return md5;
+	}
+
+	private static Boolean isFunctionCached(String fileName) {
+		File cacheDir = new File(cacheDirPath);
+		String[] cachedBinaries = cacheDir.list();
+
+		for (String s : cachedBinaries) {
+			if (s.compareTo(fileName) == 0) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static void printFile(String path) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+		String line;
+		while ((line = br.readLine()) != null) {
+			System.out.println(line);
+		}
+		br.close();
+	}
+
+	private static String getFunctions(String fileName) throws IOException {
+		// if the functions are not cached, parse them and save them to cache
+		if (isFunctionCached(fileName) == false) {
+			String binaryPath = binaryDirPath + fileName;
+
+			String content;
+			try {
+				content = new FunctionsServlet().parse(binaryPath);
+				FileUtils.writeStringToFile(new File(cacheDirPath + fileName),
+						content);
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		// return the cached result
+		return FileUtils.readFileToString(new File(cacheDirPath + fileName));
+	}
+
+	public static void main(String[] args) throws IOException {
+		String fileName = "one-function";
+
+		System.out.println(getFunctions(fileName));
+	}
+
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// Set response content type
+		response.setContentType("application/json");
+
+		response.getWriter().println(
+				getFunctions(request.getParameter("filename")));
+	}
+}
