@@ -3,30 +3,31 @@
  * Created by mindroc on 10/8/14.
  */
  angular.module('candyUiApp')
- .controller('AsmCtrl', function ($rootScope, $scope) {
+ .controller('AsmCtrl', function ($rootScope, $scope, $http) {
  	$rootScope.currentController = 'asm';
 
- 	$scope.source = [
- 	{address: "4003e0", name: "_init"},
- 	{address: "400410", name: "printf"},
- 	{address: "400420", name: "__libc_start_main"},
- 	{address: "400430", name: "__gmon_start__"},
- 	{address: "400440", name: "_start"},
- 	{address: "400470", name: "deregister_tm_clones"},
- 	{address: "4004a0", name: "register_tm_clones"},
- 	{address: "4004e0", name: "__do_global_dtors_aux"},
- 	{address: "400500", name: "frame_dummy"},
- 	{address: "40052d", name: "func1"},
- 	{address: "400541", name: "func2"},
- 	{address: "40054f", name: "func3"},
- 	{address: "400573", name: "main"},
- 	{address: "4005d0", name: "__libc_csu_init"},
- 	{address: "400640", name: "__libc_csu_fini"},
- 	{address: "400644", name: "_fini"},
- 	]
+ 	$scope.files_mapping = "/api/files";
 
+ 	$scope.init = function(){
+	    $http.get($scope.files_mapping).success(function (data) {
+		    $scope.filesList = data;
+		    $scope.source = data;
+	    });
+ 	}
 
- 	$scope.tableItems = $scope.source;
+ 	$scope.filesList = [];
+
+ 	$scope.init();
+
+ 	$scope.functions_mapping = "/api/functions";
+
+ 	$scope.setFunctions = function(fileName){
+ 		$http.get($scope.functions_mapping, { params:{filename:fileName} }).success(function (data) {
+		    $scope.functionsList = data;
+			$scope.source = data;
+			$scope.textFilter = "";
+	    });
+ 	}
 
  	$scope.assemblyDict = {	
  		"_init" : [
@@ -327,11 +328,11 @@
  	$scope.numPerPage = 20;
  	$scope.currentPage = 1;
 
- 	$scope.paginate = function (value) {
+ 	$scope.paginate = function(value){
  		var begin, end, index;
  		begin = ($scope.currentPage - 1) * $scope.numPerPage;
  		end = begin + $scope.numPerPage;
- 		index = $scope.tableItems.indexOf(value);
+ 		index = $scope.functionsList.indexOf(value);
  		return (begin <= index && index < end);
  	};
 
@@ -348,16 +349,16 @@
 
  	$scope.checkFilterEmpty = function(){
  		if($scope.textFilter.length == 0)
- 			$scope.tableItems = $scope.source;
+ 			$scope.functionsList = $scope.source;
  	};
 
  	$scope.filterTableData = function(){
- 		$scope.tableItems = $scope.source.filter(
+ 		$scope.functionsList = $scope.functionsList.filter(
  			function(a){
  				var name = a.name.toLowerCase();
  				var address = a.address.toLowerCase();
  				return (name.indexOf($scope.textFilter.toLowerCase()) > -1 || address.indexOf($scope.textFilter.toLowerCase()) > -1);
  			}
- 			);
+ 		);
  	};
- });
+});
