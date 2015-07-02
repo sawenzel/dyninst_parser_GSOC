@@ -140,6 +140,22 @@ h4 {
     cursor: hand;
 }
 
+.callInstruction {
+    color: #0064AB;
+    font-weight: bold;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.callInstructionNotClickable {
+    color: #0064AB;
+    font-weight: bold;
+}
+
+.jmpInstruction {
+    color: #007702;
+}
+
 input[type=checkbox] {
     /*display: none;*/
     transform: scale(1.5);

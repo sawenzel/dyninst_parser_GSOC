@@ -33,4 +33,5 @@ angular.module('candyUiApp')
                 $location.path(url || '/');
             }
         };
+
     });
