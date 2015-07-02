@@ -46,4 +46,14 @@
 		<servlet-name>Files</servlet-name>
 		<url-pattern>/api/files</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Assembly</servlet-name>
+		<servlet-class>AssemblyServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Assembly</servlet-name>
+		<url-pattern>/api/assembly</url-pattern>
+	</servlet-mapping>
 </web-app>

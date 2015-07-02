@@ -13,10 +13,10 @@ extern "C" {
 #define FunctionsServlet_serialVersionUID 1LL
 /*
  * Class:     FunctionsServlet
- * Method:    parse
+ * Method:    getFunctionsJni
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_FunctionsServlet_parse
+JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
   (JNIEnv *, jobject, jstring);
 
 #ifdef __cplusplus

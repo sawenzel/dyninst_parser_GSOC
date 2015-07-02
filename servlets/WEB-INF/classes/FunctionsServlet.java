@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.Gson;
 
 public class FunctionsServlet extends HttpServlet {
-	private native String parse(String fileName);
+	private native String getFunctionsJni(String fileName);
 
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
 	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-functions/";
@@ -32,17 +32,7 @@ public class FunctionsServlet extends HttpServlet {
 		System.loadLibrary("dyninstParser");
 	}
 
-	class Instr {
-		String address, name;
-
-		public Instr(String address, String name) {
-			this.address = address;
-			this.name = name;
-		}
-	}
-
-	private ArrayList<Instr> result;
-
+	/*
 	private static String getMd5(String path) throws IOException {
 		FileInputStream fis = new FileInputStream(new File(path));
 		String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
@@ -50,6 +40,7 @@ public class FunctionsServlet extends HttpServlet {
 
 		return md5;
 	}
+	*/
 
 	private static Boolean isFunctionCached(String fileName) {
 		File cacheDir = new File(cacheDirPath);
@@ -64,15 +55,6 @@ public class FunctionsServlet extends HttpServlet {
 		return false;
 	}
 
-	private static void printFile(String path) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
-		br.close();
-	}
-
 	private static String getFunctions(String fileName) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
 		if (isFunctionCached(fileName) == false) {
@@ -80,7 +62,7 @@ public class FunctionsServlet extends HttpServlet {
 
 			String content;
 			try {
-				content = new FunctionsServlet().parse(binaryPath);
+				content = new FunctionsServlet().getFunctionsJni(binaryPath);
 				FileUtils.writeStringToFile(new File(cacheDirPath + fileName),
 						content);
 			} catch (Exception e) {
@@ -93,14 +75,9 @@ public class FunctionsServlet extends HttpServlet {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String fileName = "one-function";
+		String fileName = "three-functions";
 
 		System.out.println(getFunctions(fileName));
-	}
-
-	@Override
-	public void init() throws ServletException {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
