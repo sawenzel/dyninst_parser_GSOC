@@ -17,8 +17,13 @@ import com.google.gson.reflect.TypeToken;
 public class AssemblyServlet extends HttpServlet {
 	private native String getAssemblyJni(String fileName);
 
-	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-assembly/";
+	//local:
+	//private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	//private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-assembly/";
+
+	//gsoc1:
+	private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	private static String cacheDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-assembly/";
 
 	static {
 		System.loadLibrary("dyninstParser");
@@ -74,15 +79,11 @@ public class AssemblyServlet extends HttpServlet {
 		String fileName = args[0];
 		getAssembly(fileName);
 
-//		String s = FileUtils.readFileToString(new File(cacheDirPath + fileName));
-//
 		Gson gson = new Gson();
 		Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
 		Map<String,String> map = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
 		
 		System.out.println(map.get("_init"));
-		
-//		System.out.println(map);		
 	}
 
 	@Override
