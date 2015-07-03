@@ -50,6 +50,9 @@ public class FunctionsServlet extends HttpServlet {
 		File cacheDir = new File(cacheDirPath);
 		String[] cachedBinaries = cacheDir.list();
 
+		if(cachedBinaries == null)
+			return false;
+		
 		for (String s : cachedBinaries) {
 			if (s.compareTo(fileName) == 0) {
 				return true;
