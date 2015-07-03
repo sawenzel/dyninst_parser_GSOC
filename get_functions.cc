@@ -6,6 +6,7 @@
 #include<memory>
 #include "CodeObject.h"
 #include "CFG.h"
+#include "Symtab.h"
 
 using namespace std;
 using namespace Dyninst;
@@ -17,8 +18,20 @@ int main(int argc, char *argv[]){
 	CodeObject *co;
 	CodeRegion *cr;
 
+	SymtabAPI::Symtab *symTab;
+	std::string fileName(argv[1]);
+	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileName);
+
+	if(isParsable == false){
+		cout << "file can not be parsed";
+		return -1;
+	}
+
 	sts = new SymtabCodeSource(argv[1]);
+	if(sts == NULL)
+		return -1;
 	co = new CodeObject(sts);
+
 
 	//parse the binary given as a command line arg
 	co->parse();

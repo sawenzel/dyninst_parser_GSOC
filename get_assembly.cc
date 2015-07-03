@@ -21,6 +21,15 @@ int main(int argc, char *argv[]){
 	CodeRegion *cr;
 	Instruction::Ptr instr;
 
+	SymtabAPI::Symtab *symTab;
+	std::string fileName(argv[1]);
+	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileName);
+
+	if(isParsable == false){
+		cout<< "file can not be parsed";
+		return -1;
+	}
+
 	sts = new SymtabCodeSource(argv[1]);
 	co = new CodeObject(sts);
 
