@@ -16,6 +16,7 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngTouch',
+        'googlechart',
         'ui.bootstrap'
     ])
     .config(['$routeProvider',
@@ -25,4 +26,10 @@ angular
                 when('/asm', {templateUrl: 'views/asm.html', controller: 'AsmCtrl'}).
                 when('/diff', {templateUrl: 'views/diff.html', controller: 'DiffCtrl'}).
                 otherwise({redirectTo: '/asm'});
-        }]);
+        }]).value('googleChartApiConfig', {
+        version: '1',
+        optionalSettings: {
+            packages: ['corechart'],
+            language: 'en'
+        }
+    });

@@ -1,0 +1,27 @@
+<div class="modal-header">
+	<h4 class="modal-title">Stats for <b>{{functionName}}</b> in <b>{{fileName}}</b></h4>
+</div>
+
+<div class="modal-body">
+	Mov instructions: {{movCounter}}
+	<br>
+	Logic instructions: {{logicCounter}}
+	<br>
+	Arithmetic instructions: {{arithmeticCounter}}
+	<br>
+	Branch instructions: {{branchCounter}}
+	<br>
+	Push instructions: {{pushCounter}}
+	<br>
+	Pop instructions: {{popCounter}}
+	<br>
+	Call instructions: {{callCounter}}
+	<br>
+	Other: {{otherCounter}}
+
+    <div google-chart chart="chart"></div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-success" ng-click="exit()">OK</button>
+</div>
