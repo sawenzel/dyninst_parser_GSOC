@@ -11,12 +11,8 @@
  	$scope.filesEndpoint = "/api/files";
  	$scope.assemblyEndpoint = "/api/assembly";
 
- 	//$scope.selectedFile = "";
- 	$scope.selectedFile = "three-functions";
- 	
- 	//$scope.selectedFunction = "";
- 	$scope.selectedFunction = "printf";
-
+ 	$scope.selectedFile = "";
+ 	$scope.selectedFunction = "";
  	$scope.selectedFunction2 = "";
  	$scope.selectedFunction3 = "";
 
@@ -89,22 +85,19 @@
  				},
  				assemblyEndpoint: function() {
  					return $scope.assemblyEndpoint;
+ 				},
+ 				prevFunction: function(){
+ 					return undefined;
  				}
  			}
  		});
  	};
-
-
 
  	$scope.init = function(){
  		$http.get($scope.filesEndpoint).success(function (data) {
  			$scope.filesList = data;
  			$scope.source = data;
  		});
-
- 		// $scope.setFile($scope.selectedFile);
- 		// $scope.setFunction($scope.selectedFunction);
- 		$scope.openStatsModal();
  	}
 
  	$scope.init();

@@ -37,7 +37,7 @@ ul{
         <div>
           <!--search box-->      
           <input type="text" ng-change="filterTableData()" ng-model="textFilter" placeholder="search">
-          <span style="color: #868686">Showing <span style="color: #428BCA">{{functionsList.length}}</span> functions</span>
+          <span style="color: #868686">Showing <span style="color: black; font-size: 15px; font-weight: bolder">{{functionsList.length}}</span> functions</span>
         </div>
       </div>
     </th>
@@ -55,8 +55,13 @@ ul{
 </table>
 </div>
 
-<div ng-click="openStatsModal()" ng-show="selectedFunction" class="panel panel-default assemblylisting">
-  <div class="panel-heading boldText">{{selectedFunction}} <span title="Histogram" ng-click="openStatsModal()" style="float:right" class="glyphicon glyphicon-stats clickable"/></div>
+<div ng-show="selectedFunction" class="panel panel-default assemblylisting">
+  <div class="panel-heading boldText">{{selectedFunction}} 
+    <a class="clickable" style ="float:right" ng-click="openStatsModal()">
+      Histogram
+      <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
+    </a>
+  </div>
   <div class="panel-body" style="max-height: 85vh; overflow: auto">
     <ul>
       <li ng-repeat="line in currentAssembly">

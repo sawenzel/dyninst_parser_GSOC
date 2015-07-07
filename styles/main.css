@@ -14,6 +14,7 @@ body {
 
 .app-modal-window .modal-dialog {
     width: 1000px;
+    height: 1000px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

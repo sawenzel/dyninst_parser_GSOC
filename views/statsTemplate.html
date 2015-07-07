@@ -1,30 +1,38 @@
-<div google-chart chart="branchChart" on-ready="setToolTipChart()" style="display: none"></div>
-<div google-chart chart="logicChart" on-ready="setToolTipChart()" style="display: none"></div>
-<div google-chart chart="arithmeticChart" on-ready="setToolTipChart()" style="display: none"></div>
+<div google-chart chart="branchChart" on-ready="setToolTipChartPNG()" style="display: none"></div>
+<div google-chart chart="logicChart" on-ready="setToolTipChartPNG()" style="display: none"></div>
+<div google-chart chart="arithmeticChart" on-ready="setToolTipChartPNG()" style="display: none"></div>
+<div google-chart chart="otherChart" on-ready="setToolTipChartPNG()" style="display: none"></div>
 
 <div class="modal-header">
 	<h4 class="modal-title">Stats for <b>{{functionName}}</b> in <b>{{fileName}}</b></h4>
 </div>
 
 <div class="modal-body">
-	Mov instructions: {{movCounter}}
+	Total instructions: {{allInstrs.length}}
 	<br>
-	Logic instructions: {{logicCounter}} - {{logicTypeCount}}
 	<br>
-	Arithmetic instructions: {{arithmeticCounter}} - {{arithmeticTypeCount}}
-	<br>
-	Branch instructions: {{branchCounter}} - {{branchTypeCount}}
-	<br>
-	Push instructions: {{pushCounter}}
-	<br>
-	Pop instructions: {{popCounter}}
-	<br>
-	Call instructions: {{callCounter}}
-	<br>
-	Other: {{otherCounter}}
-    <div google-chart chart="mainChart" on-ready="mainChartReady()"></div>
+	<div ng-show="callDestinations.length != 0">
+		Calls:
+		<ol>
+			<li ng-repeat="line in callDestinations">
+				<code>{{line.name}}</code>
+				<span class="glyphicon glyphicon-arrow-right"/>
+				<code ng-click="exit(); openStatsModal(line.dest)" class="callInstruction">{{line.dest}}</code>
+			</li>
+		</ol>
+	</div>
+	<div style="text-align: center" ng-show="mainChartReady == false">
+		<br>
+		<br>
+		<br>
+		Loading chart ...
+	</div>
+	<div google-chart on-ready="mainChartReady=true" chart="mainChart" style="width: 100%; height: 400px"></div>
 </div>
-
 <div class="modal-footer">
 	<button class="btn btn-success" ng-click="exit()">OK</button>
+	<a style="margin-top: 10px;float:left" ng-show="prevFunction != undefined" class="clickable" ng-click="exit(); openStatsModal(prevFunction)">
+      Back to {{prevFunction}}
+      <span class="badge"><span class="glyphicon glyphicon-chevron-up clickable"></span></span>
+    </a>
 </div>
