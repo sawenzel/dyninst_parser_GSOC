@@ -4,6 +4,7 @@
  */
  angular.module('candyUiApp')
  .controller('AsmCtrl', function ($rootScope, $scope, $http, $modal, $log) {
+ 	$rootScope.imageURI = {};
  	$rootScope.currentController = 'asm';
 
  	$scope.functionsEndpoint = "/api/functions";
@@ -78,6 +79,7 @@
  			animation: $scope.animationsEnabled,
  			templateUrl: 'views/statsTemplate.html',
  			controller: 'statsCtrl',
+ 			windowClass: 'app-modal-window',
  			resolve: {
  				functionName: function () {
  					return $scope.selectedFunction;
@@ -117,9 +119,9 @@
  	$scope.getCodeStyle = function(instr){
  		if(instr.indexOf("call") == 0)
  			if(instr.indexOf("RIP") == -1)
- 				return 'callInstructionNotClickable';
+ 				return 'callInstructionNotClickable boldText';
  			else
- 				return 'callInstruction';
+ 				return 'callInstruction boldText';
  			if(instr.indexOf("j") == 0)
  				return 'jmpInstruction';
  		}

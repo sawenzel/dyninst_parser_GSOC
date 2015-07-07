@@ -6,6 +6,16 @@ body {
     overflow-y: scroll;
 }
 
+.assemblylisting {
+    float:left;
+    background: #F5F5F5;
+    min-width: 350px;
+}
+
+.app-modal-window .modal-dialog {
+    width: 1000px;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
@@ -140,16 +150,18 @@ h4 {
     cursor: hand;
 }
 
+.boldText {
+    font-weight: bold;
+}
+
 .callInstruction {
     color: #0064AB;
-    font-weight: bold;
     cursor: pointer;
     cursor: hand;
 }
 
 .callInstructionNotClickable {
     color: #0064AB;
-    font-weight: bold;
 }
 
 .jmpInstruction {

@@ -1,3 +1,7 @@
+<div google-chart chart="branchChart" on-ready="setToolTipChart()" style="display: none"></div>
+<div google-chart chart="logicChart" on-ready="setToolTipChart()" style="display: none"></div>
+<div google-chart chart="arithmeticChart" on-ready="setToolTipChart()" style="display: none"></div>
+
 <div class="modal-header">
 	<h4 class="modal-title">Stats for <b>{{functionName}}</b> in <b>{{fileName}}</b></h4>
 </div>
@@ -5,11 +9,11 @@
 <div class="modal-body">
 	Mov instructions: {{movCounter}}
 	<br>
-	Logic instructions: {{logicCounter}}
+	Logic instructions: {{logicCounter}} - {{logicTypeCount}}
 	<br>
-	Arithmetic instructions: {{arithmeticCounter}}
+	Arithmetic instructions: {{arithmeticCounter}} - {{arithmeticTypeCount}}
 	<br>
-	Branch instructions: {{branchCounter}}
+	Branch instructions: {{branchCounter}} - {{branchTypeCount}}
 	<br>
 	Push instructions: {{pushCounter}}
 	<br>
@@ -18,8 +22,7 @@
 	Call instructions: {{callCounter}}
 	<br>
 	Other: {{otherCounter}}
-
-    <div google-chart chart="chart"></div>
+    <div google-chart chart="mainChart" on-ready="mainChartReady()"></div>
 </div>
 
 <div class="modal-footer">

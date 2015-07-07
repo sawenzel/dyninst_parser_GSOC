@@ -92,6 +92,7 @@
                     /* Watches, to refresh the chart when its data, formatters, options, or type change.
                      All other values intentionally disregarded to avoid double calls to the draw
                      function. Please avoid making changes to these objects directly from this directive.*/
+
                     $scope.$watch(function () {
                         if ($scope.chart) {
                             return {
@@ -99,7 +100,7 @@
                                 formatters: $scope.chart.formatters,
                                 options: $scope.chart.options,
                                 type: $scope.chart.type,
-                                customFormatters: $scope.chart.customFormatters
+                                customFormatters: $scope.chart.customFormatters,
                             };
                         }
                         return $scope.chart;
@@ -187,6 +188,7 @@
                                     $scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
 
                                     google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
+                                        $rootScope.imageURI[$scope.chart.name] = $scope.chartWrapper.getChart().getImageURI();
                                         $scope.chart.displayed = true;
                                         $scope.$apply(function (scope) {
                                             scope.onReady({ chartWrapper: scope.chartWrapper });
@@ -194,10 +196,12 @@
                                             $scope.chartWrapper.getChart().setSelection($scope.chart.data.selectedItems);
                                         });
                                     });
+
                                     google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
                                         console.log("Chart not displayed due to error: " + err.message + ". Full error object follows.");
                                         console.log(err);
                                     });
+                                    
                                     google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
                                         var selectedItems = $scope.chartWrapper.getChart().getSelection();
                                         $scope.$apply(function () {

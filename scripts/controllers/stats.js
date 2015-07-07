@@ -1,122 +1,106 @@
  angular.module('candyUiApp')
- .controller('statsCtrl', function ($scope, $modalInstance, $http, functionName, fileName, assemblyEndpoint) {
+ .controller('statsCtrl', function ($rootScope, $scope, $modalInstance, $http, functionName, fileName, assemblyEndpoint) {
 
  	$scope.functionName = functionName;
  	$scope.fileName = fileName;
  	$scope.assemblyEndpoint = assemblyEndpoint;
  	$scope.currentAssembly = {};
 
- 	branchType = ['jmp', 'jz', 'jnz', 'je', 'jne'];
- 	logicType = ['and', 'or', 'xor'];
- 	arithmeticType = ['add', 'mul', 'div', 'sub'];
+ 	$scope.instrTypes = {
+ 		'mov' : ['mov'],
+ 		'logic' : ['and', 'or', 'xor'],
+ 		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne'],
+ 		'arithmetic' : ['add', 'mul', 'div', 'sub'],
+ 		'push' : ['push'],
+ 		'pop' : ['pop'],
+ 		'call' : ['call'],
+ 	};
 
  	$scope.exit = function () {
  		$modalInstance.close();
  	};
 
- 	isBranchType = function(instrName) {
- 		for (i in branchType) {
- 			if (instrName.startsWith(branchType[i])){
- 				return true;
+ 	getInstrCount = function(instrArray, typeToCount){
+ 		result = [];
+ 		for (t in $scope.instrTypes[typeToCount]){
+ 			result[t] = 0;
+	 		for (i in instrArray){
+ 				if(instrArray[i].startsWith($scope.instrTypes[typeToCount][t])){
+ 					result[t]++;
+ 				}
+ 			}	
+ 		}
+
+ 		return result;
+ 	}
+
+ 	getInstrType = function(instrName){
+ 		for (key in $scope.instrTypes){
+ 			for(type in $scope.instrTypes[key]){
+ 				var crtType = $scope.instrTypes[key][type];
+				if(instrName.startsWith(crtType))
+ 					return key;
  			}
  		}
- 		return false;
- 	};
 
- 	isLogicType = function(instrName) {
- 		for (i in logicType) {
- 			if (instrName.startsWith(logicType[i]))
- 				return true;
- 		}
- 		return false;
- 	};
+ 		return 'other';
+ 	}
 
- 	isArithmeticType = function(instrName) {
- 		for (i in arithmeticType) {
- 			if (instrName.startsWith(arithmeticType[i]))
- 				return true;
- 		}
- 		return false;
- 	};
+ 	$scope.mainChart = {};
+ 	$scope.mainChart.name = "mainChart";
+ 	$scope.mainChart.type = "BarChart";
 
- 	isMovType = function(instrName) {
- 		return instrName.startsWith('mov');
- 	};
-
- 	isPushType = function(instrName) {
- 		return instrName.startsWith('push');
- 	};
-
- 	isPopType = function(instrName) {
- 		return instrName.startsWith('pop');
- 	};
-
- 	isCallType = function(instrName) {
- 		return instrName.startsWith('call');
- 	};
-
-
- 	var chart1 = {};
- 	chart1.type = "BarChart";
- 	chart1.displayed = false;
-
- 	chart1.data = {
+ 	$scope.mainChart.data = {
  		"cols": [
- 			{id: "instruction-type", type: "string"},
+ 			{id: "instr-type", type: "string"},
  			{id: "count", type: "number"},
+ 			{role: "tooltip", type: "string", p: {'html': true}},
+ 			{role: "annotation", type:"string"}
  			],
  		"rows": []
  	};
 
- 	chart1.options = {
- 		displayAnnotationsFilter: true,
- 		displayLegendValues: false,
- 		displayLegendDots: false,
+ 	$scope.mainChart.options = {
  		legend: {
  			position: 'none'
  		},
- 		lineWidth: 1,
- 		selectionMode: 'multiple',
- 		interpolateNulls: true,
- 		colors: ['#428BCA'],
-
- 		explorer: {
- 			keepInBounds: true,
- 			// axis: 'horizontal',
- 			// maxZoomIn: 0.2,
- 			// zoomDelta: 1.1
+ 		tooltip: {
+ 			ignoreBounds: true,
+ 			isHtml: true
  		},
+ 		colors: ['#428BCA'],
  		vAxis: {
- 			viewWindow: {
- 				// max: 5.2,
- 				min: 0
- 			}
+ 			viewWindowMode: "pretty"
  		},
  		hAxis: {
- 			viewWindowMode: "pretty",
- 			gridlines: {count: 2},
- 			maxTextLines: 3,
- 			slantedText: false,
- 			minTextSpacing: 50,
- 			maxAlternation: 1
+			scaleType: "mirrorLog",
  		},
- 		annotations: {
- 			textStyle: {
- 				fontSize: 12
- 			}
- 		},
- 		chartArea: {
- 			left: 20,
- 			top: 50,
- 			width: '100%',
- 			height: '70%'
- 		}
  	};
 
- 	$scope.chart = chart1;
+ 	$scope.mainChart.data.rows=[];
 
+ 	setChartOptions = function(chart){
+ 			chart.options = {
+ 				legend: {
+ 					position: 'none'
+ 				},
+ 				colors: ['#428BCA'],
+ 				hAxis: {
+					scaleType: "mirrorLog",
+ 				},
+ 			}
+ 	}
 
- 	$scope.getInstructions = function(){
+ 	setMainChartData = function(instrType){
+		$scope.mainChart.data.rows.push({c: [
+			{v: instrType},
+            {v: $scope.instTypeCount[instrType]},
+            {},
+            {v: $scope.instTypeCount[instrType]},
+        ]});
+ 	}
+
+ 	$scope.getinstrs = function(){
  		var fileName = $scope.fileName;
  		var functionName = $scope.functionName;
 
@@ -127,60 +111,130 @@
  				return a['name'];
  			});
  			
- 			$scope.movCounter = namesList.filter(isMovType).length;
- 			$scope.logicCounter = namesList.filter(isLogicType).length;
- 			$scope.branchCounter = namesList.filter(isBranchType).length;
- 			$scope.arithmeticCounter = namesList.filter(isArithmeticType).length;
- 			$scope.pushCounter = namesList.filter(isPushType).length;
- 			$scope.popCounter = namesList.filter(isPopType).length;
- 			$scope.callCounter = namesList.filter(isCallType).length;
+ 			$scope.instTypeCount = {};
+ 			for (i in $scope.instrTypes){
+ 				$scope.instTypeCount[i] = namesList.filter(function(x){return (getInstrType(x) == i)}).length;
+				setMainChartData(i);
+   	 		}
 
- 			$scope.otherCounter = namesList.length - $scope.movCounter - $scope.logicCounter - $scope.branchCounter - $scope.arithmeticCounter - $scope.pushCounter -$scope.popCounter - $scope.callCounter;
+   	 		var otherInstrCount = namesList.length;
+   	 		for(i in $scope.instTypeCount){
+   	 			otherInstrCount -= $scope.instTypeCount[i];
+   	 		}
+
+   	 		//add 'other' count
+   	 		$scope.mainChart.data.rows.push({c: [
+				{v: 'other'},
+            	{v: otherInstrCount},
+            	{},
+            	{v: otherInstrCount},
+        	]});
+
+			$scope.branchTypeCount = getInstrCount(namesList, 'branch');
+			$scope.arithmeticTypeCount = getInstrCount(namesList, 'arithmetic');
+			$scope.logicTypeCount = getInstrCount(namesList, 'logic');
+
+			console.log($scope.arithmeticTypeCount);
+
+ 			$scope.branchChart = {};
+ 			$scope.branchChart.name = "branchChart";
+ 			$scope.branchChart.type = "BarChart";
+
+ 			$scope.branchChart.data = {
+	 			"cols": [
+ 					{id: "instr-type", type: "string"},
+ 					{id: "count", type: "number"},
+ 					{role: "annotation", type: "string"}
+ 				],
+	 			"rows": []
+ 			};
+
+ 			$scope.logicChart = {};
+ 			$scope.logicChart.name = "logicChart";
+ 			$scope.logicChart.type = "BarChart";
+
+ 			$scope.logicChart.data = {
+	 			"cols": [
+ 					{id: "instr-type", type: "string"},
+ 					{id: "count", type: "number"},
+ 					{role: "annotation", type: "string"}
+ 				],
+	 			"rows": []
+ 			};
+ 			
+ 			$scope.arithmeticChart = {};
+ 			$scope.arithmeticChart.name = "arithmeticChart";
+ 			$scope.arithmeticChart.type = "BarChart";
+
+ 			$scope.arithmeticChart.data = {
+	 			"cols": [
+ 					{id: "instr-type", type: "string"},
+ 					{id: "count", type: "number"},
+ 					{role: "annotation", type: "string"}
+ 				],
+	 			"rows": []
+ 			};
+
+ 			setChartOptions($scope.branchChart);
+ 			setChartOptions($scope.logicChart);
+ 			setChartOptions($scope.arithmeticChart);
 
 
- 			// $scope.chart.data.rows.length = 0;
- 			// $scope.chart.data.cols[1].label = $scope.functionName;
+ 			var it = 0;
+ 			for (i in $scope.instrTypes['logic']){
+ 				$scope.logicChart.data.rows.push({c: [
+					{v: $scope.instrTypes['logic'][i]},
+	                {v: getInstrCount(namesList, 'logic')[it]},
+	                {v: getInstrCount(namesList, 'logic')[it]},
+            	]});
+            	it++;
+ 			}
 
+ 			it = 0;
+ 			for (i in $scope.instrTypes['branch']){
+ 				$scope.branchChart.data.rows.push({c: [
+					{v: $scope.instrTypes['branch'][i]},
+	                {v: getInstrCount(namesList, 'branch')[it]},
+	                {v: getInstrCount(namesList, 'branch')[it]},
+            	]});
+            	it++;
+ 			}
 
-			$scope.chart.data.rows.push({c: [
-				{v: "mov"},
-                {v: $scope.movCounter}
-            ]});
-
-			$scope.chart.data.rows.push({c: [
-				{v: "logic"},
-                {v: $scope.logicCounter}
-            ]});
-
-			$scope.chart.data.rows.push({c: [
-				{v: "branch"},
-                {v: $scope.branchCounter}
-            ]});
-
-			$scope.chart.data.rows.push({c: [
-				{v: "arithmetic"},
-                {v: $scope.arithmeticCounter}
-            ]});
-
-			$scope.chart.data.rows.push({c: [
-				{v: "push"},
-                {v: $scope.pushCounter}
-            ]});
-
-			$scope.chart.data.rows.push({c: [
-				{v: "pop"},
-                {v: $scope.popCounter}
-            ]});
-
-			$scope.chart.data.rows.push({c: [
-				{v: "call"},
-                {v: $scope.callCounter}
-            ]});
-
+ 			it = 0;
+ 			for (i in $scope.instrTypes['arithmetic']){
+ 				$scope.arithmeticChart.data.rows.push({c: [
+					{v: $scope.instrTypes['arithmetic'][i]},
+	                {v: getInstrCount(namesList, 'arithmetic')[it]},
+	                {v: getInstrCount(namesList, 'arithmetic')[it]},
+            	]});
+            	it++;
+ 			}
  		});
  	};
 
- 	$scope.getInstructions();
+ 	$scope.mainChartReady = function(){
+ 	}
+
+ 	getHtmlTooltip = function(tooltipName, title){
+ 		return '<div class="modal-header"><h4 class="modal-title">' +
+ 			title +
+ 			'</h4></div><div class="modal-body"><img src="' +
+ 			$rootScope.imageURI[tooltipName] + '"></div>';
+ 	}
+
+ 	$scope.setToolTipChart = function(){
+ 		$scope.mainChart.data.rows[1].c[2] = {v: getHtmlTooltip('logicChart', 'logic instructions distribution')};
+ 		$scope.mainChart.data.rows[2].c[2] = {v: getHtmlTooltip('branchChart', 'branch instructions distribution')};
+ 		$scope.mainChart.data.rows[3].c[2] = {v: getHtmlTooltip('arithmeticChart', 'arithmetic instructions distribution')};
+ 		// console.log($rootScope.imageURI);
+		// $scope.mainChart.data.rows[0].c[2] = '<img src="' + $rootScope.imageURI + '">';
+ 	}
+
+ 	$scope.mainChartBefore = function(){
+ 		// console.log("before");
+ 	}
+
+ 	$scope.getinstrs();
 
  	// $scope.cancel = function () {
  	// 	$modalInstance.dismiss('cancel');
