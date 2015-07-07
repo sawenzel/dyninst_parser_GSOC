@@ -21,7 +21,11 @@
  	$scope.filesList = [];
  	$scope.functionsList = [];
  	$scope.assemblyDict = {};
- 	
+
+ 	$scope.checkSizeToFilterData = function(){
+ 		if($scope.functionsList.length < 1000)
+ 			$scope.filterTableData();
+ 	}
 
  	$scope.setFile = function(fileName){
  		$scope.selectedFile = fileName;
@@ -29,6 +33,7 @@
  			$scope.functionsList = data;
  			$scope.source = data;
  			$scope.textFilter = "";
+ 			$scope.autoCompleteValues = data.map(function(x){return x['name']});
  		});
  		$scope.selectedFunction = "";
  		$scope.selectedFunction2 = "";
@@ -153,14 +158,12 @@
  						var name = a.name.toLowerCase();
  						var address = a.address.toLowerCase();
  						try {
- 						//valid regex
- 						var regex = new RegExp(textFilter);
- 						return regex.test(name);
- 					} catch (e) {
- 						return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1);	
+ 							var regex = new RegExp(textFilter);
+ 							return regex.test(name);
+ 						} catch (e) {
+ 							return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1);	
+ 						}
  					}
- 					//return (name.indexOf($scope.textFilter.toLowerCase()) > -1 || address.indexOf($scope.textFilter.toLowerCase()) > -1);
- 				}
  				);
  			}
  		};

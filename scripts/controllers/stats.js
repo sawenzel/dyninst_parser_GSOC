@@ -20,7 +20,7 @@
  	$scope.instrTypes = {
  		'mov' : ['mov'],
  		'logic' : ['and', 'or', 'xor'],
- 		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns'],
+ 		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns', 'jnle', 'jle', 'jnl', 'js', 'jl'],
  		'arithmetic' : ['add', 'mul', 'div', 'sub'],
  		'push' : ['push'],
  		'pop' : ['pop'],
@@ -151,11 +151,13 @@
  	setToolTipChartData = function(namesList, chart, instrType){
  		var index = 0;
  		for (key in $scope.instrTypes[instrType]){
- 			chart.data.rows.push({c: [
- 				{v: $scope.instrTypes[instrType][key]},
- 				{v: getInstrCount(namesList, instrType)[index]},
- 				{v: getInstrCount(namesList, instrType)[index]},
- 				]});
+ 			if(getInstrCount(namesList, instrType)[index] > 0){
+ 				chart.data.rows.push({c: [
+ 					{v: $scope.instrTypes[instrType][key]},
+ 					{v: getInstrCount(namesList, instrType)[index]},
+ 					{v: getInstrCount(namesList, instrType)[index]},
+ 					]});
+ 			}
  			index++;
  		}
  	}
@@ -177,7 +179,8 @@
  			$scope.instTypeCount = {};
  			for (i in $scope.instrTypes){
  				$scope.instTypeCount[i] = namesList.filter(function(x){return (getInstrType(x) == i)}).length;
- 				setMainChartData(i);
+ 				if($scope.instTypeCount[i] > 0)
+ 					setMainChartData(i);
  			}
 
  			var otherInstrCount = namesList.length;
@@ -238,10 +241,21 @@ getHtmlTooltip = function(tooltipName, title){
 }
 
 $scope.setToolTipChartPNG = function(){
-	$scope.mainChart.data.rows[1].c[2] = {v: getHtmlTooltip('logicChart', 'logic instructions distribution')};
-	$scope.mainChart.data.rows[2].c[2] = {v: getHtmlTooltip('branchChart', 'branch instructions distribution')};
-	$scope.mainChart.data.rows[3].c[2] = {v: getHtmlTooltip('arithmeticChart', 'arithmetic instructions distribution')};
-	$scope.mainChart.data.rows[7].c[2] = {v: getHtmlTooltip('otherChart', 'other instructions distribution')};
+	for (i in $scope.mainChart.data.rows){
+		if($scope.mainChart.data.rows[i].c[0]['v'] == 'logic'){
+			$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('logicChart', 'logic instructions distribution')};
+		}
+		if($scope.mainChart.data.rows[i].c[0]['v'] == 'branch'){
+			$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('branchChart', 'branch instructions distribution')};
+		}
+		if($scope.mainChart.data.rows[i].c[0]['v'] == 'arithmetic'){
+			$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('arithmeticChart', 'arithmetic instructions distribution')};
+		}
+		if($scope.mainChart.data.rows[i].c[0]['v'] == 'other'){
+			$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('otherChart', 'other instructions distribution')};
+		}
+
+	}
 }
 
 $scope.getinstrs();

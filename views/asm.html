@@ -35,9 +35,13 @@ ul{
           </pagination>
         </div>
         <div>
-          <!--search box-->      
-          <input type="text" ng-change="filterTableData()" ng-model="textFilter" placeholder="search">
-          <span style="color: #868686">Showing <span style="color: black; font-size: 15px; font-weight: bolder">{{functionsList.length}}</span> functions</span>
+          <!--typeahead-->
+          <!-- <form  ng-submit="filterTableData()">   -->
+            <!-- <input typeahead="term for term in autoCompleteValues | filter:$viewValue | limitTo:8" type="text" ng-model="textFilter" placeholder="search" ng-change="checkSizeToFilterData()" typeahead-on-select="filterTableData()"> -->
+          <!-- </form> -->
+          <input type="text" ng-model="textFilter" placeholder="search" ng-change="filterTableData()"/>
+          <span style="color: #868686">Showing <span style="color: black; font-size: 15px; font-weight: bolder">{{functionsList.length}}
+          </span> functions</span>
         </div>
       </div>
     </th>
@@ -73,7 +77,12 @@ ul{
 </div>
 
 <div ng-show="selectedFunction2" class="panel panel-default assemblylisting" style="margin-left: 10px">
-  <div class="panel-heading">{{selectedFunction2}}</div>
+  <div class="panel-heading boldText">{{selectedFunction2}}
+    <a class="clickable" style ="float:right" ng-click="openStatsModal()">
+      Histogram
+      <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
+    </a>
+  </div>
   <div class="panel-body" style="max-height: 85vh; overflow: auto">
     <ul>
       <li ng-repeat="line in currentAssembly2">
@@ -85,7 +94,12 @@ ul{
 </div>
 
 <div ng-show="selectedFunction3" class="panel panel-default assemblylisting" style="margin-left: 10px">
-  <div class="panel-heading">{{selectedFunction3}}</div>
+  <div class="panel-heading boldText">{{selectedFunction3}}
+    <a class="clickable" style ="float:right" ng-click="openStatsModal()">
+      Histogram
+      <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
+    </a>
+  </div>
   <div class="panel-body" style="max-height: 85vh; overflow: auto">
     <ul>
       <li ng-repeat="line in currentAssembly3">
