@@ -18,7 +18,7 @@
  	$scope.instrTypes = {
  		'mov' : ['mov'],
  		'logic' : ['and', 'or', 'xor'],
- 		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns', 'jnle', 'jle', 'jnl', 'js', 'jl'],
+ 		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns', 'jnle', 'jle', 'jnl', 'js', 'jl', 'jnbe'],
  		'arithmetic' : ['add', 'mul', 'div', 'sub'],
  		'push' : ['push'],
  		'pop' : ['pop'],
