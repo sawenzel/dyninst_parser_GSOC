@@ -28,7 +28,7 @@ JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
 	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileNameStr);
 
 	if(isParsable == false){
-		return env->NewStringUTF("error: file can not be parsed");
+		return env->NewStringUTF("{\\\"error\\\": \\\"file can not be parsed\\\"}");
 	}
 
 	sts = new SymtabCodeSource(fileName);
