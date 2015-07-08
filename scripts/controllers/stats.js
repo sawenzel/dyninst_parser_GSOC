@@ -7,8 +7,6 @@
  	$scope.currentAssembly = {};
  	$scope.prevFunction = prevFunction;
 
- 	console.log($scope.prevFunction);
-
  	branchChart = {};
  	logicChart = {};
  	arithmeticChart = {};

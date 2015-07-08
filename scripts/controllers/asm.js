@@ -30,10 +30,18 @@
  	$scope.setFile = function(fileName){
  		$scope.selectedFile = fileName;
  		$http.get($scope.functionsEndpoint, {params:{filename:fileName}}).success(function (data) {
- 			$scope.functionsList = data;
- 			$scope.source = data;
- 			$scope.textFilter = "";
- 			$scope.autoCompleteValues = data.map(function(x){return x['name']});
+ 			if("error" in data){
+ 				$scope.error = data["error"];
+ 				$scope.functionsList = [];
+ 				$scope.assemblyDict = {};
+ 				$scope.selectedFile = "";
+ 			} else {
+ 				$scope.error = "";
+ 				$scope.functionsList = data;
+ 				$scope.source = data;
+ 				$scope.textFilter = "";
+ 				$scope.autoCompleteValues = data.map(function(x){return x['name']});
+ 			}
  		});
  		$scope.selectedFunction = "";
  		$scope.selectedFunction2 = "";
