@@ -32,7 +32,7 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileNameStr);
 
 	if(isParsable == false){
-		return env->NewStringUTF("{\\\"error\\\": \\\"file can not be parsed\\\"}");
+		return env->NewStringUTF("{\"error\": \"file can not be parsed\"}");
 	}
 
 
@@ -71,6 +71,8 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 					InstructionDecoder::maxInstructionLength,
 					f->region()->getArch());
 			instr = decoder.decode();
+
+			//escaped slash and quotes because this will be parsed by GSON in Java
 			outstream << endl << "{\\\"address\\\":\\\"" << hex << crtaddr << "\\\", ";
 			outstream << "\\\"name\\\": \\\"" << instr->format() << "\\\"";
 

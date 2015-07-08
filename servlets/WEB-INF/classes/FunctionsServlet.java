@@ -36,16 +36,6 @@ public class FunctionsServlet extends HttpServlet {
 		System.loadLibrary("dyninstParser");
 	}
 
-	/*
-	private static String getMd5(String path) throws IOException {
-		FileInputStream fis = new FileInputStream(new File(path));
-		String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
-		fis.close();
-
-		return md5;
-	}
-	*/
-
 	private static Boolean isFunctionCached(String fileName) {
 		File cacheDir = new File(cacheDirPath);
 		String[] cachedBinaries = cacheDir.list();
