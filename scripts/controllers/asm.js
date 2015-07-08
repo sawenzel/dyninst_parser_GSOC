@@ -29,6 +29,7 @@
 
  	$scope.setFile = function(fileName){
  		$scope.selectedFile = fileName;
+ 		$scope.error = "";
  		$http.get($scope.functionsEndpoint, {params:{filename:fileName}}).success(function (data) {
  			if("error" in data){
  				$scope.error = data["error"];
@@ -36,7 +37,6 @@
  				$scope.assemblyDict = {};
  				$scope.selectedFile = "";
  			} else {
- 				$scope.error = "";
  				$scope.functionsList = data;
  				$scope.source = data;
  				$scope.textFilter = "";
