@@ -46,13 +46,19 @@ int main(int argc, char **argv){
 			//if(strcmp(f->name().c_str(), "main") == 0){
 			cout << endl << "\"" << f->name() << "\" : \"[" << endl;
 			//get address of entry point for current function
-			Address crtaddr = f->entry()->start();
+			//Address crtaddr = f->entry()->start();
+			Address crtaddr = f->addr();
 			int instr_count = 0;
 			do{
 				if(instr_count != 0)
 					cout << ",";
 				//decode current instruction
 				cout << f->isrc()->isValidAddress(crtaddr);
+
+				set<CodeRegion *>regions;
+				cout << "seturi pentru" << crtaddr << regions.size();
+				cout << "regions overlap:" << sts->regionsOverlap();
+				sts->findRegions(crtaddr, regions);
 				InstructionDecoder decoder(f->isrc()->getPtrToInstruction(crtaddr),
 						InstructionDecoder::maxInstructionLength,
 						f->isrc()->getArch());

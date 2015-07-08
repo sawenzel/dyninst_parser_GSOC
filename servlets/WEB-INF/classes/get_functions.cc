@@ -23,6 +23,14 @@ JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
 	CodeObject *co;
 	CodeRegion *cr;
 
+	SymtabAPI::Symtab *symTab;
+	std::string fileNameStr(fileName);
+	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileNameStr);
+
+	if(isParsable == false){
+		return env->NewStringUTF("error: file can not be parsed");
+	}
+
 	sts = new SymtabCodeSource(fileName);
 	co = new CodeObject(sts);
 

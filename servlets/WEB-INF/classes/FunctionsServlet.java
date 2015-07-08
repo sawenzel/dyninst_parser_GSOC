@@ -26,12 +26,12 @@ public class FunctionsServlet extends HttpServlet {
 	private native String getFunctionsJni(String fileName);
 
 	//local:
-	//private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-	//private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-functions/";
+	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-functions/";
 
 	//gsoc1:
-	private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-	private static String cacheDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-functions/";
+	//private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	//private static String cacheDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-functions/";
 	static {
 		System.loadLibrary("dyninstParser");
 	}
@@ -52,7 +52,7 @@ public class FunctionsServlet extends HttpServlet {
 
 		if(cachedBinaries == null)
 			return false;
-		
+
 		for (String s : cachedBinaries) {
 			if (s.compareTo(fileName) == 0) {
 				return true;
@@ -82,18 +82,20 @@ public class FunctionsServlet extends HttpServlet {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String fileName = "three-functions";
-
-		System.out.println(getFunctions(fileName));
+		if(args.length != 1){
+			System.out.println("usage: java FunctionsServlet <filename>");
+			return;
+		}
+		System.out.println(getFunctions(args[0]));
 	}
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Set response content type
-		response.setContentType("application/json");
+	throws ServletException, IOException {
+	// Set response content type
+	response.setContentType("application/json");
 
-		response.getWriter().println(
-				getFunctions(request.getParameter("filename")));
+	response.getWriter().println(
+			getFunctions(request.getParameter("filename")));
 	}
 }

@@ -8,7 +8,9 @@ graph: get_graph.cc
 functions: get_functions.cc
 	g++ -std=c++0x get_functions.cc -o parser -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -L/usr/include/dwarf.h -ldwarf
 symparser: symparser.cc
-	g++ -g -std=c++0x symparser.cc -o parser -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -L/usr/include/dwarf.h -ldwarf
+	g++ -Wall -g -std=c++0x symparser.cc -o parser -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -L/usr/include/dwarf.h -ldwarf
+dynparser: dynparser.cc
+	g++ -g -std=c++0x dynparser.cc -o parser -I/usr/include/dyninst -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -L/usr/include/dwarf.h -ldwarf -ldyninstAPI
 draw: parser
 	./parser binary | dot -Tpng > hello.png && go hello.png
 run: parser

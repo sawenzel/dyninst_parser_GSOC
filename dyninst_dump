@@ -1,0 +1,1004 @@
+34
+
+"__librt_enable_asynccancel" : "[
+1
+{\"address\":\"0\", \"name\": \"mov EAX, [308]\"},1
+{\"address\":\"8\", \"name\": \"mov R11, EAX\"},1
+{\"address\":\"b\", \"name\": \"or R11, 2\"},1
+{\"address\":\"f\", \"name\": \"cmp R11, EAX\"},1
+{\"address\":\"12\", \"name\": \"jz 17 + RIP + 2\"},1
+{\"address\":\"14\", \"name\": \"cmpxch [308], R11, RAX\"},1
+{\"address\":\"1f\", \"name\": \"jnz ffffffffffffffe7 + RIP + 2\"},1
+{\"address\":\"21\", \"name\": \"and R11, bb\"},1
+{\"address\":\"25\", \"name\": \"cmp R11, a\"},1
+{\"address\":\"29\", \"name\": \"jz 1 + RIP + 2\"},1
+{\"address\":\"2b\", \"name\": \"ret near [RSP]\"}]",
+
+"__librt_disable_asynccancel" : "[
+1
+{\"address\":\"60\", \"name\": \"test EDI, 2\"},1
+{\"address\":\"66\", \"name\": \"jnz 27 + RIP + 2\"},1
+{\"address\":\"68\", \"name\": \"mov EAX, [308]\"},1
+{\"address\":\"70\", \"name\": \"mov R11, EAX\"},1
+{\"address\":\"73\", \"name\": \"and R11, fd\"},1
+{\"address\":\"77\", \"name\": \"cmpxch [308], R11, RAX\"},1
+{\"address\":\"82\", \"name\": \"jnz ffffffffffffffec + RIP + 2\"},1
+{\"address\":\"84\", \"name\": \"mov EAX, R11\"},1
+{\"address\":\"87\", \"name\": \"and EAX, c\"},1
+{\"address\":\"8a\", \"name\": \"cmp EAX, 4\"},1
+{\"address\":\"8d\", \"name\": \"jz 1 + RIP + 2\"},1
+{\"address\":\"8f\", \"name\": \"ret near [RSP]\"}]",
+
+"notify_func_wrapper" : "[
+1
+{\"address\":\"0\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"2\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"3\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"4\", \"name\": \"mov RBX, RDI\"},1
+{\"address\":\"7\", \"name\": \"add RSP, 80\"},1
+{\"address\":\"b\", \"name\": \"mov RDI, RSP\"},1
+{\"address\":\"e\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"13\", \"name\": \"mov R10, 8\"},1
+{\"address\":\"19\", \"name\": \"xor EDX, EDX\"},1
+{\"address\":\"1b\", \"name\": \"mov RSI, RSP\"},1
+{\"address\":\"1e\", \"name\": \"mov RDI, 2\"},1
+{\"address\":\"23\", \"name\": \"mov RAX, e\"},1
+{\"address\":\"28\", \"name\": \"syscall RCX\"},1
+{\"address\":\"2a\", \"name\": \"mov RBP, [RBX + 8]\"},1
+{\"address\":\"2e\", \"name\": \"mov RDI, RBX\"},1
+{\"address\":\"31\", \"name\": \"mov R12, [RBX]\"},1
+{\"address\":\"34\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"39\", \"name\": \"mov RDI, RBP\"},1
+{\"address\":\"3c\", \"name\": \"call R12\"},1
+{\"address\":\"3f\", \"name\": \"sub RSP, 80\"},1
+{\"address\":\"43\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"45\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"46\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"47\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"49\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_notify_only" : "[
+1
+{\"address\":\"50\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"51\", \"name\": \"mov EDX, [RDI + c]\"},1
+{\"address\":\"54\", \"name\": \"mov RBX, RDI\"},1
+{\"address\":\"57\", \"name\": \"cmp EDX, 2\"},1
+{\"address\":\"5a\", \"name\": \"jz 23 + RIP + 2\"},1
+{\"address\":\"5c\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"5e\", \"name\": \"test EDX, EDX\"},1
+{\"address\":\"60\", \"name\": \"jz 6 + RIP + 2\"},1
+{\"address\":\"62\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"63\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_notify" : "[
+1
+{\"address\":\"90\", \"name\": \"push R14, RSP\"},1
+{\"address\":\"92\", \"name\": \"push R13, RSP\"},1
+{\"address\":\"94\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"96\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"97\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"98\", \"name\": \"mov R12, [RDI + 28]\"},1
+{\"address\":\"9c\", \"name\": \"mov RBX, RDI\"},1
+{\"address\":\"9f\", \"name\": \"mov EAX, [R12 + 2c]\"},1
+{\"address\":\"a4\", \"name\": \"lea RDI, R12 + 20\"},1
+{\"address\":\"a9\", \"name\": \"cmp EAX, 2\"},1
+{\"address\":\"ac\", \"name\": \"jz 10f + RIP + 6\"},1
+{\"address\":\"b2\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"b4\", \"name\": \"jz ae + RIP + 6\"},1
+{\"address\":\"ba\", \"name\": \"mov RBX, [RBX + 30]\"},1
+{\"address\":\"be\", \"name\": \"mov R13, ca\"},1
+{\"address\":\"c4\", \"name\": \"test RBX, RBX\"},1
+{\"address\":\"c7\", \"name\": \"jnz f + RIP + 2\"},1
+{\"address\":\"c9\", \"name\": \"jmp 54 + RIP + 2\"},1
+{\"address\":\"cb\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"d0\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"d3\", \"name\": \"jz 4a + RIP + 2\"},1
+{\"address\":\"d5\", \"name\": \"mov RBX, RBP\"},1
+{\"address\":\"d8\", \"name\": \"mov R14, [RBX + 18]\"},1
+{\"address\":\"dc\", \"name\": \"mov RBP, [RBX]\"},1
+{\"address\":\"df\", \"name\": \"test R14, R14\"},1
+{\"address\":\"e2\", \"name\": \"jz 4c + RIP + 2\"},1
+{\"address\":\"e4\", \"name\": \"mov RDI, [RBX + 10]\"},1
+{\"address\":\"e8\", \"name\": \"sub [RDI], 1\"},1
+{\"address\":\"eb\", \"name\": \"jnz ffffffffffffffe3 + RIP + 2\"},1
+{\"address\":\"ed\", \"name\": \"mov EDX, [R14 + c]\"},1
+{\"address\":\"f1\", \"name\": \"cmp EDX, 2\"},1
+{\"address\":\"f4\", \"name\": \"jz b6 + RIP + 6\"},1
+{\"address\":\"fa\", \"name\": \"test EDX, EDX\"},1
+{\"address\":\"fc\", \"name\": \"jnz 17 + RIP + 2\"},1
+{\"address\":\"fe\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"103\", \"name\": \"mov EDI, [R14 + 8]\"},1
+{\"address\":\"107\", \"name\": \"mov RSI, [R14]\"},1
+{\"address\":\"10a\", \"name\": \"mov EDX, EAX\"},1
+{\"address\":\"10c\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"111\", \"name\": \"mov RDI, [RBX + 10]\"},1
+{\"address\":\"115\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"11a\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"11d\", \"name\": \"jnz ffffffffffffffb6 + RIP + 2\"},1
+{\"address\":\"11f\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"120\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"121\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"123\", \"name\": \"pop R13, RSP\"},1
+{\"address\":\"125\", \"name\": \"pop R14, RSP\"},1
+{\"address\":\"127\", \"name\": \"ret near [RSP]\"}]",
+
+"__timer_getoverrun_new" : "[
+1
+{\"address\":\"0\", \"name\": \"movsxd RDI, [RDI + 4]\"},1
+{\"address\":\"4\", \"name\": \"mov RAX, e1\"},1
+{\"address\":\"9\", \"name\": \"syscall RCX\"},1
+{\"address\":\"b\", \"name\": \"cmp RAX, fffff000\"},1
+{\"address\":\"11\", \"name\": \"jnbe 2 + RIP + 2\"},1
+{\"address\":\"13\", \"name\": \"REP ret near [RSP]\"}]",
+
+"aio_read" : "[
+1
+{\"address\":\"0\", \"name\": \"sub RSP, 8\"},1
+{\"address\":\"4\", \"name\": \"xor ESI, ESI\"},1
+{\"address\":\"6\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"b\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"e\", \"name\": \"setz AL\"},1
+{\"address\":\"11\", \"name\": \"add RSP, 8\"},1
+{\"address\":\"15\", \"name\": \"movzx EAX, AL\"},1
+{\"address\":\"18\", \"name\": \"neg EAX\"},1
+{\"address\":\"1a\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_sigqueue" : "[
+1
+{\"address\":\"0\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"2\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"4\", \"name\": \"mov RCX, 10\"},1
+{\"address\":\"9\", \"name\": \"mov R12, RSI\"},1
+{\"address\":\"c\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"d\", \"name\": \"mov EBP, EDI\"},1
+{\"address\":\"f\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"10\", \"name\": \"add RSP, 80\"},1
+{\"address\":\"14\", \"name\": \"mov RDI, RSP\"},1
+{\"address\":\"17\", \"name\": \"REP stosd [ES * 10 + RDI], RAX\"},1
+{\"address\":\"1a\", \"name\": \"mov [RSP + 10], EDX\"},1
+{\"address\":\"1e\", \"name\": \"mov [RSP], EBP\"},1
+{\"address\":\"21\", \"name\": \"mov [RSP + 8], fffffffc\"},1
+{\"address\":\"29\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"2e\", \"name\": \"mov [RSP + 18], R12\"},1
+{\"address\":\"33\", \"name\": \"mov [RSP + 14], EAX\"},1
+{\"address\":\"37\", \"name\": \"mov RDX, RSP\"},1
+{\"address\":\"3a\", \"name\": \"movsxd RDI, [RSP + 10]\"},1
+{\"address\":\"3f\", \"name\": \"movsxd RSI, EBP\"},1
+{\"address\":\"42\", \"name\": \"mov RAX, 81\"},1
+{\"address\":\"47\", \"name\": \"syscall RCX\"},1
+{\"address\":\"49\", \"name\": \"cmp RAX, fffff000\"},1
+{\"address\":\"4f\", \"name\": \"jnbe 9 + RIP + 2\"},1
+{\"address\":\"51\", \"name\": \"sub RSP, 80\"},1
+{\"address\":\"55\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"56\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"57\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"59\", \"name\": \"ret near [RSP]\"}]",
+
+"__timer_gettime_new" : "[
+1
+{\"address\":\"0\", \"name\": \"movsxd RDI, [RDI + 4]\"},1
+{\"address\":\"4\", \"name\": \"mov RAX, e0\"},1
+{\"address\":\"9\", \"name\": \"syscall RCX\"},1
+{\"address\":\"b\", \"name\": \"cmp RAX, fffff000\"},1
+{\"address\":\"11\", \"name\": \"jnbe 2 + RIP + 2\"},1
+{\"address\":\"13\", \"name\": \"REP ret near [RSP]\"}]",
+
+"do_aio_misc_wait" : "[
+1
+{\"address\":\"0\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"2\", \"name\": \"xor R12, R12\"},1
+{\"address\":\"5\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"6\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"7\", \"name\": \"mov RBX, RDI\"},1
+{\"address\":\"a\", \"name\": \"sub RSP, 10\"},1
+{\"address\":\"e\", \"name\": \"mov EDX, [RDI]\"},1
+{\"address\":\"10\", \"name\": \"test EDX, EDX\"},1
+{\"address\":\"12\", \"name\": \"jnz c + RIP + 2\"},1
+{\"address\":\"14\", \"name\": \"add RSP, 10\"},1
+{\"address\":\"18\", \"name\": \"mov EAX, R12\"},1
+{\"address\":\"1b\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"1c\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"1d\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"1f\", \"name\": \"ret near [RSP]\"}]",
+
+"aio_suspend64" : "[
+1
+{\"address\":\"f0\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"f1\", \"name\": \"mov RBP, RSP\"},1
+{\"address\":\"f4\", \"name\": \"push R15, RSP\"},1
+{\"address\":\"f6\", \"name\": \"push R14, RSP\"},1
+{\"address\":\"f8\", \"name\": \"push R13, RSP\"},1
+{\"address\":\"fa\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"fc\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"fd\", \"name\": \"sub RSP, 58\"},1
+{\"address\":\"101\", \"name\": \"test ESI, ESI\"},1
+{\"address\":\"103\", \"name\": \"mov [RBP + ffffffffffffffb0], ESI\"},1
+{\"address\":\"106\", \"name\": \"mov [RBP + ffffffffffffffa0], RDX\"},1
+{\"address\":\"10a\", \"name\": \"js 1d3 + RIP + 6\"},1
+{\"address\":\"110\", \"name\": \"movsxd RAX, ESI\"},1
+{\"address\":\"113\", \"name\": \"mov R15, ESI\"},1
+{\"address\":\"116\", \"name\": \"mov R13, RDI\"},1
+{\"address\":\"119\", \"name\": \"mov RBX, RAX\"},1
+{\"address\":\"11c\", \"name\": \"shl/sal RAX, 3\"},1
+{\"address\":\"120\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"125\", \"name\": \"shl/sal RBX, 5\"},1
+{\"address\":\"129\", \"name\": \"mov [RBP + ffffffffffffff88], RAX\"},1
+{\"address\":\"12d\", \"name\": \"add RAX, 16\"},1
+{\"address\":\"131\", \"name\": \"lea RDX, RBX + 10\"},1
+{\"address\":\"135\", \"name\": \"and RAX, f0\"},1
+{\"address\":\"139\", \"name\": \"mov [RBP + ffffffffffffff90], RBX\"},1
+{\"address\":\"13d\", \"name\": \"mov [RBP + ffffffffffffffcc], 1\"},1
+{\"address\":\"144\", \"name\": \"sub RSP, RDX\"},1
+{\"address\":\"147\", \"name\": \"mov [RBP + ffffffffffffffa8], RSP\"},1
+{\"address\":\"14b\", \"name\": \"mov R14, RSP\"},1
+{\"address\":\"14e\", \"name\": \"sub RSP, RAX\"},1
+{\"address\":\"151\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"156\", \"name\": \"test R15, R15\"},1
+{\"address\":\"159\", \"name\": \"mov R12, RSP\"},1
+{\"address\":\"15c\", \"name\": \"jz 161 + RIP + 6\"},1
+{\"address\":\"162\", \"name\": \"mov EAX, R15\"},1
+{\"address\":\"165\", \"name\": \"mov [RBP + ffffffffffffffb7], 0\"},1
+{\"address\":\"169\", \"name\": \"xor R15, R15\"},1
+{\"address\":\"16c\", \"name\": \"sub EAX, 1\"},1
+{\"address\":\"16f\", \"name\": \"mov [RBP + ffffffffffffff9c], EAX\"},1
+{\"address\":\"172\", \"name\": \"add RAX, 1\"},1
+{\"address\":\"176\", \"name\": \"mov [RBP + ffffffffffffffb8], RAX\"},1
+{\"address\":\"17a\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"180\", \"name\": \"mov RDI, [R13 + 0 + R15 * 8 + 0]\"},1
+{\"address\":\"185\", \"name\": \"mov EBX, R15\"},1
+{\"address\":\"188\", \"name\": \"test RDI, RDI\"},1
+{\"address\":\"18b\", \"name\": \"jz 3b + RIP + 2\"},1
+{\"address\":\"18d\", \"name\": \"cmp [RDI + 70], 73\"},1
+{\"address\":\"191\", \"name\": \"jnz 47 + RIP + 2\"},1
+{\"address\":\"193\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"198\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"19b\", \"name\": \"mov [R12 + R15 * 8], RAX\"},1
+{\"address\":\"19f\", \"name\": \"jz 39 + RIP + 2\"},1
+{\"address\":\"1a1\", \"name\": \"mov RSI, [RAX + 30]\"},1
+{\"address\":\"1a5\", \"name\": \"lea RBX, RBP + ffffffffffffffcc\"},1
+{\"address\":\"1a9\", \"name\": \"mov [R14 + 8], 0\"},1
+{\"address\":\"1b1\", \"name\": \"mov [R14 + 18], 0\"},1
+{\"address\":\"1b9\", \"name\": \"mov [RBP + ffffffffffffffb7], 1\"},1
+{\"address\":\"1bd\", \"name\": \"mov [R14 + 10], RBX\"},1
+{\"address\":\"1c1\", \"name\": \"mov [R14], RSI\"},1
+{\"address\":\"1c4\", \"name\": \"mov [RAX + 30], R14\"},1
+{\"address\":\"1c8\", \"name\": \"lea EBX, R15 + 1\"},1
+{\"address\":\"1cc\", \"name\": \"add R14, 20\"},1
+{\"address\":\"1d0\", \"name\": \"add R15, 1\"},1
+{\"address\":\"1d4\", \"name\": \"cmp R15, [RBP + ffffffffffffffb8]\"},1
+{\"address\":\"1d8\", \"name\": \"jnz ffffffffffffffa6 + RIP + 2\"},1
+{\"address\":\"1da\", \"name\": \"cmp EBX, [RBP + ffffffffffffffb0]\"},1
+{\"address\":\"1dd\", \"name\": \"jz af + RIP + 6\"},1
+{\"address\":\"1e3\", \"name\": \"xor R14, R14\"},1
+{\"address\":\"1e6\", \"name\": \"mov RSI, [RBP + ffffffffffffffa8]\"},1
+{\"address\":\"1ea\", \"name\": \"movsxd RAX, EBX\"},1
+{\"address\":\"1ed\", \"name\": \"lea RDI, R13 + f8 + RAX * 8 + fffffffffffffff8\"},1
+{\"address\":\"1f2\", \"name\": \"shl/sal RAX, 5\"},1
+{\"address\":\"1f6\", \"name\": \"lea RSI, RSI + RAX * 1 + ffffffffffffffe0\"},1
+{\"address\":\"1fb\", \"name\": \"jmp b + RIP + 2\"},1
+{\"address\":\"1fd\", \"name\": \"nop [RAX]\"},1
+{\"address\":\"200\", \"name\": \"sub RDI, 8\"},1
+{\"address\":\"204\", \"name\": \"sub RSI, 20\"},1
+{\"address\":\"208\", \"name\": \"sub EBX, 1\"},1
+{\"address\":\"20b\", \"name\": \"lea EDX, RBX + 1\"},1
+{\"address\":\"20e\", \"name\": \"test EDX, EDX\"},1
+{\"address\":\"210\", \"name\": \"jle 4e + RIP + 2\"},1
+{\"address\":\"212\", \"name\": \"mov RDX, [RDI]\"},1
+{\"address\":\"215\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"218\", \"name\": \"jz ffffffffffffffe6 + RIP + 2\"},1
+{\"address\":\"21a\", \"name\": \"cmp [RDX + 70], 73\"},1
+{\"address\":\"21e\", \"name\": \"jnz ffffffffffffffe0 + RIP + 2\"},1
+{\"address\":\"220\", \"name\": \"movsxd RAX, EBX\"},1
+{\"address\":\"223\", \"name\": \"mov RDX, [R12 + RAX * 8]\"},1
+{\"address\":\"227\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"22a\", \"name\": \"jz 9d + RIP + 6\"},1
+{\"address\":\"230\", \"name\": \"mov RCX, [RDX + 30]\"},1
+{\"address\":\"234\", \"name\": \"test RCX, RCX\"},1
+{\"address\":\"237\", \"name\": \"jz ffffffffffffffc7 + RIP + 2\"},1
+{\"address\":\"239\", \"name\": \"cmp RCX, RSI\"},1
+{\"address\":\"23c\", \"name\": \"jnz 5 + RIP + 2\"},1
+{\"address\":\"23e\", \"name\": \"jmp 71 + RIP + 2\"},1
+{\"address\":\"240\", \"name\": \"mov RCX, RDX\"},1
+{\"address\":\"243\", \"name\": \"mov RDX, [RCX]\"},1
+{\"address\":\"246\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"249\", \"name\": \"jz ffffffffffffffb5 + RIP + 2\"},1
+{\"address\":\"24b\", \"name\": \"cmp RSI, RDX\"},1
+{\"address\":\"24e\", \"name\": \"jnz fffffffffffffff0 + RIP + 2\"},1
+{\"address\":\"250\", \"name\": \"mov RAX, [RDX]\"},1
+{\"address\":\"253\", \"name\": \"mov [RCX], RAX\"},1
+{\"address\":\"256\", \"name\": \"jmp ffffffffffffffa8 + RIP + 2\"},1
+{\"address\":\"258\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"260\", \"name\": \"test R14, R14\"},1
+{\"address\":\"263\", \"name\": \"jz 11 + RIP + 2\"},1
+{\"address\":\"265\", \"name\": \"mov RAX, [RIP + 0]\"},1
+{\"address\":\"26c\", \"name\": \"mov [RAX], R14\"},1
+{\"address\":\"270\", \"name\": \"mov R14, ffffffff\"},1
+{\"address\":\"276\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"27b\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"280\", \"name\": \"mov EAX, R14\"},1
+{\"address\":\"283\", \"name\": \"lea RSP, RBP + ffffffffffffffd8\"},1
+{\"address\":\"287\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"288\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"28a\", \"name\": \"pop R13, RSP\"},1
+{\"address\":\"28c\", \"name\": \"pop R14, RSP\"},1
+{\"address\":\"28e\", \"name\": \"pop R15, RSP\"},1
+{\"address\":\"290\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"291\", \"name\": \"ret near [RSP]\"}]",
+
+"__lio_listio64_item_notify" : "[
+1
+{\"address\":\"0\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"1\", \"name\": \"mov RBP, RSP\"},1
+{\"address\":\"4\", \"name\": \"push R15, RSP\"},1
+{\"address\":\"6\", \"name\": \"push R14, RSP\"},1
+{\"address\":\"8\", \"name\": \"push R13, RSP\"},1
+{\"address\":\"a\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"c\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"d\", \"name\": \"sub RSP, 78\"},1
+{\"address\":\"11\", \"name\": \"cmp EDI, 1\"},1
+{\"address\":\"14\", \"name\": \"mov [RBP + ffffff74], EDI\"},1
+{\"address\":\"1a\", \"name\": \"mov [RBP + ffffff78], RCX\"},1
+{\"address\":\"21\", \"name\": \"jnbe 2b9 + RIP + 6\"},1
+{\"address\":\"27\", \"name\": \"movsxd RAX, EDX\"},1
+{\"address\":\"2a\", \"name\": \"mov [RBP + ffffff68], RSP\"},1
+{\"address\":\"31\", \"name\": \"mov R13, RSI\"},1
+{\"address\":\"34\", \"name\": \"mov [RBP + ffffff60], RAX\"},1
+{\"address\":\"3b\", \"name\": \"lea RAX, 16 + RAX * 8\"},1
+{\"address\":\"43\", \"name\": \"mov R15, EDX\"},1
+{\"address\":\"46\", \"name\": \"mov [RBP + ffffffffffffff8c], 0\"},1
+{\"address\":\"4d\", \"name\": \"mov [RBP + ffffffffffffff80], 0\"},1
+{\"address\":\"54\", \"name\": \"and RAX, f0\"},1
+{\"address\":\"58\", \"name\": \"sub RSP, RAX\"},1
+{\"address\":\"5b\", \"name\": \"cmp [RBP + ffffff78], 0\"},1
+{\"address\":\"63\", \"name\": \"mov R14, RSP\"},1
+{\"address\":\"66\", \"name\": \"jz 2f4 + RIP + 6\"},1
+{\"address\":\"6c\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"71\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"76\", \"name\": \"test R15, R15\"},1
+{\"address\":\"79\", \"name\": \"jle 5c + RIP + 2\"},1
+{\"address\":\"7b\", \"name\": \"lea EAX, R15 + ffffffffffffffff\"},1
+{\"address\":\"7f\", \"name\": \"xor R12, R12\"},1
+{\"address\":\"82\", \"name\": \"lea RBX, 8 + RAX * 8\"},1
+{\"address\":\"8a\", \"name\": \"jmp 28 + RIP + 2\"},1
+{\"address\":\"8c\", \"name\": \"nop [RAX + 0]\"},1
+{\"address\":\"90\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"95\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"98\", \"name\": \"mov [R14 + R12 * 1], RAX\"},1
+{\"address\":\"9c\", \"name\": \"jz 146 + RIP + 6\"},1
+{\"address\":\"a2\", \"name\": \"mov EAX, [RBP + ffffffffffffff8c]\"},1
+{\"address\":\"a5\", \"name\": \"add EAX, 1\"},1
+{\"address\":\"a8\", \"name\": \"mov [RBP + ffffffffffffff8c], EAX\"},1
+{\"address\":\"ab\", \"name\": \"add R12, 8\"},1
+{\"address\":\"af\", \"name\": \"cmp R12, RBX\"},1
+{\"address\":\"b2\", \"name\": \"jz 23 + RIP + 2\"},1
+{\"address\":\"b4\", \"name\": \"mov RDI, [R13 + 0 + R12 * 1 + 0]\"},1
+{\"address\":\"b9\", \"name\": \"test RDI, RDI\"},1
+{\"address\":\"bc\", \"name\": \"jz 8 + RIP + 2\"},1
+{\"address\":\"be\", \"name\": \"mov ESI, [RDI + 4]\"},1
+{\"address\":\"c1\", \"name\": \"cmp ESI, 2\"},1
+{\"address\":\"c4\", \"name\": \"jnz ffffffffffffffca + RIP + 2\"},1
+{\"address\":\"c6\", \"name\": \"mov [R14 + R12 * 1], 0\"},1
+{\"address\":\"ce\", \"name\": \"add R12, 8\"},1
+{\"address\":\"d2\", \"name\": \"cmp R12, RBX\"},1
+{\"address\":\"d5\", \"name\": \"jnz ffffffffffffffdd + RIP + 2\"},1
+{\"address\":\"d7\", \"name\": \"mov EAX, [RBP + ffffffffffffff8c]\"},1
+{\"address\":\"da\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"dc\", \"name\": \"jz 1d6 + RIP + 6\"},1
+{\"address\":\"e2\", \"name\": \"mov EAX, [RBP + ffffff74]\"},1
+{\"address\":\"e8\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"ea\", \"name\": \"jz 108 + RIP + 6\"},1
+{\"address\":\"f0\", \"name\": \"mov RDI, [RBP + ffffff60]\"},1
+{\"address\":\"f7\", \"name\": \"shl/sal RDI, 5\"},1
+{\"address\":\"fb\", \"name\": \"add RDI, 48\"},1
+{\"address\":\"ff\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"104\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"107\", \"name\": \"jz 26a + RIP + 6\"},1
+{\"address\":\"10d\", \"name\": \"xor ESI, ESI\"},1
+{\"address\":\"10f\", \"name\": \"test R15, R15\"},1
+{\"address\":\"112\", \"name\": \"mov [RBP + ffffffffffffff8c], 0\"},1
+{\"address\":\"119\", \"name\": \"lea RCX, RAX + 48\"},1
+{\"address\":\"11d\", \"name\": \"lea R11, RAX + 8\"},1
+{\"address\":\"121\", \"name\": \"jle 54 + RIP + 2\"},1
+{\"address\":\"123\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"128\", \"name\": \"mov RDI, [R14 + RSI * 8]\"},1
+{\"address\":\"12c\", \"name\": \"test RDI, RDI\"},1
+{\"address\":\"12f\", \"name\": \"jz 39 + RIP + 2\"},1
+{\"address\":\"131\", \"name\": \"mov R10, [R13 + 0 + RSI * 8 + 0]\"},1
+{\"address\":\"136\", \"name\": \"test R10, R10\"},1
+{\"address\":\"139\", \"name\": \"jz 281 + RIP + 6\"},1
+{\"address\":\"13f\", \"name\": \"cmp [R10 + 4], 2\"},1
+{\"address\":\"144\", \"name\": \"jz 24 + RIP + 2\"},1
+{\"address\":\"146\", \"name\": \"mov R10, [RDI + 30]\"},1
+{\"address\":\"14a\", \"name\": \"mov [RCX + 8], 0\"},1
+{\"address\":\"152\", \"name\": \"mov [RCX + 10], RAX\"},1
+{\"address\":\"156\", \"name\": \"mov [RCX + 18], R11\"},1
+{\"address\":\"15a\", \"name\": \"mov [RCX], R10\"},1
+{\"address\":\"15d\", \"name\": \"mov [RDI + 30], RCX\"},1
+{\"address\":\"161\", \"name\": \"mov EDI, [RBP + ffffffffffffff8c]\"},1
+{\"address\":\"164\", \"name\": \"add EDI, 1\"},1
+{\"address\":\"167\", \"name\": \"mov [RBP + ffffffffffffff8c], EDI\"},1
+{\"address\":\"16a\", \"name\": \"add RSI, 1\"},1
+{\"address\":\"16e\", \"name\": \"add RCX, 20\"},1
+{\"address\":\"172\", \"name\": \"cmp R15, ESI\"},1
+{\"address\":\"175\", \"name\": \"jnle ffffffffffffffb1 + RIP + 2\"},1
+{\"address\":\"177\", \"name\": \"mov RBX, [RBP + ffffff78]\"},1
+{\"address\":\"17e\", \"name\": \"mov EDX, [RBP + ffffffffffffff8c]\"},1
+{\"address\":\"181\", \"name\": \"mov [RAX], EDX\"},1
+{\"address\":\"183\", \"name\": \"mov RDX, [RBX]\"},1
+{\"address\":\"186\", \"name\": \"mov [RAX + 8], RDX\"},1
+{\"address\":\"18a\", \"name\": \"mov RDX, [RBX + 8]\"},1
+{\"address\":\"18e\", \"name\": \"mov [RAX + 10], RDX\"},1
+{\"address\":\"192\", \"name\": \"mov RDX, [RBX + 10]\"},1
+{\"address\":\"196\", \"name\": \"mov [RAX + 18], RDX\"},1
+{\"address\":\"19a\", \"name\": \"mov RDX, [RBX + 18]\"},1
+{\"address\":\"19e\", \"name\": \"mov [RAX + 20], RDX\"},1
+{\"address\":\"1a2\", \"name\": \"mov RDX, [RBX + 20]\"},1
+{\"address\":\"1a6\", \"name\": \"mov [RAX + 28], RDX\"},1
+{\"address\":\"1aa\", \"name\": \"mov RDX, [RBX + 28]\"},1
+{\"address\":\"1ae\", \"name\": \"mov [RAX + 30], RDX\"},1
+{\"address\":\"1b2\", \"name\": \"mov RDX, [RBX + 30]\"},1
+{\"address\":\"1b6\", \"name\": \"mov [RAX + 38], RDX\"},1
+{\"address\":\"1ba\", \"name\": \"mov RDX, [RBX + 38]\"},1
+{\"address\":\"1be\", \"name\": \"mov [RAX + 40], RDX\"},1
+{\"address\":\"1c2\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"1c7\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"1cc\", \"name\": \"mov EAX, [RBP + ffffffffffffff80]\"},1
+{\"address\":\"1cf\", \"name\": \"mov RSP, [RBP + ffffff68]\"},1
+{\"address\":\"1d6\", \"name\": \"lea RSP, RBP + ffffffffffffffd8\"},1
+{\"address\":\"1da\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"1db\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"1dd\", \"name\": \"pop R13, RSP\"},1
+{\"address\":\"1df\", \"name\": \"pop R14, RSP\"},1
+{\"address\":\"1e1\", \"name\": \"pop R15, RSP\"},1
+{\"address\":\"1e3\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"1e4\", \"name\": \"ret near [RSP]\"}]",
+
+"mq_timedsend" : "[
+1
+{\"address\":\"0\", \"name\": \"cmp [18], 0\"},1
+{\"address\":\"9\", \"name\": \"jnz 17 + RIP + 2\"},1
+{\"address\":\"b\", \"name\": \"mov R10, RCX\"},1
+{\"address\":\"e\", \"name\": \"mov RAX, f2\"},1
+{\"address\":\"13\", \"name\": \"syscall RCX\"},1
+{\"address\":\"15\", \"name\": \"cmp RAX, fffff001\"},1
+{\"address\":\"1b\", \"name\": \"jnb 0 + RIP + 6\"},1
+{\"address\":\"21\", \"name\": \"ret near [RSP]\"}]",
+
+"__mq_timedsend_nocancel" : "[
+1
+{\"address\":\"b\", \"name\": \"mov R10, RCX\"},1
+{\"address\":\"e\", \"name\": \"mov RAX, f2\"},1
+{\"address\":\"13\", \"name\": \"syscall RCX\"},1
+{\"address\":\"15\", \"name\": \"cmp RAX, fffff001\"},1
+{\"address\":\"1b\", \"name\": \"jnb 0 + RIP + 6\"},1
+{\"address\":\"21\", \"name\": \"ret near [RSP]\"}]",
+
+"mq_unlink" : "[
+1
+{\"address\":\"0\", \"name\": \"cmp [RDI], 2f\"},1
+{\"address\":\"3\", \"name\": \"jnz 1b + RIP + 2\"},1
+{\"address\":\"5\", \"name\": \"add RDI, 1\"},1
+{\"address\":\"9\", \"name\": \"mov RAX, f1\"},1
+{\"address\":\"e\", \"name\": \"syscall RCX\"},1
+{\"address\":\"10\", \"name\": \"cmp RAX, fffff000\"},1
+{\"address\":\"15\", \"name\": \"jnbe 1d + RIP + 2\"},1
+{\"address\":\"17\", \"name\": \"REP ret near [RSP]\"}]",
+
+"handle_fildes_io" : "[
+1
+{\"address\":\"0\", \"name\": \"push R14, RSP\"},1
+{\"address\":\"2\", \"name\": \"push R13, RSP\"},1
+{\"address\":\"4\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"6\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"7\", \"name\": \"mov RBP, RDI\"},1
+{\"address\":\"a\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"b\", \"name\": \"add RSP, 80\"},1
+{\"address\":\"f\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"14\", \"name\": \"lea RDX, RSP + 10\"},1
+{\"address\":\"19\", \"name\": \"lea RSI, RSP + 20\"},1
+{\"address\":\"1e\", \"name\": \"mov RDI, RAX\"},1
+{\"address\":\"21\", \"name\": \"mov R13, RAX\"},1
+{\"address\":\"24\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"29\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"2c\", \"name\": \"jz 1bb + RIP + 6\"},1
+{\"address\":\"32\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"38\", \"name\": \"cmp [RBP + 0], 3\"},1
+{\"address\":\"3c\", \"name\": \"jnz 505 + RIP + 6\"},1
+{\"address\":\"42\", \"name\": \"mov RBX, [RBP + 28]\"},1
+{\"address\":\"46\", \"name\": \"mov EAX, [RBX + 68]\"},1
+{\"address\":\"49\", \"name\": \"cmp EAX, [RSP + 10]\"},1
+{\"address\":\"4d\", \"name\": \"mov R14, [RBX]\"},1
+{\"address\":\"50\", \"name\": \"mov ESI, [RBX + 6c]\"},1
+{\"address\":\"53\", \"name\": \"jnz 6 + RIP + 2\"},1
+{\"address\":\"55\", \"name\": \"cmp ESI, [RSP + 20]\"},1
+{\"address\":\"59\", \"name\": \"jz 15 + RIP + 2\"},1
+{\"address\":\"5b\", \"name\": \"lea RDX, RSP + 10\"},1
+{\"address\":\"60\", \"name\": \"mov RDI, R13\"},1
+{\"address\":\"63\", \"name\": \"mov [RSP + 10], EAX\"},1
+{\"address\":\"67\", \"name\": \"mov [RSP + 20], ESI\"},1
+{\"address\":\"6b\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"70\", \"name\": \"mov EAX, [RBX + 4]\"},1
+{\"address\":\"73\", \"name\": \"mov EDX, EAX\"},1
+{\"address\":\"75\", \"name\": \"and EDX, 7f\"},1
+{\"address\":\"78\", \"name\": \"jz 237 + RIP + 6\"},1
+{\"address\":\"7e\", \"name\": \"cmp EDX, 1\"},1
+{\"address\":\"81\", \"name\": \"jz 26e + RIP + 6\"},1
+{\"address\":\"87\", \"name\": \"cmp EAX, 3\"},1
+{\"address\":\"8a\", \"name\": \"jz 295 + RIP + 6\"},1
+{\"address\":\"90\", \"name\": \"cmp EAX, 4\"},1
+{\"address\":\"93\", \"name\": \"jz 2b4 + RIP + 6\"},1
+{\"address\":\"99\", \"name\": \"mov RAX, [RIP + 0]\"},1
+{\"address\":\"a0\", \"name\": \"mov [RBX + 78], ffffffff\"},1
+{\"address\":\"a8\", \"name\": \"mov [RAX], 16\"},1
+{\"address\":\"af\", \"name\": \"nop \"},1
+{\"address\":\"b0\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"b5\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"ba\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"bc\", \"name\": \"cmp [RBX + 78], ff\"},1
+{\"address\":\"c1\", \"name\": \"jz 369 + RIP + 6\"},1
+{\"address\":\"c7\", \"name\": \"mov [RBX + 70], EAX\"},1
+{\"address\":\"ca\", \"name\": \"mov RDI, RBP\"},1
+{\"address\":\"cd\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"d2\", \"name\": \"cmp [RBP + 0], 3\"},1
+{\"address\":\"d6\", \"name\": \"jnz 49d + RIP + 6\"},1
+{\"address\":\"dc\", \"name\": \"mov RCX, [RBP + 18]\"},1
+{\"address\":\"e0\", \"name\": \"mov [RBP + 0], 4\"},1
+{\"address\":\"e7\", \"name\": \"mov RAX, [RBP + 8]\"},1
+{\"address\":\"eb\", \"name\": \"test RCX, RCX\"},1
+{\"address\":\"ee\", \"name\": \"jz 38c + RIP + 6\"},1
+{\"address\":\"f4\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"f7\", \"name\": \"jz 3b3 + RIP + 6\"},1
+{\"address\":\"fd\", \"name\": \"mov [RAX + 10], RCX\"},1
+{\"address\":\"101\", \"name\": \"mov RDX, [RBP + 10]\"},1
+{\"address\":\"105\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"108\", \"name\": \"jz 8 + RIP + 2\"},1
+{\"address\":\"10a\", \"name\": \"mov [RDX + 8], RCX\"},1
+{\"address\":\"10e\", \"name\": \"mov RAX, [RBP + 8]\"},1
+{\"address\":\"112\", \"name\": \"mov [RCX], 2\"},1
+{\"address\":\"118\", \"name\": \"cmp [RBP + 0], 2\"},1
+{\"address\":\"11c\", \"name\": \"mov [RCX + 8], RAX\"},1
+{\"address\":\"120\", \"name\": \"mov [RCX + 10], RDX\"},1
+{\"address\":\"124\", \"name\": \"jz 246 + RIP + 6\"},1
+{\"address\":\"12a\", \"name\": \"mov RAX, [RIP + 0]\"},1
+{\"address\":\"131\", \"name\": \"test RCX, RCX\"},1
+{\"address\":\"134\", \"name\": \"mov R8, RAX\"},1
+{\"address\":\"137\", \"name\": \"jz 47 + RIP + 2\"},1
+{\"address\":\"139\", \"name\": \"mov RAX, [RCX + 28]\"},1
+{\"address\":\"13d\", \"name\": \"test R8, R8\"},1
+{\"address\":\"140\", \"name\": \"mov EDI, [RAX + 68]\"},1
+{\"address\":\"143\", \"name\": \"jz 277 + RIP + 6\"},1
+{\"address\":\"149\", \"name\": \"mov RDX, [R8 + 28]\"},1
+{\"address\":\"14d\", \"name\": \"mov RAX, R8\"},1
+{\"address\":\"150\", \"name\": \"cmp EDI, [RDX + 68]\"},1
+{\"address\":\"153\", \"name\": \"jle 17 + RIP + 2\"},1
+{\"address\":\"155\", \"name\": \"jmp 266 + RIP + 5\"},1
+{\"address\":\"15a\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"160\", \"name\": \"mov RSI, [RDX + 28]\"},1
+{\"address\":\"164\", \"name\": \"cmp EDI, [RSI + 68]\"},1
+{\"address\":\"167\", \"name\": \"jnle c + RIP + 2\"},1
+{\"address\":\"169\", \"name\": \"mov RAX, RDX\"},1
+{\"address\":\"16c\", \"name\": \"mov RDX, [RAX + 20]\"},1
+{\"address\":\"170\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"173\", \"name\": \"jnz ffffffffffffffeb + RIP + 2\"},1
+{\"address\":\"175\", \"name\": \"mov [RCX + 20], RDX\"},1
+{\"address\":\"179\", \"name\": \"mov [RAX + 20], RCX\"},1
+{\"address\":\"17d\", \"name\": \"mov RAX, R8\"},1
+{\"address\":\"180\", \"name\": \"mov RDX, [RIP + 0]\"},1
+{\"address\":\"187\", \"name\": \"mov [RBP + 0], 0\"},1
+{\"address\":\"18e\", \"name\": \"mov [RIP + 0], RBP\"},1
+{\"address\":\"195\", \"name\": \"mov [RBP + 18], RDX\"},1
+{\"address\":\"199\", \"name\": \"mov RBP, RAX\"},1
+{\"address\":\"19c\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"19f\", \"name\": \"jz 67 + RIP + 2\"},1
+{\"address\":\"1a1\", \"name\": \"cmp [RBP + 0], 2\"},1
+{\"address\":\"1a5\", \"name\": \"jnz 3b5 + RIP + 6\"},1
+{\"address\":\"1ab\", \"name\": \"mov RAX, [RBP + 20]\"},1
+{\"address\":\"1af\", \"name\": \"mov [RBP + 0], 3\"},1
+{\"address\":\"1b6\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"1b9\", \"name\": \"mov [RIP + 0], RAX\"},1
+{\"address\":\"1c0\", \"name\": \"jz 18 + RIP + 2\"},1
+{\"address\":\"1c2\", \"name\": \"mov EAX, [RIP + 0]\"},1
+{\"address\":\"1c8\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"1ca\", \"name\": \"jle 208 + RIP + 6\"},1
+{\"address\":\"1d0\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"1d5\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"1da\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"1df\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"1e4\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"1e7\", \"name\": \"jnz fffffe4b + RIP + 6\"},1
+{\"address\":\"1ed\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"1f2\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"1f7\", \"name\": \"mov RBP, [RIP + 0]\"},1
+{\"address\":\"1fe\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"201\", \"name\": \"jnz ffffffffffffff9e + RIP + 2\"},1
+{\"address\":\"203\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"208\", \"name\": \"mov ECX, [RIP + 0]\"},1
+{\"address\":\"20e\", \"name\": \"test ECX, ECX\"},1
+{\"address\":\"210\", \"name\": \"js 6d + RIP + 2\"},1
+{\"address\":\"212\", \"name\": \"lea RDI, RSP + 30\"},1
+{\"address\":\"217\", \"name\": \"xor ESI, ESI\"},1
+{\"address\":\"219\", \"name\": \"add [RIP + 0], 1\"},1
+{\"address\":\"220\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"225\", \"name\": \"mov RDX, [RSP + 38]\"},1
+{\"address\":\"22a\", \"name\": \"movsxd RAX, [RIP + 0]\"},1
+{\"address\":\"231\", \"name\": \"add RAX, [RSP + 30]\"},1
+{\"address\":\"236\", \"name\": \"imul RDX, RDX, 3e8\"},1
+{\"address\":\"23d\", \"name\": \"mov [RSP + 40], RAX\"},1
+{\"address\":\"242\", \"name\": \"cmp RDX, 3b9ac9ff\"},1
+{\"address\":\"249\", \"name\": \"jnle 2ac + RIP + 6\"},1
+{\"address\":\"24f\", \"name\": \"mov [RSP + 48], RDX\"},1
+{\"address\":\"254\", \"name\": \"lea RDX, RSP + 40\"},1
+{\"address\":\"259\", \"name\": \"mov RSI, 0\"},1
+{\"address\":\"25e\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"263\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"268\", \"name\": \"mov RBP, [RIP + 0]\"},1
+{\"address\":\"26f\", \"name\": \"sub [RIP + 0], 1\"},1
+{\"address\":\"276\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"279\", \"name\": \"jnz ffffff22 + RIP + 6\"},1
+{\"address\":\"27f\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"284\", \"name\": \"sub [RIP + 0], 1\"},1
+{\"address\":\"28b\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"290\", \"name\": \"sub RSP, 80\"},1
+{\"address\":\"294\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"296\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"297\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"298\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"29a\", \"name\": \"pop R13, RSP\"},1
+{\"address\":\"29c\", \"name\": \"pop R14, RSP\"},1
+{\"address\":\"29e\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_free_request" : "[
+1
+{\"address\":\"5a0\", \"name\": \"mov RAX, [RIP + 0]\"},1
+{\"address\":\"5a7\", \"name\": \"mov [RDI], 0\"},1
+{\"address\":\"5ad\", \"name\": \"mov [RIP + 0], RDI\"},1
+{\"address\":\"5b4\", \"name\": \"mov [RDI + 18], RAX\"},1
+{\"address\":\"5b8\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_find_req" : "[
+1
+{\"address\":\"5c0\", \"name\": \"mov RAX, [RIP + 0]\"},1
+{\"address\":\"5c7\", \"name\": \"mov ESI, [RDI]\"},1
+{\"address\":\"5c9\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"5cc\", \"name\": \"jnz b + RIP + 2\"},1
+{\"address\":\"5ce\", \"name\": \"jmp 32 + RIP + 2\"},1
+{\"address\":\"5d0\", \"name\": \"mov RAX, [RAX + 10]\"},1
+{\"address\":\"5d4\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"5d7\", \"name\": \"jz 29 + RIP + 2\"},1
+{\"address\":\"5d9\", \"name\": \"mov RDX, [RAX + 28]\"},1
+{\"address\":\"5dd\", \"name\": \"mov ECX, [RDX]\"},1
+{\"address\":\"5df\", \"name\": \"cmp ESI, ECX\"},1
+{\"address\":\"5e1\", \"name\": \"jnle ffffffffffffffed + RIP + 2\"},1
+{\"address\":\"5e3\", \"name\": \"cmp ECX, ESI\"},1
+{\"address\":\"5e5\", \"name\": \"jz d + RIP + 2\"},1
+{\"address\":\"5e7\", \"name\": \"jmp 21 + RIP + 2\"},1
+{\"address\":\"5e9\", \"name\": \"nop [RAX + 0]\"},1
+{\"address\":\"5f0\", \"name\": \"mov RDX, [RAX + 28]\"},1
+{\"address\":\"5f4\", \"name\": \"cmp RDI, RDX\"},1
+{\"address\":\"5f7\", \"name\": \"jz f + RIP + 2\"},1
+{\"address\":\"5f9\", \"name\": \"mov RAX, [RAX + 18]\"},1
+{\"address\":\"5fd\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"600\", \"name\": \"jnz ffffffffffffffee + RIP + 2\"},1
+{\"address\":\"602\", \"name\": \"REP ret near [RSP]\"}]",
+
+"__aio_find_req_fd" : "[
+1
+{\"address\":\"620\", \"name\": \"mov RDX, [RIP + 0]\"},1
+{\"address\":\"627\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"62a\", \"name\": \"jz 27 + RIP + 2\"},1
+{\"address\":\"62c\", \"name\": \"mov RAX, [RDX + 28]\"},1
+{\"address\":\"630\", \"name\": \"mov ECX, [RAX]\"},1
+{\"address\":\"632\", \"name\": \"cmp EDI, ECX\"},1
+{\"address\":\"634\", \"name\": \"jnle 14 + RIP + 2\"},1
+{\"address\":\"636\", \"name\": \"jmp 28 + RIP + 2\"},1
+{\"address\":\"638\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"640\", \"name\": \"mov RAX, [RDX + 28]\"},1
+{\"address\":\"644\", \"name\": \"mov ECX, [RAX]\"},1
+{\"address\":\"646\", \"name\": \"cmp ECX, EDI\"},1
+{\"address\":\"648\", \"name\": \"jnl 16 + RIP + 2\"},1
+{\"address\":\"64a\", \"name\": \"mov RDX, [RDX + 10]\"},1
+{\"address\":\"64e\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"651\", \"name\": \"jnz ffffffffffffffed + RIP + 2\"},1
+{\"address\":\"653\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"655\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_remove_request" : "[
+1
+{\"address\":\"670\", \"name\": \"mov EAX, [RSI]\"},1
+{\"address\":\"672\", \"name\": \"lea ECX, RAX + ffffffffffffffff\"},1
+{\"address\":\"675\", \"name\": \"cmp ECX, 1\"},1
+{\"address\":\"678\", \"name\": \"jnbe e3 + RIP + 6\"},1
+{\"address\":\"67e\", \"name\": \"test RDI, RDI\"},1
+{\"address\":\"681\", \"name\": \"jz 15 + RIP + 2\"},1
+{\"address\":\"683\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"685\", \"name\": \"test EDX, EDX\"},1
+{\"address\":\"687\", \"name\": \"jnz 4 + RIP + 2\"},1
+{\"address\":\"689\", \"name\": \"mov RAX, [RSI + 18]\"},1
+{\"address\":\"68d\", \"name\": \"mov [RDI + 18], RAX\"},1
+{\"address\":\"691\", \"name\": \"ret near [RSP]\"}]",
+
+"aio_init" : "[
+1
+{\"address\":\"790\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"791\", \"name\": \"mov RBX, RDI\"},1
+{\"address\":\"794\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"799\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"79e\", \"name\": \"cmp [RIP + 0], 0\"},1
+{\"address\":\"7a6\", \"name\": \"jz 18 + RIP + 2\"},1
+{\"address\":\"7a8\", \"name\": \"mov EAX, [RBX + 18]\"},1
+{\"address\":\"7ab\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"7ad\", \"name\": \"jz 6 + RIP + 2\"},1
+{\"address\":\"7af\", \"name\": \"mov [RIP + 0], EAX\"},1
+{\"address\":\"7b5\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"7b6\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"7bb\", \"name\": \"jmp 0 + RIP + 5\"},1
+{\"address\":\"7c0\", \"name\": \"mov EDX, [RBX]\"},1
+{\"address\":\"7c2\", \"name\": \"mov RAX, 1\"},1
+{\"address\":\"7c7\", \"name\": \"test EDX, EDX\"},1
+{\"address\":\"7c9\", \"name\": \"mov EDX, [RBX + 4]\"},1
+{\"address\":\"7cc\", \"name\": \"cmovnl EAX, [RBX]\"},1
+{\"address\":\"7cf\", \"name\": \"mov ECX, EDX\"},1
+{\"address\":\"7d1\", \"name\": \"and ECX, e0\"},1
+{\"address\":\"7d4\", \"name\": \"mov [RIP + 0], EAX\"},1
+{\"address\":\"7da\", \"name\": \"cmp EDX, 20\"},1
+{\"address\":\"7dd\", \"name\": \"mov RAX, 20\"},1
+{\"address\":\"7e2\", \"name\": \"cmovnl EAX, ECX\"},1
+{\"address\":\"7e5\", \"name\": \"mov [RIP + 0], EAX\"},1
+{\"address\":\"7eb\", \"name\": \"jmp ffffffffffffffbb + RIP + 2\"},1
+{\"address\":\"7ed\", \"name\": \"nop [RAX]\"},1
+{\"address\":\"7f0\", \"name\": \"push R15, RSP\"},1
+{\"address\":\"7f2\", \"name\": \"lea EAX, RSI + fffffffffffffffd\"},1
+{\"address\":\"7f5\", \"name\": \"mov R15, ESI\"},1
+{\"address\":\"7f8\", \"name\": \"push R14, RSP\"},1
+{\"address\":\"7fa\", \"name\": \"push R13, RSP\"},1
+{\"address\":\"7fc\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"7fe\", \"name\": \"mov R12, RDI\"},1
+{\"address\":\"801\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"802\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"803\", \"name\": \"sub RSP, 198\"},1
+{\"address\":\"80a\", \"name\": \"cmp EAX, 1\"},1
+{\"address\":\"80d\", \"name\": \"jbe 1d5 + RIP + 6\"},1
+{\"address\":\"813\", \"name\": \"cmp [RDI + 8], 14\"},1
+{\"address\":\"817\", \"name\": \"jnbe 364 + RIP + 6\"},1
+{\"address\":\"81d\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"822\", \"name\": \"lea RDX, RSP + 30\"},1
+{\"address\":\"827\", \"name\": \"lea RSI, RSP + 20\"},1
+{\"address\":\"82c\", \"name\": \"mov RDI, RAX\"},1
+{\"address\":\"82f\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"834\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"839\", \"name\": \"mov R14, [RSP + 30]\"},1
+{\"address\":\"83e\", \"name\": \"sub R14, [R12 + 8]\"},1
+{\"address\":\"843\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"848\", \"name\": \"mov RCX, [RIP + 0]\"},1
+{\"address\":\"84f\", \"name\": \"test RCX, RCX\"},1
+{\"address\":\"852\", \"name\": \"jz 35d + RIP + 6\"},1
+{\"address\":\"858\", \"name\": \"mov RAX, [RCX + 28]\"},1
+{\"address\":\"85c\", \"name\": \"mov EDX, [R12]\"},1
+{\"address\":\"860\", \"name\": \"cmp EDX, [RAX]\"},1
+{\"address\":\"862\", \"name\": \"jle 3a4 + RIP + 6\"},1
+{\"address\":\"868\", \"name\": \"mov RBP, RCX\"},1
+{\"address\":\"86b\", \"name\": \"jmp e + RIP + 2\"},1
+{\"address\":\"86d\", \"name\": \"nop [RAX]\"},1
+{\"address\":\"870\", \"name\": \"mov RAX, [RBX + 28]\"},1
+{\"address\":\"874\", \"name\": \"cmp [RAX], EDX\"},1
+{\"address\":\"876\", \"name\": \"jnl c + RIP + 2\"},1
+{\"address\":\"878\", \"name\": \"mov RBP, RBX\"},1
+{\"address\":\"87b\", \"name\": \"mov RBX, [RBP + 10]\"},1
+{\"address\":\"87f\", \"name\": \"test RBX, RBX\"},1
+{\"address\":\"882\", \"name\": \"jnz ffffffffffffffec + RIP + 2\"},1
+{\"address\":\"884\", \"name\": \"mov R13, [RIP + 0]\"},1
+{\"address\":\"88b\", \"name\": \"test R13, R13\"},1
+{\"address\":\"88e\", \"name\": \"jz 234 + RIP + 6\"},1
+{\"address\":\"894\", \"name\": \"mov RDX, [R13 + 18]\"},1
+{\"address\":\"898\", \"name\": \"mov EAX, [RSP + 20]\"},1
+{\"address\":\"89c\", \"name\": \"test RBX, RBX\"},1
+{\"address\":\"89f\", \"name\": \"mov [R13 + 28], R12\"},1
+{\"address\":\"8a3\", \"name\": \"mov [R13 + 30], 0\"},1
+{\"address\":\"8ab\", \"name\": \"mov [RIP + 0], RDX\"},1
+{\"address\":\"8b2\", \"name\": \"mov [R12 + 68], R14\"},1
+{\"address\":\"8b7\", \"name\": \"mov [R12 + 4], R15\"},1
+{\"address\":\"8bc\", \"name\": \"mov [R12 + 6c], EAX\"},1
+{\"address\":\"8c1\", \"name\": \"mov [R12 + 70], 73\"},1
+{\"address\":\"8ca\", \"name\": \"mov [R12 + 78], 0\"},1
+{\"address\":\"8d3\", \"name\": \"jz 10 + RIP + 2\"},1
+{\"address\":\"8d5\", \"name\": \"mov RAX, [RBX + 28]\"},1
+{\"address\":\"8d9\", \"name\": \"mov EDI, [R12]\"},1
+{\"address\":\"8dd\", \"name\": \"cmp [RAX], EDI\"},1
+{\"address\":\"8df\", \"name\": \"jz 98 + RIP + 6\"},1
+{\"address\":\"8e5\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"8e8\", \"name\": \"jz 272 + RIP + 6\"},1
+{\"address\":\"8ee\", \"name\": \"mov RAX, [RBP + 10]\"},1
+{\"address\":\"8f2\", \"name\": \"mov [R13 + 8], RBP\"},1
+{\"address\":\"8f6\", \"name\": \"mov [R13 + 10], RAX\"},1
+{\"address\":\"8fa\", \"name\": \"mov [RBP + 10], R13\"},1
+{\"address\":\"8fe\", \"name\": \"mov RAX, [R13 + 10]\"},1
+{\"address\":\"902\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"905\", \"name\": \"jz 4 + RIP + 2\"},1
+{\"address\":\"907\", \"name\": \"mov [RAX + 8], R13\"},1
+{\"address\":\"90b\", \"name\": \"mov EAX, [RIP + 0]\"},1
+{\"address\":\"911\", \"name\": \"cmp [RIP + 0], EAX\"},1
+{\"address\":\"917\", \"name\": \"mov [R13 + 18], 0\"},1
+{\"address\":\"91f\", \"name\": \"jnle d3 + RIP + 6\"},1
+{\"address\":\"925\", \"name\": \"mov RDX, [RIP + 0]\"},1
+{\"address\":\"92c\", \"name\": \"mov RAX, [R13 + 28]\"},1
+{\"address\":\"930\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"933\", \"name\": \"mov ESI, [RAX + 68]\"},1
+{\"address\":\"936\", \"name\": \"jz d + RIP + 2\"},1
+{\"address\":\"938\", \"name\": \"mov RAX, [RDX + 28]\"},1
+{\"address\":\"93c\", \"name\": \"cmp ESI, [RAX + 68]\"},1
+{\"address\":\"93f\", \"name\": \"jle 87 + RIP + 6\"},1
+{\"address\":\"945\", \"name\": \"mov [R13 + 20], RDX\"},1
+{\"address\":\"949\", \"name\": \"mov [RIP + 0], R13\"},1
+{\"address\":\"950\", \"name\": \"mov EAX, [RIP + 0]\"},1
+{\"address\":\"956\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"958\", \"name\": \"jle a + RIP + 2\"},1
+{\"address\":\"95a\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"95f\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"964\", \"name\": \"mov RAX, 2\"},1
+{\"address\":\"969\", \"name\": \"jmp 28 + RIP + 2\"},1
+{\"address\":\"96b\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"970\", \"name\": \"mov RAX, [RDX + 28]\"},1
+{\"address\":\"974\", \"name\": \"cmp R14, [RAX + 68]\"},1
+{\"address\":\"978\", \"name\": \"jnle c + RIP + 2\"},1
+{\"address\":\"97a\", \"name\": \"mov RBX, RDX\"},1
+{\"address\":\"97d\", \"name\": \"mov RDX, [RBX + 18]\"},1
+{\"address\":\"981\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"984\", \"name\": \"jnz ffffffffffffffea + RIP + 2\"},1
+{\"address\":\"986\", \"name\": \"mov [R13 + 18], RDX\"},1
+{\"address\":\"98a\", \"name\": \"mov RAX, 1\"},1
+{\"address\":\"98f\", \"name\": \"mov [RBX + 18], R13\"},1
+{\"address\":\"993\", \"name\": \"mov [R13 + 0], EAX\"},1
+{\"address\":\"997\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"99c\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"9a1\", \"name\": \"mov RAX, R13\"},1
+{\"address\":\"9a4\", \"name\": \"add RSP, 198\"},1
+{\"address\":\"9ab\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"9ac\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"9ad\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"9af\", \"name\": \"pop R13, RSP\"},1
+{\"address\":\"9b1\", \"name\": \"pop R14, RSP\"},1
+{\"address\":\"9b3\", \"name\": \"pop R15, RSP\"},1
+{\"address\":\"9b5\", \"name\": \"ret near [RSP]\"}]",
+
+"__aio_enqueue_request" : "[
+1
+{\"address\":\"7f0\", \"name\": \"push R15, RSP\"},1
+{\"address\":\"7f2\", \"name\": \"lea EAX, RSI + fffffffffffffffd\"},1
+{\"address\":\"7f5\", \"name\": \"mov R15, ESI\"},1
+{\"address\":\"7f8\", \"name\": \"push R14, RSP\"},1
+{\"address\":\"7fa\", \"name\": \"push R13, RSP\"},1
+{\"address\":\"7fc\", \"name\": \"push R12, RSP\"},1
+{\"address\":\"7fe\", \"name\": \"mov R12, RDI\"},1
+{\"address\":\"801\", \"name\": \"push RBP, RSP\"},1
+{\"address\":\"802\", \"name\": \"push RBX, RSP\"},1
+{\"address\":\"803\", \"name\": \"sub RSP, 198\"},1
+{\"address\":\"80a\", \"name\": \"cmp EAX, 1\"},1
+{\"address\":\"80d\", \"name\": \"jbe 1d5 + RIP + 6\"},1
+{\"address\":\"813\", \"name\": \"cmp [RDI + 8], 14\"},1
+{\"address\":\"817\", \"name\": \"jnbe 364 + RIP + 6\"},1
+{\"address\":\"81d\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"822\", \"name\": \"lea RDX, RSP + 30\"},1
+{\"address\":\"827\", \"name\": \"lea RSI, RSP + 20\"},1
+{\"address\":\"82c\", \"name\": \"mov RDI, RAX\"},1
+{\"address\":\"82f\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"834\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"839\", \"name\": \"mov R14, [RSP + 30]\"},1
+{\"address\":\"83e\", \"name\": \"sub R14, [R12 + 8]\"},1
+{\"address\":\"843\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"848\", \"name\": \"mov RCX, [RIP + 0]\"},1
+{\"address\":\"84f\", \"name\": \"test RCX, RCX\"},1
+{\"address\":\"852\", \"name\": \"jz 35d + RIP + 6\"},1
+{\"address\":\"858\", \"name\": \"mov RAX, [RCX + 28]\"},1
+{\"address\":\"85c\", \"name\": \"mov EDX, [R12]\"},1
+{\"address\":\"860\", \"name\": \"cmp EDX, [RAX]\"},1
+{\"address\":\"862\", \"name\": \"jle 3a4 + RIP + 6\"},1
+{\"address\":\"868\", \"name\": \"mov RBP, RCX\"},1
+{\"address\":\"86b\", \"name\": \"jmp e + RIP + 2\"},1
+{\"address\":\"86d\", \"name\": \"nop [RAX]\"},1
+{\"address\":\"870\", \"name\": \"mov RAX, [RBX + 28]\"},1
+{\"address\":\"874\", \"name\": \"cmp [RAX], EDX\"},1
+{\"address\":\"876\", \"name\": \"jnl c + RIP + 2\"},1
+{\"address\":\"878\", \"name\": \"mov RBP, RBX\"},1
+{\"address\":\"87b\", \"name\": \"mov RBX, [RBP + 10]\"},1
+{\"address\":\"87f\", \"name\": \"test RBX, RBX\"},1
+{\"address\":\"882\", \"name\": \"jnz ffffffffffffffec + RIP + 2\"},1
+{\"address\":\"884\", \"name\": \"mov R13, [RIP + 0]\"},1
+{\"address\":\"88b\", \"name\": \"test R13, R13\"},1
+{\"address\":\"88e\", \"name\": \"jz 234 + RIP + 6\"},1
+{\"address\":\"894\", \"name\": \"mov RDX, [R13 + 18]\"},1
+{\"address\":\"898\", \"name\": \"mov EAX, [RSP + 20]\"},1
+{\"address\":\"89c\", \"name\": \"test RBX, RBX\"},1
+{\"address\":\"89f\", \"name\": \"mov [R13 + 28], R12\"},1
+{\"address\":\"8a3\", \"name\": \"mov [R13 + 30], 0\"},1
+{\"address\":\"8ab\", \"name\": \"mov [RIP + 0], RDX\"},1
+{\"address\":\"8b2\", \"name\": \"mov [R12 + 68], R14\"},1
+{\"address\":\"8b7\", \"name\": \"mov [R12 + 4], R15\"},1
+{\"address\":\"8bc\", \"name\": \"mov [R12 + 6c], EAX\"},1
+{\"address\":\"8c1\", \"name\": \"mov [R12 + 70], 73\"},1
+{\"address\":\"8ca\", \"name\": \"mov [R12 + 78], 0\"},1
+{\"address\":\"8d3\", \"name\": \"jz 10 + RIP + 2\"},1
+{\"address\":\"8d5\", \"name\": \"mov RAX, [RBX + 28]\"},1
+{\"address\":\"8d9\", \"name\": \"mov EDI, [R12]\"},1
+{\"address\":\"8dd\", \"name\": \"cmp [RAX], EDI\"},1
+{\"address\":\"8df\", \"name\": \"jz 98 + RIP + 6\"},1
+{\"address\":\"8e5\", \"name\": \"test RBP, RBP\"},1
+{\"address\":\"8e8\", \"name\": \"jz 272 + RIP + 6\"},1
+{\"address\":\"8ee\", \"name\": \"mov RAX, [RBP + 10]\"},1
+{\"address\":\"8f2\", \"name\": \"mov [R13 + 8], RBP\"},1
+{\"address\":\"8f6\", \"name\": \"mov [R13 + 10], RAX\"},1
+{\"address\":\"8fa\", \"name\": \"mov [RBP + 10], R13\"},1
+{\"address\":\"8fe\", \"name\": \"mov RAX, [R13 + 10]\"},1
+{\"address\":\"902\", \"name\": \"test RAX, RAX\"},1
+{\"address\":\"905\", \"name\": \"jz 4 + RIP + 2\"},1
+{\"address\":\"907\", \"name\": \"mov [RAX + 8], R13\"},1
+{\"address\":\"90b\", \"name\": \"mov EAX, [RIP + 0]\"},1
+{\"address\":\"911\", \"name\": \"cmp [RIP + 0], EAX\"},1
+{\"address\":\"917\", \"name\": \"mov [R13 + 18], 0\"},1
+{\"address\":\"91f\", \"name\": \"jnle d3 + RIP + 6\"},1
+{\"address\":\"925\", \"name\": \"mov RDX, [RIP + 0]\"},1
+{\"address\":\"92c\", \"name\": \"mov RAX, [R13 + 28]\"},1
+{\"address\":\"930\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"933\", \"name\": \"mov ESI, [RAX + 68]\"},1
+{\"address\":\"936\", \"name\": \"jz d + RIP + 2\"},1
+{\"address\":\"938\", \"name\": \"mov RAX, [RDX + 28]\"},1
+{\"address\":\"93c\", \"name\": \"cmp ESI, [RAX + 68]\"},1
+{\"address\":\"93f\", \"name\": \"jle 87 + RIP + 6\"},1
+{\"address\":\"945\", \"name\": \"mov [R13 + 20], RDX\"},1
+{\"address\":\"949\", \"name\": \"mov [RIP + 0], R13\"},1
+{\"address\":\"950\", \"name\": \"mov EAX, [RIP + 0]\"},1
+{\"address\":\"956\", \"name\": \"test EAX, EAX\"},1
+{\"address\":\"958\", \"name\": \"jle a + RIP + 2\"},1
+{\"address\":\"95a\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"95f\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"964\", \"name\": \"mov RAX, 2\"},1
+{\"address\":\"969\", \"name\": \"jmp 28 + RIP + 2\"},1
+{\"address\":\"96b\", \"name\": \"nop [RAX + RAX * 1 + 0]\"},1
+{\"address\":\"970\", \"name\": \"mov RAX, [RDX + 28]\"},1
+{\"address\":\"974\", \"name\": \"cmp R14, [RAX + 68]\"},1
+{\"address\":\"978\", \"name\": \"jnle c + RIP + 2\"},1
+{\"address\":\"97a\", \"name\": \"mov RBX, RDX\"},1
+{\"address\":\"97d\", \"name\": \"mov RDX, [RBX + 18]\"},1
+{\"address\":\"981\", \"name\": \"test RDX, RDX\"},1
+{\"address\":\"984\", \"name\": \"jnz ffffffffffffffea + RIP + 2\"},1
+{\"address\":\"986\", \"name\": \"mov [R13 + 18], RDX\"},1
+{\"address\":\"98a\", \"name\": \"mov RAX, 1\"},1
+{\"address\":\"98f\", \"name\": \"mov [RBX + 18], R13\"},1
+{\"address\":\"993\", \"name\": \"mov [R13 + 0], EAX\"},1
+{\"address\":\"997\", \"name\": \"mov RDI, 0\"},1
+{\"address\":\"99c\", \"name\": \"call 0 + RIP + 5\"},1
+{\"address\":\"9a1\", \"name\": \"mov RAX, R13\"},1
+{\"address\":\"9a4\", \"name\": \"add RSP, 198\"},1
+{\"address\":\"9ab\", \"name\": \"pop RBX, RSP\"},1
+{\"address\":\"9ac\", \"name\": \"pop RBP, RSP\"},1
+{\"address\":\"9ad\", \"name\": \"pop R12, RSP\"},1
+{\"address\":\"9af\", \"name\": \"pop R13, RSP\"},1
+{\"address\":\"9b1\", \"name\": \"pop R14, RSP\"},1
+{\"address\":\"9b3\", \"name\": \"pop R15, RSP\"},1
+{\"address\":\"9b5\", \"name\": \"ret near [RSP]\"}]",
+
+"__mq_open" : "[
+1
+{\"address\":\"0\", \"name\": \"mov [RSP + ffffffffffffffd8], RDX\"},1
+{\"address\":\"5\", \"name\": \"mov [RSP + ffffffffffffffe0], RCX\"},1
+{\"address\":\"a\", \"name\": \"cmp [RDI], 2f\"},1
+{\"address\":\"d\", \"name\": \"jnz 51 + RIP + 2\"},1
+{\"address\":\"f\", \"name\": \"xor EDX, EDX\"},1
+{\"address\":\"11\", \"name\": \"xor R10, R10\"},1
+{\"address\":\"14\", \"name\": \"test SIL, 40\"},1
+{\"address\":\"18\", \"name\": \"jnz 1e + RIP + 2\"},1
+{\"address\":\"1a\", \"name\": \"movsxd RSI, ESI\"},1
+{\"address\":\"1d\", \"name\": \"add RDI, 1\"},1
+{\"address\":\"21\", \"name\": \"mov RAX, f0\"},1
+{\"address\":\"26\", \"name\": \"syscall RCX\"},1
+{\"address\":\"28\", \"name\": \"cmp RAX, fffff000\"},1
+{\"address\":\"2e\", \"name\": \"jnbe 44 + RIP + 2\"},1
+{\"address\":\"30\", \"name\": \"REP ret near [RSP]\"}]",
+
+"__mq_open_2" : "[
+1
+{\"address\":\"90\", \"name\": \"test SIL, 40\"},1
+{\"address\":\"94\", \"name\": \"jnz 7 + RIP + 2\"},1
+{\"address\":\"96\", \"name\": \"xor EAX, EAX\"},1
+{\"address\":\"98\", \"name\": \"jmp 0 + RIP + 5\"},1
+{\"address\":\"9d\", \"name\": \"push RAX, RSP\"},1
+{\"address\":\"9e\", \"name\": \"mov RDI, 0\"},1
