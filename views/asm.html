@@ -11,12 +11,12 @@ ul{
 <table class="table table-striped table-bordered table-hover">
   <thead>
     <th>
-      Executable name
+      Binaries
     </th>
   </thead>
   <tbody>
     <tr ng-repeat="entry in filesList">
-      <td class="clickable" ng-style="getFileBackgroundStyle(entry)" ng-click="setFile(entry)">
+      <td class="clickable" ng-style="getBackgroundStyle(entry, 'files')" ng-click="setFile(entry)">
         <a class="clickable" ng-click="setFile(entry)">{{entry}}</a>
       </td>
     </tr>
@@ -30,10 +30,48 @@ ul{
   {{error}}
 </div>
 
-<div ng-show="selectedFile">
+
+<!-- Object files -->
+
+
+<div ng-show="archiveMap">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <th>
+        Object files in {{selectedFile}}
+        <br>
+        <br>
+        <pagination total-items="archiveFiles.length" ng-model="currentPageArchive" max-size="5"
+        boundary-links="true"
+        items-per-page="numPerPage" class="pagination-sm" style="margin: 0px !important;">
+      </pagination>
+      <form ng-submit="filterObjectTableData()">  
+        <input typeahead="term for term in autoCompleteValues | filter:$viewValue | limitTo:8" type="text" ng-model="objectTextFilter"
+        placeholder="search" ng-change="filterObjectTableData()" typeahead-on-select="filterObjectTableData()">
+      </form>
+    </th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="entry in archiveFiles | filter : paginateArchive track by $index">
+      <td class="clickable" ng-click="setObjectFile(entry)" ng-style="getBackgroundStyle(entry, 'object files')">
+        <a class="clickable" ng-click="setObjectFile(entry)">{{entry}}</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+<!-- Functions -->
+
+
+<div ng-show="functionsList">
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <th colspan="3">
+        Functions in {{archiveMap == undefined ? selectedFile : selectedObjectFile}}
+        <br>
+        <br>
         <div>
           <div>
             <pagination total-items="functionsList.length" ng-model="currentPage" max-size="5"
@@ -42,10 +80,6 @@ ul{
           </pagination>
         </div>
         <div>
-          <!--typeahead-->
-          <!-- <form  ng-submit="filterTableData()">   -->
-            <!-- <input typeahead="term for term in autoCompleteValues | filter:$viewValue | limitTo:8" type="text" ng-model="textFilter" placeholder="search" ng-change="checkSizeToFilterData()" typeahead-on-select="filterTableData()"> -->
-          <!-- </form> -->
           <input type="text" ng-model="textFilter" placeholder="search" ng-change="filterTableData()"/>
           <span style="color: #868686">Showing <span style="color: black; font-size: 15px; font-weight: bolder">{{functionsList.length}}
           </span> functions</span>
@@ -54,17 +88,23 @@ ul{
     </th>
   </thead>
   <tbody>
-    <tr ng-click="setFunction(entry.name)" ng-repeat="entry in functionsList | filter : paginate track by $index">
-      <td style="width:1px">
+    <tr class="clickable" ng-click="setFunction(entry.name)" ng-repeat="entry in functionsList | filter : paginate track by $index">
+      <td style="width:1px" ng-style="getBackgroundStyle(entry.name, 'functions')">
         {{entry.address}}
       </td>
-      <td>
+      <td ng-style="getBackgroundStyle(entry.name, 'functions')">
         <a class="clickable" ng-click="setFunction(entry.name)">{{entry.name}}</a>
       </td>
     </tr>
   </tbody>
 </table>
 </div>
+
+
+
+<!-- Assembly -->
+
+
 
 <div ng-show="selectedFunction" class="panel panel-default assemblylisting">
   <div class="panel-heading boldText">{{selectedFunction}} 

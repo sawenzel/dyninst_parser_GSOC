@@ -1,9 +1,15 @@
  angular.module('candyUiApp')
- .controller('statsCtrl', function ($rootScope, $scope, $modalInstance, $http, $modal, functionName, fileName, assemblyEndpoint, prevFunction) {
+ .controller('statsCtrl', function ($rootScope, $scope, $modalInstance, $http, $modal, functionName,
+ 	fileName, objectFileName, isCurrentFileArchive, prevFunction) {
 
+ 	$scope.archiveAssemblyEndpoint = "/api/archive";
+ 	$scope.assemblyEndpoint = "/api/assembly";
+
+
+ 	$scope.isCurrentFileArchive = isCurrentFileArchive;
+ 	$scope.objectFileName = objectFileName;
  	$scope.functionName = functionName;
  	$scope.fileName = fileName;
- 	$scope.assemblyEndpoint = assemblyEndpoint;
  	$scope.currentAssembly = {};
  	$scope.prevFunction = prevFunction;
 
@@ -19,7 +25,7 @@
  		'mov' : ['mov'],
  		'logic' : ['and', 'or', 'xor'],
  		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns', 'jnle', 'jle', 'jnl', 'js', 'jl', 'jnbe'],
- 		'arithmetic' : ['add', 'mul', 'div', 'sub'],
+ 		'arithmetic' : ['add', 'mul', 'div', 'sub', 'shl', 'shr', 'sar'],
  		'push' : ['push'],
  		'pop' : ['pop'],
  		'call' : ['call'],
@@ -52,8 +58,11 @@
  				fileName: function () {
  					return $scope.fileName;
  				},
- 				assemblyEndpoint: function() {
- 					return $scope.assemblyEndpoint;
+ 				objectFileName : function() {
+ 					return $scope.objectFileName;
+ 				},
+ 				isCurrentFileArchive: function() {
+ 					return $scope.isCurrentFileArchive;
  				},
  				prevFunction: function(){
  					return $scope.functionName;
@@ -169,12 +178,8 @@
  		}
  	}
 
- 	$scope.getinstrs = function(){
- 		var fileName = $scope.fileName;
- 		var functionName = $scope.functionName;
-
- 		$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
- 			$scope.currentAssembly = data;
+ 	updateData = function(data){
+ 		$scope.currentAssembly = data;
 
  			namesList = data.map(function (a){
  				return a['name'];
@@ -237,7 +242,22 @@
  					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
  					]});
  			}
- 		});
+ 	}
+
+ 	$scope.getinstrs = function(){
+ 		var fileName = $scope.fileName;
+ 		var functionName = $scope.functionName;
+ 		var objectName = $scope.objectFileName;
+
+ 		if($scope.isCurrentFileArchive == true){
+ 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, functionname: functionName}, cache:true}).success(function (data) {
+	 			updateData(data);
+ 			});
+ 		} else {
+ 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
+	 			updateData(data);
+ 			});
+ 		}
 };
 
 getHtmlTooltip = function(tooltipName, title){
