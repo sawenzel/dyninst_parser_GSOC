@@ -64,10 +64,6 @@ public class AssemblyServlet extends HttpServlet {
 		return FileUtils.readFileToString(new File(cacheDirPath + fileName));
 	}
 
-	class Instr{
-		public String address, name, dest;
-	}
-
 	public static void main(String[] args) throws IOException {
 		if(args.length != 1){
 			System.out.println("usage: java AssemblyServlet <filename>");
@@ -92,6 +88,7 @@ public class AssemblyServlet extends HttpServlet {
 		response.setContentType("application/json");
 
 		String fileName = request.getParameter("filename");
+		String functionName = request.getParameter("functionname");
 
 		if(isAssemblyCached(fileName) == false)
 			getAssembly(fileName);
@@ -100,6 +97,6 @@ public class AssemblyServlet extends HttpServlet {
 		Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
 		Map<String,String> map = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
 
-		response.getWriter().println(map.get(request.getParameter("functionname")));//.replace('\'', '\"'));
+		response.getWriter().println(map.get(functionName));
 	}
 }

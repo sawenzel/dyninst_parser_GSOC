@@ -56,4 +56,24 @@
 		<servlet-name>Assembly</servlet-name>
 		<url-pattern>/api/assembly</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Archive</servlet-name>
+		<servlet-class>ArchiveServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Archive</servlet-name>
+		<url-pattern>/api/archive</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ArchiveFuncs</servlet-name>
+		<servlet-class>ArchiveFuncsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ArchiveFuncs</servlet-name>
+		<url-pattern>/api/archivefuncs</url-pattern>
+	</servlet-mapping>
 </web-app>

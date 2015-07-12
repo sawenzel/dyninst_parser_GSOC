@@ -52,7 +52,7 @@ int main(int argc, char **argv){
 			continue;
 		}
 
-		outstream << "\"" << s->name() << "\":[";
+		outstream << "\"" << s->name() << "\":{";
 
 		Address crtAddr;
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv){
 			//if the function exists, don't output it
 
 			//if(strcmp(f->name().c_str(), "main") == 0){
-			outstream << "{\"" << f->name() << "\" : [";
+			outstream << "\n\"" << f->name() << "\": \"[";
 			//get address of entry point for current function
 			//Address crtAddr = f->entry()->start();
 			crtAddr = f->addr();
@@ -89,8 +89,8 @@ int main(int argc, char **argv){
 				//decode current instruction
 				instr = decoder.decode((unsigned char *)f->isrc()->getPtrToInstruction(crtAddr));
 
-				outstream << "{\"address\":\"" << hex << crtAddr << "\", ";
-				outstream << "\"name\": \"" << instr->format() << "\"";
+				outstream << "\n\t{\\\"address\": \\\"" << hex << crtAddr << "\\\", ";
+				outstream << "\\\"name\\\": \\\"" << instr->format() << "\\\"";
 				//pentru instructiuni de tip call afisam adresa destinatie
 
 				if(instr->getCategory() == 0 && instr->size() == 5){
@@ -113,7 +113,7 @@ int main(int argc, char **argv){
 							ParseAPI::Function *dest = co->findFuncByEntry(f->region(), expr->eval().convert<unsigned long int>());
 							//pt cazurile in care al doilea node al AST-ului nu era RIP
 							if(dest)
-								outstream << ", \"dest\": \"" << dest->name() << "\"";
+								outstream << ", \\\"dest\\\": \\\"" << dest->name() << "\\\"";
 						}
 					}
 				}
@@ -124,9 +124,9 @@ int main(int argc, char **argv){
 				outstream << "}";
 				instr_count++;
 			};
-			outstream << "]}";
+			outstream << "\"]";
 		}
-		outstream << "],";
+		outstream << "},";
 		}
 
 		string resp = outstream.str();

@@ -36,6 +36,57 @@ int main(int argc, char *argv[]){
 	//parse the binary given as a command line arg
 	co->parse();
 
+	const CodeObject::funclist &all = co->funcs();
+	if(all.size() == 0){
+		cout << "no functions" << endl;
+		return -1;
+	}
+
+	Address crtAddr;
+
+	vector<CodeRegion *> regions = co->cs()->regions();
+	cout << regions.size() << endl;
+
+	if(regions.size() == 0){
+		cout << "no code regions" << endl;
+		return -1;
+	}
+
+	auto crfit = regions.begin();
+	for(;crfit != regions.end(); crfit++){
+		CodeRegion* cr = *crfit;
+		cout << hex << cr->low() << " " << hex << cr->high() << endl;
+	}
+
+	auto fit = all.begin();
+	Function *f = *fit;
+	InstructionDecoder decoder(f->isrc()->getPtrToInstruction(f->addr()), InstructionDecoder::maxInstructionLength, f->isrc()->getArch());
+
+	for(; fit != all.end(); ++fit){
+		f = *fit;
+		crtAddr = f->addr();
+
+		cout << f->name() << endl;;// << " " << hex << crtAddr << endl;
+
+		instr = decoder.decode((const unsigned char*)f->isrc()->getPtrToInstruction(crtAddr));
+		auto fbl = f->blocks().end();
+		fbl--;
+		Block *b = *fbl;
+		Address lastAddr = b->last();
+		while(crtAddr < lastAddr){
+			cout << hex << crtAddr << " " << instr->format() << endl;
+
+			instr = decoder.decode((const unsigned char*)f->isrc()->getPtrToInstruction(crtAddr));
+
+			crtAddr += instr->size();
+		}
+	}
+	/*
+	InstructionDecoder decoder(co->cs()->getPtrToInstruction(crtAddr), 200, co->cs()->getArch());
+	instr = decoder.decode();
+	cout << instr->format();
+*/
+	/*
 	//get list of all functions in the binary
 	const CodeObject::funclist &all = co->funcs();
 
@@ -47,48 +98,23 @@ int main(int argc, char *argv[]){
 		//if(strcmp(f->name().c_str(), "main") == 0){
 			cout << endl << "\"" << f->name() << "\" : [" << endl;
 			//get address of entry point for current function
-			Address crtaddr = f->entry()->start();
+			crtAddr = f->entry()->start();
 			do{
 				//decode current instruction
-				InstructionDecoder decoder(f->isrc()->getPtrToInstruction(crtaddr),
-						InstructionDecoder::maxInstructionLength,
+				InstructionDecoder decoder(f->isrc()->getPtrToInstruction(crtAddr),
+						200,
 						f->region()->getArch());
 				instr = decoder.decode();
-				cout << "{address:\"" << hex << crtaddr << "\", ";
+				cout << "{address:\"" << hex << crtAddr << "\", ";
 				cout << "name: \"" << instr->format() << "\"";
-
-				//pentru instructiuni de tip call afisam adresa destinatie
-				if(instr->getCategory() == 0 && instr->size() == 5){
-					//aflam target-ul control flow-ului
-					Expression::Ptr expr = instr->getControlFlowTarget();
-					if(expr){
-						std::vector<Expression::Ptr> children1;
-						std::vector<Expression::Ptr> children2;
-						expr->getChildren(children1);
-						if(children1.size() > 0)
-							children1[1]->getChildren(children2);
-
-						//bind the RIP register value inside of the instruction
-						//to that of the current address + size
-						if(children1.size() > 0 && children2.size() > 0){
-							expr->bind(children1[1].get(), Result(u32, crtaddr + instr->size()));
-							//cout << " : " << expr->eval().format();
-
-							//get the destination function
-							Function *dest = co->findFuncByEntry(f->region(), expr->eval().convert<unsigned long int>());
-							cout << ", dest: \"" << dest->name() << "\"";
-						}
-					}
-				}
-				//go to the address of the next instruction by adding the
-				//size of the current instruction to the current address
-
-				crtaddr += instr->size();
+				crtAddr += instr->size();
 				cout << "}," << endl;
-			} while(instr->getCategory() != 1);
+			}while(f->region()->contains(crtAddr) == true);
 			//decode instructions until return type instruction is found
 			//i.e. category = 1
 			cout << "]," << endl;
 		}
-	//}
+	}
+	*/
 }
+
