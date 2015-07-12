@@ -106,9 +106,12 @@
  		$scope.selectedFunction3 = "";
  	};
 
- 	$scope.setFunction = function(functionName){
+ 	$scope.setFunction = function(functionName, address){
  		$scope.selectedFunction = functionName;
+ 		$scope.selectedFunctionAddress = address;
+
  		var fileName = $scope.selectedFile;
+ 		var addressVal = address;
  		if($scope.isCurrentFileArchive == false){
  			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
  				$scope.currentAssembly = data;
@@ -118,7 +121,7 @@
  			$scope.selectedFunction3 = "";
  		} else {
  			var objectName = $scope.selectedObjectFile;
- 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: objectName, functionname: functionName}, cache:true}).success(function (data) {
+ 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: objectName, address:addressVal, functionname: functionName}, cache:true}).success(function (data) {
  				$scope.currentAssembly = data;
  			});
  		}
@@ -164,6 +167,9 @@
  				objectFileName : function() {
  					return $scope.selectedObjectFile;
  				},
+ 				address : function(){
+ 					return $scope.selectedFunctionAddress;
+ 				},
  				isCurrentFileArchive: function() {
  					return $scope.isCurrentFileArchive;
  				},
@@ -194,7 +200,7 @@
  				return {'background-color': '#B2DDEB'}
  			}
  		} else if(entrySetName == "functions"){
- 			if($scope.selectedFunction == entry){
+ 			if($scope.selectedFunction == entry.name && $scope.selectedFunctionAddress == entry.address){
  				return {'background-color': '#B2DDEB'}
  			}
  		}

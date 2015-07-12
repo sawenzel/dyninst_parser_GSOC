@@ -1,6 +1,6 @@
  angular.module('candyUiApp')
  .controller('statsCtrl', function ($rootScope, $scope, $modalInstance, $http, $modal, functionName,
- 	fileName, objectFileName, isCurrentFileArchive, prevFunction) {
+ 	fileName, objectFileName, address, isCurrentFileArchive, prevFunction) {
 
  	$scope.archiveAssemblyEndpoint = "/api/archive";
  	$scope.assemblyEndpoint = "/api/assembly";
@@ -12,6 +12,7 @@
  	$scope.fileName = fileName;
  	$scope.currentAssembly = {};
  	$scope.prevFunction = prevFunction;
+ 	$scope.address = address;
 
  	branchChart = {};
  	logicChart = {};
@@ -22,8 +23,8 @@
  	$scope.mainChartReady = false;
 
  	$scope.instrTypes = {
- 		'mov' : ['mov'],
- 		'logic' : ['and', 'or', 'xor'],
+ 		'mov' : ['movsd', 'mov'],
+ 		'logic' : ['and', 'or', 'xorpd', 'xor'],
  		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns', 'jnle', 'jle', 'jnl', 'js', 'jl', 'jnbe'],
  		'arithmetic' : ['add', 'mul', 'div', 'sub', 'shl', 'shr', 'sar'],
  		'push' : ['push'],
@@ -60,6 +61,9 @@
  				},
  				objectFileName : function() {
  					return $scope.objectFileName;
+ 				},
+ 				address : function() {
+ 					return $scope.address;
  				},
  				isCurrentFileArchive: function() {
  					return $scope.isCurrentFileArchive;
@@ -250,7 +254,7 @@
  		var objectName = $scope.objectFileName;
 
  		if($scope.isCurrentFileArchive == true){
- 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, functionname: functionName}, cache:true}).success(function (data) {
+ 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: $scope.address, functionname: functionName}, cache:true}).success(function (data) {
 	 			updateData(data);
  			});
  		} else {

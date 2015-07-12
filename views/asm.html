@@ -47,7 +47,7 @@ ul{
       </pagination>
       <form ng-submit="filterObjectTableData()">  
         <input typeahead="term for term in autoCompleteValues | filter:$viewValue | limitTo:8" type="text" ng-model="objectTextFilter"
-        placeholder="search" ng-change="filterObjectTableData()" typeahead-on-select="filterObjectTableData()">
+        placeholder="search" ng-change="filterObjectTableData(); functionsList=undefined; selectedFunction=undefined" typeahead-on-select="filterObjectTableData()">
       </form>
     </th>
   </thead>
@@ -88,12 +88,12 @@ ul{
     </th>
   </thead>
   <tbody>
-    <tr class="clickable" ng-click="setFunction(entry.name)" ng-repeat="entry in functionsList | filter : paginate track by $index">
-      <td style="width:1px" ng-style="getBackgroundStyle(entry.name, 'functions')">
+    <tr class="clickable" ng-click="setFunction(entry.name, entry.address)" ng-repeat="entry in functionsList | filter : paginate track by $index">
+      <td style="width:1px" ng-style="getBackgroundStyle(entry, 'functions')">
         {{entry.address}}
       </td>
-      <td ng-style="getBackgroundStyle(entry.name, 'functions')">
-        <a class="clickable" ng-click="setFunction(entry.name)">{{entry.name}}</a>
+      <td ng-style="getBackgroundStyle(entry, 'functions')">
+        <a class="clickable" ng-click="setFunction(entry.name, entry.address)">{{entry.name}}</a>
       </td>
     </tr>
   </tbody>
