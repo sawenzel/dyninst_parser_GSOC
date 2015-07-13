@@ -12,6 +12,13 @@ body {
     min-width: 350px;
 }
 
+.objectSubscript {
+    float: right;
+    color: #7B7B7B;
+    font-size: 12px;
+    padding-top: 5px
+}
+
 .app-modal-window .modal-dialog {
     width: 1000px;
     height: 1000px;

@@ -9,17 +9,13 @@
 
  	$scope.archiveFuncsEndpoint = "/api/archivefuncs";
  	$scope.archiveAssemblyEndpoint = "/api/archive";
-
  	$scope.functionsEndpoint = "/api/functions";
  	$scope.filesEndpoint = "/api/files";
  	$scope.assemblyEndpoint = "/api/assembly";
 
  	$scope.selectedFile = "";
- 	$scope.selectedFunction = "";
- 	$scope.selectedFunction2 = "";
- 	$scope.selectedFunction3 = "";
-
- 	$scope.currentAssembly = "";
+ 	$scope.selectedFunction = [];
+ 	$scope.currentAssembly = [];
 
  	$scope.filesList = [];
  	$scope.functionsList = undefined;
@@ -38,120 +34,86 @@
  		};
  	}
 
- 	$scope.setObjectFile = function(fileName){
- 		$scope.selectedObjectFile = fileName;
- 		$scope.functionsList = $scope.archiveMap[fileName];
- 		$scope.source = $scope.archiveMap[fileName];
-
- 		$scope.selectedFunction = "";
- 		$scope.selectedFunction2 = "";
- 		$scope.selectedFunction3 = "";
- 	}
-
- 	$scope.checkSizeToFilterData = function(){
- 		if($scope.functionsList.length < 1000)
- 			$scope.filterTableData();
- 	}
-
- 	$scope.filterObjectTableData = function(){
- 		var textFilter = $scope.objectTextFilter;
- 		if(textFilter.length == 0){
- 			$scope.archiveFiles = $scope.originalArchiveFiles;
- 		} else {
- 			$scope.archiveFiles = $scope.originalArchiveFiles.filter(
- 				function(a){
- 					return $scope.archiveMap[a].map(function(x){return x['name']}).indexOf(textFilter) != -1;
- 				}
- 			);
- 		}
- 	}
-
  	$scope.setFile = function(fileName){
  		$scope.selectedFile = fileName;
- 		$scope.functionsList = undefined;
- 		$scope.archiveMap = undefined;
- 		$scope.isCurrentFileArchive = false;
+ 		$scope.functionsList = []
+ 		$scope.source = [];
 
  		$scope.error = "";
  		if(fileName.endsWith(".a")){
  			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName}}).success(function (data) {
- 				$scope.archiveMap = data;
- 				$scope.archiveFiles = Object.keys(data);
- 				$scope.originalArchiveFiles = Object.keys(data);
- 				$scope.isCurrentFileArchive = true;
-
- 				// console.log(data);
- 				$scope.autoCompleteValues = [];
- 				$scope.objectFunctions = [];
- 				for (var i in data){
- 					$scope.autoCompleteValues = $scope.autoCompleteValues.concat(data[i].map(function(x){return x['name']}));
+ 				for(var i in data){
+ 					$scope.functionsList = $scope.functionsList.concat(data[i].map(function(x){x['obj']=i; return x}));
  				}
+ 				$scope.source = $scope.functionsList.slice(0);
+ 				$scope.isCurrentFileArchive = true;
  			});
  		} else {
  			$http.get($scope.functionsEndpoint, {params:{filename:fileName}}).success(function (data) {
  				if("error" in data){
  					$scope.error = data["error"];
- 					$scope.functionsList = [];
  					$scope.assemblyDict = {};
  					$scope.selectedFile = "";
  				} else {
  					$scope.functionsList = data;
- 					$scope.source = data;
  					$scope.textFilter = "";
  				}
+ 				$scope.source = $scope.functionsList.slice(0);
+ 				$scope.isCurrentFileArchive = false;
  			});
  		}
- 		$scope.selectedFunction = "";
- 		$scope.selectedFunction2 = "";
- 		$scope.selectedFunction3 = "";
+
+ 		$scope.selectedFunction = [];
+ 		$scope.textFilter = "";
  	};
 
- 	$scope.setFunction = function(functionName, address){
- 		$scope.selectedFunction = functionName;
- 		$scope.selectedFunctionAddress = address;
+
+ 	function findFuncByName(functionName){
+ 		for(var i in $scope.source){
+			if($scope.source[i].name == functionName){
+				return $scope.source[i];
+			}
+		}
+ 	}
+
+ 	$scope.setFunction = function(functionEntry, index){
+ 		if(index == 0)
+ 			$scope.selectedFunction = [];
+
+ 		var functionName = functionEntry['name'];
+ 		var functionObjFile = functionEntry['obj'];
+ 		var functionAddr = functionEntry['address'];
+
+ 		if('dest' in functionEntry){
+			//set a destination function
+			functionName = functionEntry['dest'];
+			var destFunc = findFuncByName(functionName);
+
+			functionObjFile = destFunc.obj;
+			functionAddr = destFunc.address;
+		}
+
+ 		$scope.selectedFunction[index] = {};
+ 		$scope.selectedFunction[index].name = functionName;
+ 		$scope.selectedFunction[index].addr = functionAddr;
+ 		$scope.selectedFunction[index].obj = functionObjFile;
 
  		var fileName = $scope.selectedFile;
- 		var addressVal = address;
- 		if($scope.isCurrentFileArchive == false){
- 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
- 				$scope.currentAssembly = data;
- 			});
 
- 			$scope.selectedFunction2 = "";
- 			$scope.selectedFunction3 = "";
+ 		if($scope.isCurrentFileArchive == true){
+ 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: functionObjFile, address:functionAddr, functionname: functionName}, cache:true}).success(function (data) {
+ 				$scope.currentAssembly[index] = data;
+ 			});
  		} else {
- 			var objectName = $scope.selectedObjectFile;
- 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: objectName, address:addressVal, functionname: functionName}, cache:true}).success(function (data) {
- 				$scope.currentAssembly = data;
+ 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
+ 				$scope.currentAssembly[index] = data;
  			});
  		}
+
+ 		$scope.textFilter = "";
  	};
 
- 	$scope.setFunction2 = function(functionName){
- 		if(typeof functionName == "undefined"){
- 			return;
- 		}
- 		$scope.selectedFunction2 = functionName;
- 		var fileName = $scope.selectedFile;
- 		$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
- 			$scope.currentAssembly2 = data;
- 		});
- 		
- 		$scope.selectedFunction3 = "";
- 	};
-
- 	$scope.setFunction3 = function(functionName){
- 		if(typeof functionName == "undefined"){
- 			return;
- 		}
- 		$scope.selectedFunction3 = functionName;
- 		var fileName = $scope.selectedFile;
- 		$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
- 			$scope.currentAssembly3 = data;
- 		});
- 	};
-
- 	$scope.openStatsModal = function () {
+ 	$scope.openStatsModal = function (functionEntry) {
  		var modalInstance = $modal.open({
  			animation: $scope.animationsEnabled,
  			templateUrl: 'views/statsTemplate.html',
@@ -159,16 +121,16 @@
  			windowClass: 'app-modal-window',
  			resolve: {
  				functionName: function () {
- 					return $scope.selectedFunction;
+ 					return functionEntry.name;
  				},
  				fileName: function () {
  					return $scope.selectedFile;
  				},
  				objectFileName : function() {
- 					return $scope.selectedObjectFile;
+ 					return functionEntry.obj;
  				},
  				address : function(){
- 					return $scope.selectedFunctionAddress;
+ 					return functionEntry.addr;
  				},
  				isCurrentFileArchive: function() {
  					return $scope.isCurrentFileArchive;
@@ -188,7 +150,6 @@
  	}
 
  	$scope.init();
-
 
  	$scope.getBackgroundStyle = function(entry, entrySetName){
  		if(entrySetName == "files"){
@@ -260,12 +221,12 @@
  						var address = a.address.toLowerCase();
  						try {
  							var regex = new RegExp(textFilter);
- 							return regex.test(name);
+ 							return (regex.test(name) || regex.test(address));
  						} catch (e) {
  							return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1);	
  						}
  					}
- 				);
+ 					);
  			}
  		};
  	});
