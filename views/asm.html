@@ -90,7 +90,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[0]">
         {{line.address}} :
-        <code ng-class="getCodeStyle(line.name)" ng-click="line.dest ? setFunction(line, 1) : ''">{{format(line)}}</code>
+        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction(line, 1) : ''">{{format(line)}}</code>
       </li>
     </ul>
   </div>
@@ -107,7 +107,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[1]">
         {{line.address}} :
-        <code ng-class="getCodeStyle(line.name)" ng-click="setFunction(line, 2)">{{format(line)}}</code>
+        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction(line, 2) : ''">{{format(line)}}</code>
       </li>
     </ul>
   </div>

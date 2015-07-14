@@ -67,15 +67,6 @@
  		$scope.textFilter = "";
  	};
 
-
- 	function findFuncByName(functionName){
- 		for(var i in $scope.source){
-			if($scope.source[i].name == functionName){
-				return $scope.source[i];
-			}
-		}
- 	}
-
  	$scope.setFunction = function(functionEntry, index){
  		if(index == 0)
  			$scope.selectedFunction = [];
@@ -84,18 +75,16 @@
  		var functionObjFile = functionEntry['obj'];
  		var functionAddr = functionEntry['address'];
 
- 		if('dest' in functionEntry){
+ 		if('destName' in functionEntry){
 			//set a destination function
-			functionName = functionEntry['dest'];
-			var destFunc = findFuncByName(functionName);
-
-			functionObjFile = destFunc.obj;
-			functionAddr = destFunc.address;
+			functionName = functionEntry['destName'];
+ 			functionObjFile = functionEntry['obj'];
+			functionAddr = functionEntry['destAddr'];
 		}
 
  		$scope.selectedFunction[index] = {};
  		$scope.selectedFunction[index].name = functionName;
- 		$scope.selectedFunction[index].addr = functionAddr;
+ 		$scope.selectedFunction[index].address = functionAddr;
  		$scope.selectedFunction[index].obj = functionObjFile;
 
  		var fileName = $scope.selectedFile;
@@ -120,17 +109,11 @@
  			controller: 'statsCtrl',
  			windowClass: 'app-modal-window',
  			resolve: {
- 				functionName: function () {
- 					return functionEntry.name;
+ 				crtFunction: function () {
+ 					return functionEntry;
  				},
  				fileName: function () {
  					return $scope.selectedFile;
- 				},
- 				objectFileName : function() {
- 					return functionEntry.obj;
- 				},
- 				address : function(){
- 					return functionEntry.addr;
  				},
  				isCurrentFileArchive: function() {
  					return $scope.isCurrentFileArchive;
@@ -178,9 +161,10 @@
  		}
 
  		$scope.format = function(line){
+ 			// console.log(line);
  			var name = line.name;
- 			if(line.dest != undefined && name.indexOf("call") == 0 && name.indexOf("RIP") != -1)
- 				return "call " + line.dest
+ 			if(line.destName != undefined && name.indexOf("call") == 0 && name.indexOf("RIP") != -1)
+ 				return "call " + line.destName;
  			else
  				return line.name;
  		}

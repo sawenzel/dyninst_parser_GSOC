@@ -1,17 +1,16 @@
  angular.module('candyUiApp')
- .controller('statsCtrl', function ($rootScope, $scope, $modalInstance, $http, $modal, functionName,
- 	fileName, objectFileName, address, isCurrentFileArchive, prevFunction) {
+ .controller('statsCtrl', function ($rootScope, $scope, $modalInstance, $http, $modal,
+ 	crtFunction, fileName, isCurrentFileArchive, prevFunction) {
 
  	$scope.archiveAssemblyEndpoint = "/api/archive";
  	$scope.assemblyEndpoint = "/api/assembly";
 
+ 	$scope.crtFunction = crtFunction;
  	$scope.isCurrentFileArchive = isCurrentFileArchive;
- 	$scope.objectFileName = objectFileName;
- 	$scope.functionName = functionName;
  	$scope.fileName = fileName;
- 	$scope.currentAssembly = {};
  	$scope.prevFunction = prevFunction;
- 	$scope.address = address;
+
+ 	$scope.currentAssembly = {};
 
  	branchChart = {};
  	logicChart = {};
@@ -40,48 +39,31 @@
  		};
  	}
 
-
  	$scope.exit = function() {
  		$modalInstance.close();
  	};
 
-
-
- 	function findFuncByName(functionName){
- 		for(var i in $scope.source){
-			if($scope.source[i].name == functionName){
-				return $scope.source[i];
-			}
-		}
- 	}
-
- 	$scope.openStatsModal = function(functionName) {
-
-
-
+ 	$scope.openStatsModal = function(functionEntry) {
  		var modalInstance = $modal.open({
  			animation: $scope.animationsEnabled,
  			templateUrl: 'views/statsTemplate.html',
  			controller: 'statsCtrl',
  			windowClass: 'app-modal-window',
  			resolve: {
- 				functionName: function () {
- 					return functionName;
+ 				crtFunction: function () {
+ 					if('destName' in functionEntry)
+ 						return {address:functionEntry.destAddr, name: functionEntry.destName, obj: $scope.crtFunction.obj};
+ 					else
+ 						return functionEntry;
  				},
  				fileName: function () {
  					return $scope.fileName;
- 				},
- 				objectFileName : function() {
- 					return $scope.objectFileName;
- 				},
- 				address : function() {
- 					return $scope.address;
  				},
  				isCurrentFileArchive: function() {
  					return $scope.isCurrentFileArchive;
  				},
  				prevFunction: function(){
- 					return $scope.functionName;
+ 					return $scope.crtFunction;
  				}
  			}
  		});
@@ -202,7 +184,8 @@
  		});
 
  		$scope.allInstrs = namesList;
- 		$scope.callDestinations = data.filter(function(x){return ('dest' in x)});
+ 		$scope.callDestinations = data.filter(function(x){return ('destName' in x)});
+
 
  		$scope.instTypeCount = {};
  		for (i in $scope.instrTypes){
@@ -256,17 +239,18 @@
  					{v: uniqueOthers[key]},
  					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
  					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
- 					]});
+ 				]});
  			}
  		}
 
  		$scope.getinstrs = function(){
  			var fileName = $scope.fileName;
- 			var functionName = $scope.functionName;
- 			var objectName = $scope.objectFileName;
+ 			var functionName = $scope.crtFunction.name;
+ 			var objectName = $scope.crtFunction.obj;
+ 			var destAddress = $scope.crtFunction.address;
 
  			if($scope.isCurrentFileArchive == true){
- 				$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: $scope.address, functionname: functionName}, cache:true}).success(function (data) {
+ 				$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: destAddress, functionname: functionName}, cache:true}).success(function (data) {
  					updateData(data);
  				});
  			} else {

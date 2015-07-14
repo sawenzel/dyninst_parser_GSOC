@@ -4,7 +4,7 @@
 <div google-chart chart="otherChart" on-ready="setToolTipChartPNG()" style="display: none"></div>
 
 <div class="modal-header">
-	<h4 class="modal-title">Stats for <b>{{functionName}}</b> in <b>{{fileName}}</b></h4>
+	<h4 class="modal-title">Stats for <b>{{crtFunction.name}}</b> in <b>{{fileName}}</b></h4>
 </div>
 
 <div class="modal-body">
@@ -17,7 +17,7 @@
 			<li ng-repeat="line in callDestinations">
 				<code>{{line.name}}</code>
 				<span class="glyphicon glyphicon-arrow-right"/>
-				<code ng-click="exit(); openStatsModal(line.dest)" class="callInstruction">{{line.dest}}</code>
+				<code ng-click="exit(); openStatsModal(line)" class="callInstruction">{{line.destName}}</code>
 			</li>
 		</ol>
 	</div>
@@ -32,7 +32,7 @@
 <div class="modal-footer">
 	<button class="btn btn-success" ng-click="exit()">OK</button>
 	<a style="margin-top: 10px;float:left" ng-show="prevFunction != undefined" class="clickable" ng-click="exit(); openStatsModal(prevFunction)">
-      Back to {{prevFunction}}
+      Back to {{prevFunction.name}}
       <span class="badge"><span class="glyphicon glyphicon-chevron-up clickable"></span></span>
     </a>
 </div>
