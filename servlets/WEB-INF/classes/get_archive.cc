@@ -115,8 +115,10 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 							//get the destination function
 							ParseAPI::Function *dest = co->findFuncByEntry(f->region(), expr->eval().convert<unsigned long int>());
 							//pt cazurile in care al doilea node al AST-ului nu era RIP
-							if(dest)
-								outstream << ", \\\"dest\\\": \\\"" << dest->name() << "\\\"";
+							if(dest){
+								outstream << ", \\\"destName\\\": \\\"" << dest->name() << "\\\"";
+								outstream << ", \\\"destAddr\\\": \\\"" << hex << dest->addr() << "\\\"";
+							}
 						}
 					}
 				}
