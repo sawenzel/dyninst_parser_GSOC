@@ -67,34 +67,51 @@
  		$scope.textFilter = "";
  	};
 
- 	$scope.setFunction = function(functionEntry, index){
- 		if(index == 0)
- 			$scope.selectedFunction = [];
+ 	$scope.setFunction = function(functionEntry){
+		$scope.selectedFunction = [];
 
  		var functionName = functionEntry['name'];
  		var functionObjFile = functionEntry['obj'];
  		var functionAddr = functionEntry['address'];
+ 		var fileName = $scope.selectedFile;
 
- 		if('destName' in functionEntry){
-			//set a destination function
-			functionName = functionEntry['destName'];
- 			functionObjFile = functionEntry['obj'];
-			functionAddr = functionEntry['destAddr'];
-		}
+ 		$scope.selectedFunction[0] = {};
+ 		$scope.selectedFunction[0].name = functionName;
+ 		$scope.selectedFunction[0].address = functionAddr;
+ 		$scope.selectedFunction[0].obj = functionObjFile;
+
+ 		if($scope.isCurrentFileArchive == true){
+ 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: functionObjFile, address:functionAddr, functionname: functionName}, cache:true}).success(function (data) {
+ 				$scope.currentAssembly[0] = data;
+ 			});
+ 		} else {
+ 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
+ 				$scope.currentAssembly[0] = data;
+ 			});
+ 		}
+
+ 		$scope.textFilter = "";
+ 	};
+
+ 	$scope.setFunction2 = function(assemblyEntry, index){
+ 		// console.log(assemblyEntry);
+
+		var functionName = assemblyEntry['destName'];
+		var functionObjFile = $scope.selectedFunction[0].obj;
+		var functionAddr = assemblyEntry['destAddr'];
+ 		var fileName = $scope.selectedFile;
 
  		$scope.selectedFunction[index] = {};
  		$scope.selectedFunction[index].name = functionName;
  		$scope.selectedFunction[index].address = functionAddr;
  		$scope.selectedFunction[index].obj = functionObjFile;
 
- 		var fileName = $scope.selectedFile;
-
  		if($scope.isCurrentFileArchive == true){
  			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: functionObjFile, address:functionAddr, functionname: functionName}, cache:true}).success(function (data) {
  				$scope.currentAssembly[index] = data;
  			});
  		} else {
- 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
+ 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
  				$scope.currentAssembly[index] = data;
  			});
  		}

@@ -247,14 +247,14 @@
  			var fileName = $scope.fileName;
  			var functionName = $scope.crtFunction.name;
  			var objectName = $scope.crtFunction.obj;
- 			var destAddress = $scope.crtFunction.address;
+ 			var functionAddr = $scope.crtFunction.address;
 
  			if($scope.isCurrentFileArchive == true){
- 				$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: destAddress, functionname: functionName}, cache:true}).success(function (data) {
+ 				$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: functionAddr, functionname: functionName}, cache:true}).success(function (data) {
  					updateData(data);
  				});
  			} else {
- 				$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName}, cache:true}).success(function (data) {
+ 				$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
  					updateData(data);
  				});
  			}

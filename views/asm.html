@@ -39,7 +39,7 @@ ul{
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <th colspan="3">
-        Functions in selectedFile
+        Functions in {{selectedFile}}
         <br>
         <br>
         <div>
@@ -63,7 +63,7 @@ ul{
         {{entry.address}}
       </td>
       <td ng-style="getBackgroundStyle(entry, 'functions')">
-        <a class="clickable" ng-click="setFunction(entry, 0)">{{entry.name}}</a>
+        <a class="clickable" ng-click="setFunction(entry)">{{entry.name}}</a>
         <span class="objectSubscript">
           {{entry.obj}}
         </span>
@@ -82,7 +82,7 @@ ul{
 <div ng-show="selectedFunction[0]" class="panel panel-default assemblylisting">
   <div class="panel-heading boldText">{{selectedFunction[0].name}} 
     <a class="clickable" style ="float:right" ng-click="openStatsModal(selectedFunction[0])">
-      Histogram
+      &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
   </div>
@@ -90,7 +90,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[0]">
         {{line.address}} :
-        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction(line, 1) : ''">{{format(line)}}</code>
+        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 1) : ''">{{format(line)}}</code>
       </li>
     </ul>
   </div>
@@ -99,7 +99,7 @@ ul{
 <div ng-show="selectedFunction[1]" class="panel panel-default assemblylisting" style="margin-left: 10px">
   <div class="panel-heading boldText">{{selectedFunction[1].name}}
     <a class="clickable" style ="float:right" ng-click="openStatsModal(selectedFunction[1])">
-      Histogram
+      &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
   </div>
@@ -107,7 +107,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[1]">
         {{line.address}} :
-        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction(line, 2) : ''">{{format(line)}}</code>
+        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 2) : ''">{{format(line)}}</code>
       </li>
     </ul>
   </div>
@@ -116,7 +116,7 @@ ul{
 <div ng-show="selectedFunction[2]" class="panel panel-default assemblylisting" style="margin-left: 10px">
   <div class="panel-heading boldText">{{selectedFunction[2].name}}
     <a class="clickable" style ="float:right" ng-click="openStatsModal(selectedFunction[2])">
-      Histogram
+      &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
   </div>
