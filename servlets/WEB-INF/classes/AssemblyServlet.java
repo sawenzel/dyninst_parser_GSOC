@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,20 +66,26 @@ public class AssemblyServlet extends HttpServlet {
 	}
 
 	public static void main(String[] args) throws IOException {
-		if(args.length != 1){
-			System.out.println("usage: java AssemblyServlet <filename>");
+		if(args.length != 3){
+			System.out.println("usage: java AssemblyServlet <filename> <function name> <address>");
 			return;
 		}
 		String fileName = args[0];
+		String functionName = args[1];
+		String address = args[2];
 
 		if(isAssemblyCached(fileName) == false)
 			getAssembly(fileName);
 
 		Gson gson = new Gson();
-		Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
-		Map<String,String> map = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
+		Type stringStringMap = new TypeToken<List<Map<String, String>>>(){}.getType();
+		List<Map<String,String>> funcsList = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
 
-		System.out.println(map.get("_init"));
+		for(Map<String, String> i : funcsList){
+			if(i.get(functionName) != null && i.get(functionName).contains(address)){
+				System.out.println(i.get(functionName));
+			}
+		}
 	}
 
 	@Override
@@ -89,14 +96,20 @@ public class AssemblyServlet extends HttpServlet {
 
 		String fileName = request.getParameter("filename");
 		String functionName = request.getParameter("functionname");
+		String address = request.getParameter("address");
 
 		if(isAssemblyCached(fileName) == false)
 			getAssembly(fileName);
 
 		Gson gson = new Gson();
-		Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
-		Map<String,String> map = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
+		Type stringStringMap = new TypeToken<List<Map<String, String>>>(){}.getType();
+		List<Map<String,String>> funcsList = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
 
-		response.getWriter().println(map.get(functionName));
+		for(Map<String, String> i : funcsList){
+			if(i.get(functionName) != null && i.get(functionName).contains(address)){
+				response.getWriter().println(i.get(functionName));
+				return;
+			}
+		}
 	}
 }

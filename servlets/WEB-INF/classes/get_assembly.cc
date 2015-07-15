@@ -35,7 +35,6 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 		return env->NewStringUTF("{\"error\": \"file can not be parsed\"}");
 	}
 
-
 	sts = new SymtabCodeSource(fileName);
 	co = new CodeObject(sts);
 
@@ -44,36 +43,42 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 
 	//get list of all functions in the binary
 	const CodeObject::funclist &all = co->funcs();
+	if(all.size() == 0){
+		return env->NewStringUTF("{\"error\": \"no functions in file\"}");
+	}
 
-	map<string, int> fmap;
+	Address crtAddr;
 
 	//iterate the ContainerWrapper through all the functions
 	auto fit = all.begin();
+	Function *f = *fit;
+
+	InstructionDecoder decoder(f->isrc()->getPtrToInstruction(f->addr()),
+			InstructionDecoder::maxInstructionLength,
+			f->region()->getArch());
+
 	for(;fit != all.end(); ++fit){
 		Function *f = *fit;
 
-		//if the function exists, don't output it
-		if(fmap.count(f->name()) != 0)
-			continue;
-
-		fmap[f->name()] = 1;
-
-		//if(strcmp(f->name().c_str(), "main") == 0){
-		outstream << endl << "\"" << f->name() << "\" : \"[" << endl;
+		outstream << endl << "{\"" << f->name() << "\" : \"[" << endl;
 		//get address of entry point for current function
-		Address crtaddr = f->entry()->start();
+		crtAddr = f->addr();
 		int instr_count = 0;
-		do{
+
+		instr = decoder.decode((unsigned char *)f->isrc()->getPtrToInstruction(crtAddr));
+		auto fbl = f->blocks().end();
+		fbl--;
+		Block *b = *fbl;
+		Address lastAddr = b->last();
+
+		while(crtAddr < lastAddr){
 			if(instr_count != 0)
 				outstream << ",";
 			//decode current instruction
-			InstructionDecoder decoder(f->isrc()->getPtrToInstruction(crtaddr),
-					InstructionDecoder::maxInstructionLength,
-					f->region()->getArch());
-			instr = decoder.decode();
+			instr = decoder.decode((unsigned char *)f->isrc()->getPtrToInstruction(crtAddr));
 
 			//escaped slash and quotes because this will be parsed by GSON in Java
-			outstream << endl << "{\\\"address\\\":\\\"" << hex << crtaddr << "\\\", ";
+			outstream << endl << "{\\\"address\\\":\\\"" << hex << crtAddr << "\\\", ";
 			outstream << "\\\"name\\\": \\\"" << instr->format() << "\\\"";
 
 			//pentru instructiuni de tip call afisam adresa destinatie
@@ -90,7 +95,7 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 					//bind the RIP register value inside of the instruction
 					//to that of the current address + size
 					if(children1.size() > 1 && children2.size() > 1){
-						expr->bind(children1[1].get(), Result(u32, crtaddr + instr->size()));
+						expr->bind(children1[1].get(), Result(u32, crtAddr + instr->size()));
 						//outstream << " : " << expr->eval().format();
 
 						//get the destination function
@@ -106,21 +111,21 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 			//go to the address of the next instruction by adding the
 			//size of the current instruction to the current address
 
-			crtaddr += instr->size();
+			crtAddr += instr->size();
 			outstream << "}";
 			instr_count++;
-		} while(instr->getCategory() != 1);
+		};
 		//decode instructions until return type instruction is found
 		//i.e. category = 1
-		outstream << "]\"," << endl;
+		outstream << "]\"}," << endl;
 	}
 
 	string resp = outstream.str();
 	resp.pop_back();
 	resp.pop_back();
 
-	resp.insert(0, "{");
-	resp.append("}");
+	resp.insert(0, "[");
+	resp.append("]");
 
 	return env->NewStringUTF(resp.c_str());
 }
