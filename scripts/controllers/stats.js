@@ -177,6 +177,8 @@
  	}
 
  	updateData = function(data){
+ 		if(data == undefined || data.length == 0)
+ 			return;
  		$scope.currentAssembly = data;
 
  		namesList = data.map(function (a){
@@ -239,11 +241,11 @@
  					{v: uniqueOthers[key]},
  					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
  					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
- 				]});
+ 					]});
  			}
  		}
 
- 		$scope.getinstrs = function(){
+ 		$scope.init = function(){
  			var fileName = $scope.fileName;
  			var functionName = $scope.crtFunction.name;
  			var objectName = $scope.crtFunction.obj;
@@ -285,5 +287,5 @@
  			}
  		}
 
- 		$scope.getinstrs();
+ 		$scope.init();
  	});

@@ -4,6 +4,74 @@
  */
  angular.module('candyUiApp')
  .controller('AsmCtrl', function ($rootScope, $scope, $http, $modal, $log) {
+ 	
+
+ 	$scope.showDiffBox = false;
+
+ 	$scope.diffList = [];
+
+ 	$scope.remove = function(l, o) {
+ 		var index = l.indexOf(o);
+ 		if (index > -1) {
+ 			l.splice(index, 1);
+ 		}
+ 	};
+
+ 	$scope.onDragStart = function() {
+ 		$scope.showDiffBox = true;
+ 		$scope.diffBoxClass = "opaque";
+ 	};
+
+ 	$scope.onDataEnd = function() {
+ 		if($scope.diffList.length < 2){
+ 			$scope.diffBoxClass = "fade";
+ 		}
+  	};
+
+ 	$scope.onDragOver = function() {
+
+ 	};
+
+ 	$scope.onDrop = function(data) {
+ 		if (data) {
+ 			data['file'] = $scope.selectedFile;
+ 			$scope.diffList.push(data)
+
+ 			if($scope.diffList.length > 2)
+ 				$scope.diffList.shift();
+ 		}
+ 		if($scope.diffList.length < 2){
+ 			$scope.diffBoxClass = "fade";
+ 		}
+ 	};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  	$rootScope.imageURI = {};
  	$rootScope.currentController = 'asm';
 
@@ -68,7 +136,7 @@
  	};
 
  	$scope.setFunction = function(functionEntry){
-		$scope.selectedFunction = [];
+ 		$scope.selectedFunction = [];
 
  		var functionName = functionEntry['name'];
  		var functionObjFile = functionEntry['obj'];
@@ -94,11 +162,9 @@
  	};
 
  	$scope.setFunction2 = function(assemblyEntry, index){
- 		// console.log(assemblyEntry);
-
-		var functionName = assemblyEntry['destName'];
-		var functionObjFile = $scope.selectedFunction[0].obj;
-		var functionAddr = assemblyEntry['destAddr'];
+ 		var functionName = assemblyEntry['destName'];
+ 		var functionObjFile = $scope.selectedFunction[0].obj;
+ 		var functionAddr = assemblyEntry['destAddr'];
  		var fileName = $scope.selectedFile;
 
  		$scope.selectedFunction[index] = {};
@@ -119,7 +185,7 @@
  		$scope.textFilter = "";
  	};
 
- 	$scope.openStatsModal = function (functionEntry) {
+ 	$scope.openChartModal = function (functionEntry) {
  		var modalInstance = $modal.open({
  			animation: $scope.animationsEnabled,
  			templateUrl: 'views/statsTemplate.html',
@@ -142,6 +208,20 @@
  		});
  	};
 
+ 	$scope.openDiffModal = function (functionList) {
+ 		var modalInstance = $modal.open({
+ 			animation: $scope.animationsEnabled,
+ 			templateUrl: 'views/diffTemplate.html',
+ 			controller: 'diffCtrl',
+ 			windowClass: 'app-modal-window',
+ 			resolve: {
+ 				functionList: function () {
+ 					return functionList;
+ 				},
+ 			}
+ 		});
+ 	};
+
  	$scope.init = function(){
  		$http.get($scope.filesEndpoint).success(function (data) {
  			$scope.filesList = data;
@@ -154,15 +234,17 @@
  	$scope.getBackgroundStyle = function(entry, entrySetName){
  		if(entrySetName == "files"){
  			if($scope.selectedFile == entry){
- 				return {'background-color': '#B2DDEB'}
+ 				return {'font-weight' : 'bolder'}
  			}
  		} else if(entrySetName == "object files"){
  			if($scope.selectedObjectFile == entry){
- 				return {'background-color': '#B2DDEB'}
+ 				return {'font-weight' : 'bolder'}
  			}
  		} else if(entrySetName == "functions"){
- 			if($scope.selectedFunction == entry.name && $scope.selectedFunctionAddress == entry.address){
- 				return {'background-color': '#B2DDEB'}
+ 			if($scope.selectedFunction[0]){
+ 				if($scope.selectedFunction[0].name == entry.name && $scope.selectedFunction[0].address == entry.address){
+ 					return {'font-weight' : 'bolder'}
+ 				}
  			}
  		}
  	};
@@ -178,7 +260,6 @@
  		}
 
  		$scope.format = function(line){
- 			// console.log(line);
  			var name = line.name;
  			if(line.destName != undefined && name.indexOf("call") == 0 && name.indexOf("RIP") != -1)
  				return "call " + line.destName;

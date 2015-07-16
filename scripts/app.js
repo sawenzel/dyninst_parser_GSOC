@@ -17,7 +17,8 @@ angular
         'ngSanitize',
         'ngTouch',
         'googlechart',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'adaptv.adaptStrap'
     ])
     .config(['$routeProvider',
         function ($routeProvider) {

@@ -1,0 +1,56 @@
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+
+	<style type="text/css">
+
+	h2 {
+		margin: 0.5em 0 0.1em;
+		text-align: center;
+	}
+	.top {
+		text-align: center;
+	}
+	.textInput {
+		display: block;
+		width: 30%;
+		float: left;
+		margin:0px 30px;
+	}
+	textarea {
+		width:300px;
+		height:600px;
+	}
+	label:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	.spacer {
+		margin-left: 10px;
+	}
+	.viewType {
+		font-size: 16px;
+		clear: both;
+		text-align: center;
+		padding: 1em;
+	}
+	#diffoutput {
+		width: 100%;
+	}
+	</style>
+</head>
+
+
+<div class="modal-header">
+	<h4 class="modal-title">Function diff</b></h4>
+</div>
+
+<div class="modal-body">
+	<div style="margin: 0 auto; width:800px" id="diffoutput"></div>
+	<!-- wow such dirty hack -->
+	{{diffUsingJS(0)}}
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-success" ng-click="exit()">OK</button>
+</div>
