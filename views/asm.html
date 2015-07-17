@@ -56,6 +56,7 @@ ul{
   <tbody>
     <tr class="clickable" ng-click="setFunction(entry, 0)" ng-repeat="entry in functionsList | filter : paginate track by $index">
       <td style="width:1px; background-color: #dff0d8"
+      id="address"
       title="drag to diff"
       ad-drag="true"
       ad-drag-data="entry"
@@ -84,6 +85,7 @@ ul{
   </div>
   <div ng-hide="assemblyLoading[0]">
     <div class="panel-heading boldText" style="background-color: #dff0d8"
+    id="0"
     title="drag to diff"
     ad-drag="true"
     ad-drag-data="selectedFunction[0]"
@@ -107,14 +109,15 @@ ul{
 </div>
 
 <div ng-show="selectedFunction[1]" class="panel panel-default assemblylisting" style="margin-left: 10px">
-  <div ng-hide="assemblyLoading[1]" style="width: 10%; margin: 0 auto">
+  <div ng-show="assemblyLoading[1]" style="width: 10%; margin: 0 auto">
     <ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
   </div>
-  <div ng-show="assemblyLoading[1]">
-    <div class="panel-heading boldText"
+  <div ng-hide="assemblyLoading[1]">
+    <div class="panel-heading boldText" style="background-color: #dff0d8"
+    id="1"
     title="drag to diff"
     ad-drag="true"
-    ad-drag-data="selectedFunction[0]"
+    ad-drag-data="selectedFunction[1]"
     ad-drag-begin="onDragStart($data, $dragElement, $event);"
     ad-drag-end="onDataEnd($data, $dragElement, $event);">{{selectedFunction[1].name}}
     <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[1])">
@@ -134,14 +137,15 @@ ul{
 </div>
 
 <div class="panel panel-default assemblylisting" style="margin-left: 10px" ng-show="selectedFunction[2]">
-  <div ng-hide="assemblyLoading[2]" style="width: 10%; margin: 0 auto">
+  <div ng-show="assemblyLoading[2]" style="width: 10%; margin: 0 auto">
     <ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
   </div>
-  <div ng-show="assemblyLoading[2]">
-    <div class="panel-heading boldText"
+  <div ng-hide="assemblyLoading[2]">
+    <div class="panel-heading boldText" style="background-color: #dff0d8"
     title="drag to diff"
+    id="2"
     ad-drag="true"
-    ad-drag-data="selectedFunction[0]"
+    ad-drag-data="selectedFunction[2]"
     ad-drag-begin="onDragStart($data, $dragElement, $event);"
     ad-drag-end="onDataEnd($data, $dragElement, $event);">
     {{selectedFunction[2].name}}

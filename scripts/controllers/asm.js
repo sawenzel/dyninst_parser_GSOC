@@ -270,7 +270,7 @@
  		}
  	};
 
- 	$scope.onDragStart = function() {
+ 	$scope.onDragStart = function(data, dragElement) {
  		$scope.showDiffBox = true;
  		$scope.diffBoxClass = "opaque";
  	};
@@ -285,9 +285,14 @@
 
  	};
 
- 	$scope.onDrop = function(data) {
+ 	$scope.onDrop = function(data, dragElement, dropElement) {
+ 		var id = dragElement.el.context.id;
+ 		//if a function name is dropped, set it by DOM id, because ad-drag doesn't corectly send data arg
+ 		if(id != 'address'){
+ 			data = $scope.selectedFunction[id];
+ 		}
  		if (data) {
- 			data['file'] = $scope.selectedFile;
+ 			data['file'] = $scope.selectedFile.slice(0);
  			$scope.diffList.push(data)
 
  			if($scope.diffList.length > 2)
