@@ -4,73 +4,6 @@
  */
  angular.module('candyUiApp')
  .controller('AsmCtrl', function ($rootScope, $scope, $http, $modal, $log) {
- 	
-
- 	$scope.showDiffBox = false;
-
- 	$scope.diffList = [];
-
- 	$scope.remove = function(l, o) {
- 		var index = l.indexOf(o);
- 		if (index > -1) {
- 			l.splice(index, 1);
- 		}
- 	};
-
- 	$scope.onDragStart = function() {
- 		$scope.showDiffBox = true;
- 		$scope.diffBoxClass = "opaque";
- 	};
-
- 	$scope.onDataEnd = function() {
- 		if($scope.diffList.length < 2){
- 			$scope.diffBoxClass = "fade";
- 		}
-  	};
-
- 	$scope.onDragOver = function() {
-
- 	};
-
- 	$scope.onDrop = function(data) {
- 		if (data) {
- 			data['file'] = $scope.selectedFile;
- 			$scope.diffList.push(data)
-
- 			if($scope.diffList.length > 2)
- 				$scope.diffList.shift();
- 		}
- 		if($scope.diffList.length < 2){
- 			$scope.diffBoxClass = "fade";
- 		}
- 	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
  	$rootScope.imageURI = {};
  	$rootScope.currentController = 'asm';
@@ -88,6 +21,7 @@
  	$scope.filesList = [];
  	$scope.functionsList = undefined;
  	$scope.assemblyDict = {};
+ 	$scope.assemblyLoading = [];
 
  	//we don't have endsWith on safari
  	if (!String.prototype.endsWith) {
@@ -107,6 +41,8 @@
  		$scope.functionsList = []
  		$scope.source = [];
 
+ 		$scope.functionsLoading = true;
+
  		$scope.error = "";
  		if(fileName.endsWith(".a")){
  			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName}}).success(function (data) {
@@ -115,6 +51,7 @@
  				}
  				$scope.source = $scope.functionsList.slice(0);
  				$scope.isCurrentFileArchive = true;
+ 				$scope.functionsLoading = false;
  			});
  		} else {
  			$http.get($scope.functionsEndpoint, {params:{filename:fileName}}).success(function (data) {
@@ -128,6 +65,7 @@
  				}
  				$scope.source = $scope.functionsList.slice(0);
  				$scope.isCurrentFileArchive = false;
+ 				$scope.functionsLoading = false;
  			});
  		}
 
@@ -143,6 +81,8 @@
  		var functionAddr = functionEntry['address'];
  		var fileName = $scope.selectedFile;
 
+ 		$scope.assemblyLoading[0] = true;
+
  		$scope.selectedFunction[0] = {};
  		$scope.selectedFunction[0].name = functionName;
  		$scope.selectedFunction[0].address = functionAddr;
@@ -151,10 +91,12 @@
  		if($scope.isCurrentFileArchive == true){
  			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: functionObjFile, address:functionAddr, functionname: functionName}, cache:true}).success(function (data) {
  				$scope.currentAssembly[0] = data;
+ 				$scope.assemblyLoading[0] = false;
  			});
  		} else {
  			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
  				$scope.currentAssembly[0] = data;
+ 				$scope.assemblyLoading[0] = false;
  			});
  		}
 
@@ -167,6 +109,8 @@
  		var functionAddr = assemblyEntry['destAddr'];
  		var fileName = $scope.selectedFile;
 
+ 		$scope.assemblyLoading[index] = true;
+
  		$scope.selectedFunction[index] = {};
  		$scope.selectedFunction[index].name = functionName;
  		$scope.selectedFunction[index].address = functionAddr;
@@ -175,10 +119,12 @@
  		if($scope.isCurrentFileArchive == true){
  			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname: functionObjFile, address:functionAddr, functionname: functionName}, cache:true}).success(function (data) {
  				$scope.currentAssembly[index] = data;
+ 				$scope.assemblyLoading[index] = false;
  			});
  		} else {
  			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
  				$scope.currentAssembly[index] = data;
+ 				$scope.assemblyLoading[index] = false;
  			});
  		}
 
@@ -242,7 +188,7 @@
  			}
  		} else if(entrySetName == "functions"){
  			if($scope.selectedFunction[0]){
- 				if($scope.selectedFunction[0].name == entry.name && $scope.selectedFunction[0].address == entry.address){
+ 				if($scope.selectedFunction[0].name == entry.name && $scope.selectedFunction[0].address == entry.address && $scope.selectedFunction[0].obj == entry.obj){
  					return {'font-weight' : 'bolder'}
  				}
  			}
@@ -311,4 +257,45 @@
  					);
  			}
  		};
- 	});
+
+ 		
+ 	//diff drop box control
+ 	$scope.showDiffBox = false;
+ 	$scope.diffList = [];
+
+ 	$scope.remove = function(l, o) {
+ 		var index = l.indexOf(o);
+ 		if (index > -1) {
+ 			l.splice(index, 1);
+ 		}
+ 	};
+
+ 	$scope.onDragStart = function() {
+ 		$scope.showDiffBox = true;
+ 		$scope.diffBoxClass = "opaque";
+ 	};
+
+ 	$scope.onDataEnd = function() {
+ 		if($scope.diffList.length < 2){
+ 			$scope.diffBoxClass = "fade";
+ 		}
+ 	};
+
+ 	$scope.onDragOver = function() {
+
+ 	};
+
+ 	$scope.onDrop = function(data) {
+ 		if (data) {
+ 			data['file'] = $scope.selectedFile;
+ 			$scope.diffList.push(data)
+
+ 			if($scope.diffList.length > 2)
+ 				$scope.diffList.shift();
+ 		}
+ 		if($scope.diffList.length < 2){
+ 			$scope.diffBoxClass = "fade";
+ 		}
+ 	};
+ 	
+ });

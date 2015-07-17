@@ -31,8 +31,11 @@ ul{
 
 
 <div class="panel panel-default" ng-show="functionsList">
-  <div class="panel-heading">Functions in <strong>{{selectedFile}}</strong></div>
-  <table class="table table-striped table-bordered table-hover">
+  <div ng-show="functionsLoading" style="width: 10%; margin: 0 auto">
+    <ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
+  </div>
+  <div ng-hide="functionsLoading" class="panel-heading">Functions in <strong>{{selectedFile}}</strong></div>
+  <table ng-hide="functionsLoading" class="table table-striped table-bordered table-hover">
     <thead>
       <th colspan="3">
         <div>
@@ -72,76 +75,89 @@ ul{
 </div>
 
 
-
 <!-- Assembly -->
 
 
-
 <div ng-show="selectedFunction[0]" class="panel panel-default assemblylisting">
-  <div class="panel-heading boldText" style="background-color: #dff0d8"
-  title="drag to diff"
-  ad-drag="true"
-  ad-drag-data="selectedFunction[0]"
-  ad-drag-begin="onDragStart($data, $dragElement, $event);"
-  ad-drag-end="onDataEnd($data, $dragElement, $event);">
-  {{selectedFunction[0].name}}
-  <a ad-prevent-drag style="float:right; cursor:pointer" ng-click="openChartModal(selectedFunction[0])">
-    &nbsp Histogram
-    <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
-  </a>
-</div>
-<div class="panel-body" style="max-height: 85vh; overflow: auto">
-  <ul>
-    <li ng-repeat="line in currentAssembly[0]">
-      {{line.address}} :
-      <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 1) : ''">{{format(line)}}</code>
-    </li>
-  </ul>
+  <div ng-show="assemblyLoading[0]" style="width: 10%; margin: 0 auto">
+    <ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
+  </div>
+  <div ng-hide="assemblyLoading[0]">
+    <div class="panel-heading boldText" style="background-color: #dff0d8"
+    title="drag to diff"
+    ad-drag="true"
+    ad-drag-data="selectedFunction[0]"
+    ad-drag-begin="onDragStart($data, $dragElement, $event);"
+    ad-drag-end="onDataEnd($data, $dragElement, $event);">
+    {{selectedFunction[0].name}}
+    <a ad-prevent-drag style="float:right; cursor:pointer" ng-click="openChartModal(selectedFunction[0])">
+      &nbsp Histogram
+      <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
+    </a>
+  </div>
+  <div class="panel-body" style="max-height: 85vh; overflow: auto">
+    <ul>
+      <li ng-repeat="line in currentAssembly[0]">
+        {{line.address}} :
+        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 1) : ''">{{format(line)}}</code>
+      </li>
+    </ul>
+  </div>
 </div>
 </div>
 
 <div ng-show="selectedFunction[1]" class="panel panel-default assemblylisting" style="margin-left: 10px">
-  <div class="panel-heading boldText"
-  title="drag to diff"
-  ad-drag="true"
-  ad-drag-data="selectedFunction[0]"
-  ad-drag-begin="onDragStart($data, $dragElement, $event);"
-  ad-drag-end="onDataEnd($data, $dragElement, $event);">{{selectedFunction[1].name}}
-  <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[1])">
-    &nbsp Histogram
-    <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
-  </a>
-</div>
-<div class="panel-body" style="max-height: 85vh; overflow: auto">
-  <ul>
-    <li ng-repeat="line in currentAssembly[1]">
-      {{line.address}} :
-      <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 2) : ''">{{format(line)}}</code>
-    </li>
-  </ul>
+  <div ng-hide="assemblyLoading[1]" style="width: 10%; margin: 0 auto">
+    <ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
+  </div>
+  <div ng-show="assemblyLoading[1]">
+    <div class="panel-heading boldText"
+    title="drag to diff"
+    ad-drag="true"
+    ad-drag-data="selectedFunction[0]"
+    ad-drag-begin="onDragStart($data, $dragElement, $event);"
+    ad-drag-end="onDataEnd($data, $dragElement, $event);">{{selectedFunction[1].name}}
+    <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[1])">
+      &nbsp Histogram
+      <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
+    </a>
+  </div>
+  <div class="panel-body" style="max-height: 85vh; overflow: auto">
+    <ul>
+      <li ng-repeat="line in currentAssembly[1]">
+        {{line.address}} :
+        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 2) : ''">{{format(line)}}</code>
+      </li>
+    </ul>
+  </div>
 </div>
 </div>
 
 <div class="panel panel-default assemblylisting" style="margin-left: 10px" ng-show="selectedFunction[2]">
-  <div class="panel-heading boldText"
-  title="drag to diff"
-  ad-drag="true"
-  ad-drag-data="selectedFunction[0]"
-  ad-drag-begin="onDragStart($data, $dragElement, $event);"
-  ad-drag-end="onDataEnd($data, $dragElement, $event);">
-  {{selectedFunction[2].name}}
-  <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[2])">
-    &nbsp Histogram
-    <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
-  </a>
-</div>
-<div class="panel-body" style="max-height: 85vh; overflow: auto">
-  <ul>
-    <li ng-repeat="line in currentAssembly[2]">
-      {{line.address}} :
-      <code style="cursor:auto" ng-class="getCodeStyle(line.name)">{{format(line)}}</code>
-    </li>
-  </ul>
+  <div ng-hide="assemblyLoading[2]" style="width: 10%; margin: 0 auto">
+    <ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
+  </div>
+  <div ng-show="assemblyLoading[2]">
+    <div class="panel-heading boldText"
+    title="drag to diff"
+    ad-drag="true"
+    ad-drag-data="selectedFunction[0]"
+    ad-drag-begin="onDragStart($data, $dragElement, $event);"
+    ad-drag-end="onDataEnd($data, $dragElement, $event);">
+    {{selectedFunction[2].name}}
+    <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[2])">
+      &nbsp Histogram
+      <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
+    </a>
+  </div>
+  <div class="panel-body" style="max-height: 85vh; overflow: auto">
+    <ul>
+      <li ng-repeat="line in currentAssembly[2]">
+        {{line.address}} :
+        <code style="cursor:auto" ng-class="getCodeStyle(line.name)">{{format(line)}}</code>
+      </li>
+    </ul>
+  </div>
 </div>
 </div>
 
