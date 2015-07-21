@@ -120,7 +120,7 @@ ul{
     ad-drag-data="selectedFunction[1]"
     ad-drag-begin="onDragStart($data, $dragElement, $event);"
     ad-drag-end="onDataEnd($data, $dragElement, $event);">{{selectedFunction[1].name}}
-    <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[1])">
+    <a ad-prevent-drag style ="float:right; cursor: pointer" ng-click="openChartModal(selectedFunction[1])">
       &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
@@ -149,7 +149,7 @@ ul{
     ad-drag-begin="onDragStart($data, $dragElement, $event);"
     ad-drag-end="onDataEnd($data, $dragElement, $event);">
     {{selectedFunction[2].name}}
-    <a class="clickable" style ="float:right" ng-click="openChartModal(selectedFunction[2])">
+    <a ad-prevent-drag style ="float:right; cursor: pointer" ng-click="openChartModal(selectedFunction[2])">
       &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
