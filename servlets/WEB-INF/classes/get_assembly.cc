@@ -60,7 +60,6 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	for(;fit != all.end(); ++fit){
 		Function *f = *fit;
 
-		outstream << endl << "{\"" << f->name() << "\" : \"[" << endl;
 		//get address of entry point for current function
 		crtAddr = f->addr();
 		int instr_count = 0;
@@ -71,6 +70,10 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 		Block *b = *fbl;
 		Address lastAddr = b->last();
 
+		if(crtAddr == lastAddr)
+			continue;
+	
+		outstream << endl << "{\"" << f->name() << "\" : \"[" << endl;
 		while(crtAddr < lastAddr){
 			if(instr_count != 0)
 				outstream << ",";

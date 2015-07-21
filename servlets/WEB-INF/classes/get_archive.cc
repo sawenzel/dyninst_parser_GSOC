@@ -74,7 +74,6 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 			//if the function exists, don't output it
 
 			//if(strcmp(f->name().c_str(), "main") == 0){
-			outstream << "\n{\"" << f->name() << "\": \"[";
 			//get address of entry point for current function
 			//Address crtAddr = f->entry()->start();
 			crtAddr = f->addr();
@@ -86,6 +85,10 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 			Block *b = *fbl;
 			Address lastAddr = b->last();
 
+			if(crtAddr == lastAddr)
+				continue;
+
+			outstream << "\n{\"" << f->name() << "\": \"[";
 			while(crtAddr < lastAddr){
 				if(instr_count != 0)
 					outstream << ",";

@@ -14,7 +14,7 @@ using namespace Dyninst;
 using namespace ParseAPI;
 
 JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
-	(JNIEnv * env, jobject obj, jstring jFileName){
+(JNIEnv * env, jobject obj, jstring jFileName){
 	char *fileName = (char*) env->GetStringUTFChars(jFileName, 0);
 	stringstream outstream;
 
@@ -44,6 +44,22 @@ JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
 	auto fit = all.begin();
 	for(int i=0; fit != all.end(); ++fit, i++){
 		Function *f = *fit;
+
+		Address startAddr = f->addr();                                              
+		Address lastAddr;                                                           
+
+		auto fbl = f->exitBlocks().end();                                           
+		if(f->exitBlocks().empty() == false){                                             
+			fbl--;                                                                    
+			Block *b = *fbl;                                                          
+			lastAddr = b->last();                                                     
+		} else {                                                                    
+			continue;                                                                 
+		}                                                                           
+
+		if(startAddr == lastAddr)                                                     
+			continue;                                                                 
+
 		outstream << "{\"address\": \"" << hex << f->addr() << "\", \"name\": \"" << f->name() << "\"}," << endl;
 	}
 

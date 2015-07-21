@@ -67,11 +67,27 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 
 		//iterate the ContainerWrapper through all the functions
 		for(;fit != all.end(); ++fit){
+			ParseAPI::Function *f = *fit;
+			//if the function exists, don't output it
+
+			Address startAddr = f->addr();                                              
+			Address lastAddr;                                                           
+
+			auto fbl = f->exitBlocks().end();                                           
+			if(f->exitBlocks().empty() == false){                                             
+				fbl--;                                                                    
+				Block *b = *fbl;                                                          
+				lastAddr = b->last();                                                     
+			} else {                                                                    
+				continue;                                                                 
+			}                                                                           
+
+			if(startAddr == lastAddr)                                                     
+				continue;                                                                 
+
 			if(func_count != 0)
 				outstream << ",";
 			func_count++;
-			ParseAPI::Function *f = *fit;
-			//if the function exists, don't output it
 
 			//if(strcmp(f->name().c_str(), "main") == 0){
 			outstream << "\n{\"address\": \"" << hex << f->addr() << "\",\"name\":\"" << f->name() << "\"}";
@@ -84,4 +100,4 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 		resp.append("}");
 
 		return env->NewStringUTF(resp.c_str());
-}
+	}

@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 public class FilesServlet extends HttpServlet {	
-        //local:
-        private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	//local:
+	//private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
 
-        //gsoc1:
-        //private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	//gsoc1:
+	private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
 
 	public static void main(String[] args) {
 		File baseDir = new File("gsoc-binaries");
@@ -23,15 +23,15 @@ public class FilesServlet extends HttpServlet {
 	}
 
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.setContentType("application/json");
-		
-		File baseDir = new File(binaryDirPath);
-		
-		Gson gson = new Gson();
-		String result = gson.toJson(baseDir.list());
-		
-		response.getWriter().println(result);
-	}
+		public void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+			response.setContentType("application/json");
+
+			File baseDir = new File(binaryDirPath);
+
+			Gson gson = new Gson();
+			String result = gson.toJson(baseDir.list());
+
+			response.getWriter().println(result);
+		}
 }

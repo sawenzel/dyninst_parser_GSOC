@@ -18,12 +18,12 @@ public class ArchiveFuncsServlet extends HttpServlet{
 	private native String getArchiveFuncsJni(String fileName);
 
 	//local:
-	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-archive-functions/";
+	//private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	//private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-archive-functions/";
 
 	//gsoc1:
-	//private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-	//private static String cacheDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-archives/";
+	private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	private static String cacheDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-archive-functions/";
 
 	static {
 		System.loadLibrary("dyninstParser");

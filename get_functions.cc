@@ -5,8 +5,6 @@
 #include<sstream>
 #include<memory>
 #include "Symtab.h"
-#include "CodeObject.h"
-#include "CFG.h"
 
 using namespace std;
 using namespace Dyninst;
