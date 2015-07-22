@@ -13,12 +13,15 @@
 
  		diffoutputdiv.innerHTML = "";
 
+ 		var name1 = $scope.functionList[0].name.substring(0, 40) + ($scope.functionList[0].name.length > 40 ? '...' : '');
+ 		var name2 = $scope.functionList[1].name.substring(0, 40) + ($scope.functionList[1].name.length > 40 ? '...' : '');
+
  		diffoutputdiv.appendChild(diffview.buildView({
  			baseTextLines: base,
  			newTextLines: newtxt,
  			opcodes: opcodes,
- 			baseTextName: $scope.functionList[0].name,
- 			newTextName: $scope.functionList[1].name,
+ 			baseTextName: name1,
+ 			newTextName: name2,
  			contextSize: null,
  			viewType: viewType
  		}));

@@ -3,7 +3,7 @@
  * Created by mindroc on 10/8/14.
  */
  angular.module('candyUiApp')
- .controller('AsmCtrl', function ($rootScope, $scope, $http, $modal, $log) {
+ .controller('AsmCtrl', function ($rootScope, $scope, $http, $modal, $anchorScroll, $location) {
 
  	$rootScope.imageURI = {};
  	$rootScope.currentController = 'asm';
@@ -36,8 +36,10 @@
  		};
  	}
 
- 	$scope.setFile = function(fileName){
+ 	$scope.setFile = function(fileName, sortBy, sortDirection){
  		$scope.selectedFile = fileName;
+ 		$scope.sortBy = sortBy;
+ 		$scope.sortDirection = sortDirection;
  		$scope.functionsList = []
  		$scope.source = [];
 
@@ -45,7 +47,7 @@
 
  		$scope.error = "";
  		if(fileName.endsWith(".a")){
- 			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName}}).success(function (data) {
+ 			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName, sortby:"address", sortdirection:"ascending"}}).success(function (data) {
  				for(var i in data){
  					$scope.functionsList = $scope.functionsList.concat(data[i].map(function(x){x['obj']=i; return x}));
  				}
@@ -54,7 +56,7 @@
  				$scope.functionsLoading = false;
  			});
  		} else {
- 			$http.get($scope.functionsEndpoint, {params:{filename:fileName}}).success(function (data) {
+ 			$http.get($scope.functionsEndpoint, {params:{filename:fileName, sortby:sortBy, sortdirection:sortDirection}}).success(function (data) {
  				if("error" in data){
  					$scope.error = data["error"];
  					$scope.assemblyDict = {};
@@ -258,7 +260,7 @@
  			}
  		};
 
- 		
+
  	//diff drop box control
  	$scope.showDiffBox = false;
  	$scope.diffList = [];
