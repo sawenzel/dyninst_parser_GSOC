@@ -77,6 +77,11 @@ public class AssemblyServlet extends HttpServlet {
 		if(isAssemblyCached(fileName) == false)
 			getAssembly(fileName);
 
+		if(getAssembly(fileName).startsWith("error")){
+			System.out.println(getAssembly(fileName));
+			return;
+		}
+
 		Gson gson = new Gson();
 		Type stringStringMap = new TypeToken<List<Map<String, String>>>(){}.getType();
 		List<Map<String,String>> funcsList = gson.fromJson(new FileReader(cacheDirPath + fileName), stringStringMap);
@@ -92,7 +97,7 @@ public class AssemblyServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Set response content type
-		response.setContentType("application/json");
+		response.setContentType("text/plain");
 
 		String fileName = request.getParameter("filename");
 		String functionName = request.getParameter("functionname");
@@ -100,6 +105,11 @@ public class AssemblyServlet extends HttpServlet {
 
 		if(isAssemblyCached(fileName) == false)
 			getAssembly(fileName);
+
+		if(getAssembly(fileName).startsWith("error")){
+			response.getWriter().println(getAssembly(fileName));
+			return;
+		}
 
 		Gson gson = new Gson();
 		Type stringStringMap = new TypeToken<List<Map<String, String>>>(){}.getType();

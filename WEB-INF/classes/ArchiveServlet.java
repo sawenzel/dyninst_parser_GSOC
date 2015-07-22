@@ -93,7 +93,10 @@ public class ArchiveServlet extends HttpServlet{
 		String objectName = args[1];
 		String functionName = args[2];
 
-		getArchive(fileName);
+		if(getArchive(fileName).startsWith("error")){
+			System.out.println(getArchive(fileName));
+			return;
+		}
 
 		Gson gson = new Gson();
 		//{object_name : [{function_name:assembly}, ...]}
@@ -117,7 +120,7 @@ public class ArchiveServlet extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 	// Set response content type
-	response.setContentType("application/json");
+	response.setContentType("text/plain");
 
 	String fileName = request.getParameter("filename");
 	String objectName = request.getParameter("objectname");
@@ -126,6 +129,11 @@ public class ArchiveServlet extends HttpServlet{
 
 	if(isArchiveCached(fileName) == false)
 		getArchive(fileName);
+
+	if(getArchive(fileName).startsWith("error")){
+		response.getWriter().println(getArchive(fileName));
+		return;
+	}
 
 	Gson gson = new Gson();
 	//{object_name : [{function_name:assembly}, ...]}

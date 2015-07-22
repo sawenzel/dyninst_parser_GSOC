@@ -32,7 +32,7 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileNameStr);
 
 	if(isParsable == false){
-		return env->NewStringUTF("{\"error\": \"file can not be parsed\"}");
+		return env->NewStringUTF("error: file can not be parsed");
 	}
 
 	sts = new SymtabCodeSource(fileName);
@@ -44,7 +44,7 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	//get list of all functions in the binary
 	const CodeObject::funclist &all = co->funcs();
 	if(all.size() == 0){
-		return env->NewStringUTF("{\"error\": \"no functions in file\"}");
+		return env->NewStringUTF("error: no functions in file");
 	}
 
 	Address crtAddr;
@@ -72,7 +72,7 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 
 		if(crtAddr == lastAddr)
 			continue;
-	
+
 		outstream << endl << "{\"" << f->name() << "\" : \"[" << endl;
 		while(crtAddr < lastAddr){
 			if(instr_count != 0)
@@ -124,6 +124,11 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	}
 
 	string resp = outstream.str();
+
+	if(resp.size() == 0){
+		return env->NewStringUTF("error: no functions parsed");
+	}
+
 	resp.pop_back();
 	resp.pop_back();
 

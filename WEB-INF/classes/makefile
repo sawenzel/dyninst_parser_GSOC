@@ -11,7 +11,7 @@ headers: FunctionsServlet.java AssemblyServlet.java
 	javah -jni ArchiveFuncsServlet
 
 #gsoc1:
-#java_path = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.85-2.6.1.2.el7_1.x86_64/include/
+#java_pathi = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.85-2.6.1.2.el7_1.x86_64/include/
 #compile_bin_functions: get_functions.cc
 #	g++ -fPIC -std=c++0x -I$(java_path) -I$(java_path)/linux -I/scratch/Dyninst-8.2.1/headers -lparseAPI -linstructionAPI -lsymtabAPI -lsymLite -ldynDwarf -ldynElf -lcommon -c get_functions.cc -L/scratch/Dyninst-8.2.1/lib -ldwarf
 #compile_bin_assembly: get_assembly.cc

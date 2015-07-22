@@ -13,6 +13,12 @@ using namespace SymtabAPI;
 using namespace ParseAPI;
 using namespace InstructionAPI;
 
+Address absDiff2(Address high, Address low){
+	if(high < low)
+		return low - high;
+	return high - low;
+}
+
 JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 (JNIEnv * env, jobject obj, jstring jFileName){
 	char *fileName = (char*) env->GetStringUTFChars(jFileName, 0);
@@ -24,12 +30,10 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 
 	Archive::openArchive(ar, fileName);
 	if(ar == NULL){
-		return env->NewStringUTF("{\"error\": {\"archive empty\":\"\"}}");
+		return env->NewStringUTF("error: archive empty");
 	}
 
 	ar->getAllMembers(symTabs);
-
-	outstream << "{";
 
 	auto sit = symTabs.begin();
 	for(; sit != symTabs.end(); ++sit){
@@ -54,8 +58,6 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 			//no functions
 			continue;
 		}
-
-		outstream << "\n\"" << s->name() << "\":[";
 
 		Address crtAddr;
 
@@ -86,19 +88,29 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 				continue;
 
 			if(func_count != 0)
-				outstream << ",";
+				outstream << ",\n";
 			func_count++;
 
-			outstream << "\n{\"address\": \"" << hex << f->addr() << "\",\"name\":\"" << f->name();
-			outstream << "\",\"size\":\"" << dec << lastAddr - startAddr << "\"}," << endl;
+			outstream << "{\"address\": \"" << hex << f->addr() << "\",\"name\":\"" << f->name();
+			outstream << "\",\"size\":\"" << dec << absDiff2(lastAddr, startAddr);
+			outstream << "\",\"obj\":\"" << s->name() << "\"}";
 
 		}
-		outstream << "],";
-		}
-
-		string resp = outstream.str();
-		resp.pop_back();
-		resp.append("}");
-
-		return env->NewStringUTF(resp.c_str());
+		if(func_count != 0)
+			outstream << ",\n";
 	}
+
+	string resp = outstream.str();
+
+	if(resp.size() == 0){
+		return env->NewStringUTF("error: no functions parsed");
+	}
+
+	resp.pop_back();
+	resp.pop_back();
+
+	resp.insert(0, "[");
+	resp.append("]");
+
+	return env->NewStringUTF(resp.c_str());
+}

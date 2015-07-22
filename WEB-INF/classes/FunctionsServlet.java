@@ -97,6 +97,10 @@ public class FunctionsServlet extends HttpServlet {
 		String source = FileUtils.readFileToString(new File(cacheDirPath
 				+ fileName));
 
+		if(source.startsWith("error")){
+			return source;
+		}
+
 		Gson gson = new Gson();
 		Type stringStringMap = new TypeToken<List<Func>>() {
 		}.getType();
@@ -146,7 +150,7 @@ public class FunctionsServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Set response content type
-		response.setContentType("application/json");
+		response.setContentType("text/plain");
 		String sortMode = request.getParameter("sortby");
 		String sortDirection = request.getParameter("sortdirection");
 		String fileName = request.getParameter("filename");

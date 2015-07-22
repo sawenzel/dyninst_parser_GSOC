@@ -34,7 +34,7 @@ JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
 	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileNameStr);
 
 	if(isParsable == false){
-		return env->NewStringUTF("{\"error\": \"file can not be parsed\"}");
+		return env->NewStringUTF("error: file can not be parsed");
 	}
 
 	sts = new SymtabCodeSource(fileName);
@@ -71,6 +71,11 @@ JNIEXPORT jstring JNICALL Java_FunctionsServlet_getFunctionsJni
 	}
 
 	string resp = outstream.str();
+
+	if(resp.size() == 0){
+		return env->NewStringUTF("error: no functions parsed");
+	}
+
 	resp.pop_back();
 	resp.pop_back();
 

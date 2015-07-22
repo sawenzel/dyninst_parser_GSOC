@@ -24,7 +24,7 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 
 	Archive::openArchive(ar, fileName);
 	if(ar == NULL){
-		return env->NewStringUTF("{\"error\": {\"archive empty\":\"\"}}");
+		return env->NewStringUTF("error: archive empty");
 	}
 
 	ar->getAllMembers(symTabs);
@@ -138,6 +138,10 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 		}
 
 		string resp = outstream.str();
+		if(resp.size() == 0){
+			return env->NewStringUTF("error: no functions parsed");
+		}
+
 		resp.pop_back();
 		resp.append("}");
 
