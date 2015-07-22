@@ -36,6 +36,13 @@
  		};
  	}
 
+ 	if (!String.prototype.startsWith) {
+ 		String.prototype.startsWith = function(searchString, position) {
+ 			position = position || 0;
+ 			return this.indexOf(searchString, position) === position;
+ 		};
+ 	}
+
  	$scope.setFile = function(fileName, sortBy, sortDirection){
  		$scope.selectedFile = fileName;
  		$scope.sortBy = sortBy;
@@ -47,25 +54,35 @@
 
  		$scope.error = "";
  		if(fileName.endsWith(".a")){
- 			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName, sortby:"address", sortdirection:"ascending"}}).success(function (data) {
- 				for(var i in data){
- 					$scope.functionsList = $scope.functionsList.concat(data[i].map(function(x){x['obj']=i; return x}));
- 				}
- 				$scope.source = $scope.functionsList.slice(0);
- 				$scope.isCurrentFileArchive = true;
- 				$scope.functionsLoading = false;
- 			});
- 		} else {
- 			$http.get($scope.functionsEndpoint, {params:{filename:fileName, sortby:sortBy, sortdirection:sortDirection}}).success(function (data) {
- 				if("error" in data){
- 					$scope.error = data["error"];
+ 			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName, sortby:sortBy, sortdirection:sortDirection}}).
+ 				success(function (data) {
+ 				if((typeof data) == 'string' && data.startsWith("error")){
+ 					$scope.error = data;
  					$scope.assemblyDict = {};
  					$scope.selectedFile = "";
+ 					$scope.functionsList = undefined;
  				} else {
  					$scope.functionsList = data;
+ 					$scope.source = $scope.functionsList.slice(0);
+ 				}
+
+ 				$scope.isCurrentFileArchive = true;
+ 				$scope.functionsLoading = false;
+ 				});
+ 		} else {
+ 			$http.get($scope.functionsEndpoint, {params:{filename:fileName, sortby:sortBy, sortdirection:sortDirection}}).
+ 				success(function (data) {
+ 				if((typeof data) == 'string' && data.startsWith("error")){
+ 					$scope.error = data;
+ 					$scope.assemblyDict = {};
+ 					$scope.selectedFile = "";
+ 					$scope.functionsList = undefined;
+ 				} else {
+ 					$scope.functionsList = data;
+ 					$scope.source = $scope.functionsList.slice(0);
  					$scope.textFilter = "";
  				}
- 				$scope.source = $scope.functionsList.slice(0);
+
  				$scope.isCurrentFileArchive = false;
  				$scope.functionsLoading = false;
  			});
@@ -77,6 +94,7 @@
 
  	$scope.setFunction = function(functionEntry){
  		$scope.selectedFunction = [];
+
 
  		var functionName = functionEntry['name'];
  		var functionObjFile = functionEntry['obj'];
@@ -249,11 +267,17 @@
  					function(a){
  						var name = a.name.toLowerCase();
  						var address = a.address.toLowerCase();
+ 						if(a.obj){
+ 							var obj = a.obj.toLowerCase();
+ 						}
  						try {
  							var regex = new RegExp(textFilter);
- 							return (regex.test(name) || regex.test(address));
+ 							return regex.test(name + address + obj);
  						} catch (e) {
- 							return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1);	
+ 							if($scope.isCurrentFileArchive == true)
+ 								return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1 || obj.indexOf(textFilter) > -1);	
+ 							else
+ 								return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1);		
  						}
  					}
  					);
@@ -279,7 +303,7 @@
 
  	$scope.onDataEnd = function() {
  		if($scope.diffList.length < 2){
- 			$scope.diffBoxClass = "fade";
+ 			$scope.diffBoxClass = "fade-diff-box";
  		}
  	};
 
@@ -301,7 +325,7 @@
  				$scope.diffList.shift();
  		}
  		if($scope.diffList.length < 2){
- 			$scope.diffBoxClass = "fade";
+ 			$scope.diffBoxClass = "fade-diff-box";
  		}
  	};
  	

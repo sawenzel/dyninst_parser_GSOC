@@ -22,7 +22,6 @@ ul{
 
 <div ng-show="error" class="alert alert-danger" role="alert">
   <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  <span class="sr-only">Error:</span>
   {{error}}
 </div>
 
@@ -48,7 +47,7 @@ ul{
         </div>
         <!-- search -->
         <form style="margin-left: -10px" class="navbar-form navbar-left">
-          <input class="form-control" type="text" ng-model="textFilter" placeholder="search" ng-change="filterTableData()"/>
+          <input title="{{isCurrentFileArchive ? 'search for function names, addresses or object names' : 'search for function names or addresses'}}" class="form-control" type="text" ng-model="textFilter" placeholder="search" ng-change="filterTableData()"/>
           <span style="color: #868686"><span style="color: black; font-size: 15px; font-weight: bolder">{{functionsList.length}}
           </span> functions matched</span>
         </form>
@@ -60,20 +59,26 @@ ul{
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a ng-click="setFile(selectedFile, 'address', 'ascending')">address ascending</a></li>
+            <li class="clickable"><a ng-click="setFile(selectedFile, 'address', 'ascending')">address ascending</a></li>
             <li role="separator" class="divider"></li>
-            <li><a ng-click="setFile(selectedFile, 'name', 'ascending')">name ascending</a></li>
-            <li><a ng-click="setFile(selectedFile, 'name', 'descending')">name descending</a></li>
+            
+            <li class="clickable"><a ng-click="setFile(selectedFile, 'name', 'ascending')">name ascending</a></li>
+            <li class="clickable"><a ng-click="setFile(selectedFile, 'name', 'descending')">name descending</a></li>
             <li role="separator" class="divider"></li>
-            <li><a ng-click="setFile(selectedFile, 'size', 'ascending')">size ascending</a></li>
-            <li><a ng-click="setFile(selectedFile, 'size', 'descending')">size descending</a></li>
+            
+            <li class="clickable"><a ng-click="setFile(selectedFile, 'size', 'ascending')">size ascending</a></li>
+            <li class="clickable"><a ng-click="setFile(selectedFile, 'size', 'descending')">size descending</a></li>
+
+            <li ng-show="isCurrentFileArchive" role="separator" class="divider"></li>
+            <li class="clickable" ng-show="isCurrentFileArchive"><a ng-click="setFile(selectedFile, 'objname', 'ascending')">object name ascending</a></li>
+            <li class="clickable" ng-show="isCurrentFileArchive" ><a ng-click="setFile(selectedFile, 'objname', 'descending')">object name descending</a></li>
           </ul>
         </div>
       </div>
     </th>
   </thead>
   <tbody>
-    <tr class="clickable" ng-click="setFunction(entry, 0)" ng-repeat="entry in functionsList | filter : paginate track by $index">
+    <tr class="clickable" ng-click="setFunction(entry)" ng-repeat="entry in functionsList | filter : paginate track by $index">
       <td style="width:1px; background-color: #dff0d8"
       id="address"
       title="drag to diff"
@@ -85,6 +90,11 @@ ul{
     </td>
     <td ng-style="getBackgroundStyle(entry, 'functions')" style="min-width: 1000px; max-width:1050px">
       <a style="word-wrap: break-word;" class="clickable" ng-click="setFunction(entry)">{{entry.name}}</a>
+      <span ng-show="entry.size < 100000" style="font-size: 10px">({{entry.size}} bytes)</span>
+      <span popover="Warning! This function has a very big size and may block the current browser tab"
+      popover-trigger="mouseenter" ng-show="entry.size >= 100000" style="font-size: 15px; color: red"
+      popover-placement="right">({{entry.size}} bytes)</span>
+
       <span class="objectSubscript">
         {{entry.obj}}
       </span>
@@ -139,7 +149,7 @@ ul{
     ad-drag-data="selectedFunction[1]"
     ad-drag-begin="onDragStart($data, $dragElement, $event);"
     ad-drag-end="onDataEnd($data, $dragElement, $event);">{{selectedFunction[1].name}}
-    <a ad-prevent-drag style ="float:right; cursor: pointer" ng-click="openChartModal(selectedFunction[1])">
+    <a ng-show="currentAssembly[1]" ad-prevent-drag style ="float:right; cursor: pointer" ng-click="openChartModal(selectedFunction[1])">
       &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
@@ -168,7 +178,7 @@ ul{
     ad-drag-begin="onDragStart($data, $dragElement, $event);"
     ad-drag-end="onDataEnd($data, $dragElement, $event);">
     {{selectedFunction[2].name}}
-    <a ad-prevent-drag style ="float:right; cursor: pointer" ng-click="openChartModal(selectedFunction[2])">
+    <a ng-show="currentAssembly[2]" ad-prevent-drag style ="float:right; cursor: pointer" ng-click="openChartModal(selectedFunction[2])">
       &nbsp Histogram
       <span class="badge"><span class="glyphicon glyphicon-stats clickable"></span></span>
     </a>
@@ -201,7 +211,7 @@ ad-drop-end="onDrop($data, $dragElement, $dropElement, $event);">
   </ul>
   <div ng-show="diffList.length == 2">
     <button type="button" class="btn btn-success" ng-click="openDiffModal(diffList)">Diff</button>
-    <button style="float:right" type="button" class="btn btn-danger" ng-click="diffBoxClass='fade'">Hide</button>
+    <button style="float:right" type="button" class="btn btn-danger" ng-click="diffBoxClass='fade-diff-box'">Hide</button>
   </div>
 </div>
 </div>
