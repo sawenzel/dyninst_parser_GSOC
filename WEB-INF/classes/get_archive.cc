@@ -67,9 +67,6 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 
 		//iterate the ContainerWrapper through all the functions
 		for(;fit != all.end(); ++fit){
-			if(func_count != 0)
-				outstream << ",";
-			func_count++;
 			ParseAPI::Function *f = *fit;
 			//if the function exists, don't output it
 
@@ -87,6 +84,10 @@ JNIEXPORT jstring JNICALL Java_ArchiveServlet_getArchiveJni
 
 			if(crtAddr == lastAddr)
 				continue;
+
+			if(func_count != 0)
+				outstream << ",";
+			func_count++;
 
 			outstream << "\n{\"" << f->name() << "\": \"[";
 			while(crtAddr < lastAddr){
