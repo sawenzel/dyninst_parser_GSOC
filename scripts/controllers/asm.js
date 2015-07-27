@@ -4,9 +4,9 @@
  */
  angular.module('candyUiApp')
  .controller('AsmCtrl', function ($rootScope, $scope, $http, $modal, $anchorScroll, $location) {
-
  	$rootScope.imageURI = {};
  	$rootScope.currentController = 'asm';
+
 
  	$scope.archiveFuncsEndpoint = "/api/archivefuncs";
  	$scope.archiveAssemblyEndpoint = "/api/archive";
@@ -23,7 +23,14 @@
  	$scope.assemblyDict = {};
  	$scope.assemblyLoading = [];
 
- 	//we don't have endsWith on safari
+ 	//polyfills for safari
+ 	if (!String.prototype.startsWith) {
+ 		String.prototype.startsWith = function(searchString, position) {
+ 			position = position || 0;
+ 			return this.indexOf(searchString, position) === position;
+ 		};
+ 	}
+
  	if (!String.prototype.endsWith) {
  		String.prototype.endsWith = function(searchString, position) {
  			var subjectString = this.toString();
@@ -36,26 +43,30 @@
  		};
  	}
 
- 	if (!String.prototype.startsWith) {
- 		String.prototype.startsWith = function(searchString, position) {
- 			position = position || 0;
- 			return this.indexOf(searchString, position) === position;
- 		};
+ 	//get the list of binaries at page load
+ 	$scope.init = function(){
+ 		$http.get($scope.filesEndpoint).success(function (data) {
+ 			$scope.filesList = data;
+ 			$scope.fileSource = data;
+ 		});
  	}
 
+ 	$scope.init();
+
+ 	//selects a file to be analized
  	$scope.setFile = function(fileName, sortBy, sortDirection){
  		$scope.selectedFile = fileName;
  		$scope.sortBy = sortBy;
  		$scope.sortDirection = sortDirection;
  		$scope.functionsList = []
- 		$scope.source = [];
+ 		$scope.functionSource = [];
 
  		$scope.functionsLoading = true;
 
  		$scope.error = "";
  		if(fileName.endsWith(".a")){
  			$http.get($scope.archiveFuncsEndpoint, {params:{filename:fileName, sortby:sortBy, sortdirection:sortDirection}}).
- 				success(function (data) {
+ 			success(function (data) {
  				if((typeof data) == 'string' && data.startsWith("error")){
  					$scope.error = data;
  					$scope.assemblyDict = {};
@@ -63,15 +74,15 @@
  					$scope.functionsList = undefined;
  				} else {
  					$scope.functionsList = data;
- 					$scope.source = $scope.functionsList.slice(0);
+ 					$scope.functionSource = $scope.functionsList.slice(0);
  				}
 
  				$scope.isCurrentFileArchive = true;
  				$scope.functionsLoading = false;
- 				});
+ 			});
  		} else {
  			$http.get($scope.functionsEndpoint, {params:{filename:fileName, sortby:sortBy, sortdirection:sortDirection}}).
- 				success(function (data) {
+ 			success(function (data) {
  				if((typeof data) == 'string' && data.startsWith("error")){
  					$scope.error = data;
  					$scope.assemblyDict = {};
@@ -79,8 +90,8 @@
  					$scope.functionsList = undefined;
  				} else {
  					$scope.functionsList = data;
- 					$scope.source = $scope.functionsList.slice(0);
- 					$scope.textFilter = "";
+ 					$scope.functionSource = $scope.functionsList.slice(0);
+ 					$scope.functionFilter = "";
  				}
 
  				$scope.isCurrentFileArchive = false;
@@ -89,12 +100,12 @@
  		}
 
  		$scope.selectedFunction = [];
- 		$scope.textFilter = "";
+ 		$scope.functionFilter = "";
  	};
 
- 	$scope.setFunction = function(functionEntry){
+ 	//selects a function to be analized
+ 	$scope.setFunctionFromTable = function(functionEntry){
  		$scope.selectedFunction = [];
-
 
  		var functionName = functionEntry['name'];
  		var functionObjFile = functionEntry['obj'];
@@ -120,10 +131,11 @@
  			});
  		}
 
- 		$scope.textFilter = "";
+ 		$scope.functionFilter = "";
  	};
 
- 	$scope.setFunction2 = function(assemblyEntry, index){
+ 	//selects a function to be analized from a "call" instruction
+ 	$scope.setFunctionFromCall = function(assemblyEntry, index){
  		var functionName = assemblyEntry['destName'];
  		var functionObjFile = $scope.selectedFunction[0].obj;
  		var functionAddr = assemblyEntry['destAddr'];
@@ -148,8 +160,9 @@
  			});
  		}
 
- 		$scope.textFilter = "";
+ 		$scope.functionFilter = "";
  	};
+
 
  	$scope.openChartModal = function (functionEntry) {
  		var modalInstance = $modal.open({
@@ -188,16 +201,8 @@
  		});
  	};
 
- 	$scope.init = function(){
- 		$http.get($scope.filesEndpoint).success(function (data) {
- 			$scope.filesList = data;
- 			$scope.source = data;
- 		});
- 	}
-
- 	$scope.init();
-
- 	$scope.getBackgroundStyle = function(entry, entrySetName){
+ 	//return bold style for clicked entries
+ 	$scope.getEntryStyle = function(entry, entrySetName){
  		if(entrySetName == "files"){
  			if($scope.selectedFile == entry){
  				return {'font-weight' : 'bolder'}
@@ -215,77 +220,95 @@
  		}
  	};
 
- 	$scope.getCodeStyle = function(instr){
- 		if(instr.indexOf("call") == 0)
+ 	//return clickable style for call instructions
+ 	$scope.getInstructionStyle = function(instr){
+ 		if(instr.indexOf("call") == 0){
  			if(instr.indexOf("RIP") == -1)
  				return 'callInstructionNotClickable boldText';
  			else
  				return 'callInstruction boldText';
- 			if(instr.indexOf("j") == 0)
- 				return 'jmpInstruction';
  		}
-
- 		$scope.format = function(line){
- 			var name = line.name;
- 			if(line.destName != undefined && name.indexOf("call") == 0 && name.indexOf("RIP") != -1)
- 				return "call " + line.destName;
- 			else
- 				return line.name;
+ 		if(instr.indexOf("j") == 0){
+ 			return 'jmpInstruction';
  		}
+ 	}
 
- 		$scope.numPerPage = 10;
- 		$scope.currentPage = 1;
- 		$scope.currentPageArchive = 1;
+ 	//return address function name for call instructions
+ 	$scope.format = function(line){
+ 		var name = line.name;
+ 		if(line.destName != undefined && name.indexOf("call") == 0 && name.indexOf("RIP") != -1)
+ 			return "call " + line.destName;
+ 		else
+ 			return line.name;
+ 	}
 
- 		$scope.paginateArchive = function(value){
- 			var begin, end, index;
- 			begin = ($scope.currentPageArchive - 1) * $scope.numPerPage;
- 			end = begin + $scope.numPerPage;
- 			index = $scope.archiveFiles.indexOf(value);
- 			return (begin <= index && index < end);
- 		};
 
- 		$scope.paginate = function(value){
- 			var begin, end, index;
- 			begin = ($scope.currentPage - 1) * $scope.numPerPage;
- 			end = begin + $scope.numPerPage;
- 			index = $scope.functionsList.indexOf(value);
- 			return (begin <= index && index < end);
- 		};
+ 	//pagination
+ 	$scope.numPerPage = 10;
+ 	$scope.currentPageFunctions = 1;
+ 	$scope.currentPageFiles = 1;
 
- 		$scope.checkFilterEmpty = function(){
- 			if($scope.textFilter.length == 0)
- 				$scope.functionsList = $scope.source;
- 		};
+ 	$scope.paginateFiles = function(value){
+ 		var begin, end, index;
+ 		begin = ($scope.currentPageFiles - 1) * $scope.numPerPage;
+ 		end = begin + $scope.numPerPage;
+ 		index = $scope.filesList.indexOf(value);
+ 		return (begin <= index && index < end);
+ 	};
 
- 		$scope.filterTableData = function(){
- 			var textFilter = $scope.textFilter.toLowerCase();
- 			if($scope.textFilter.length == 0){
- 				$scope.functionsList = $scope.source;
- 			} else {
- 				$scope.functionsList = $scope.source.filter(
- 					function(a){
- 						var name = a.name.toLowerCase();
- 						var address = a.address.toLowerCase();
- 						if(a.obj){
- 							var obj = a.obj.toLowerCase();
- 						}
- 						try {
- 							var regex = new RegExp(textFilter);
- 							return regex.test(name + address + obj);
- 						} catch (e) {
- 							if($scope.isCurrentFileArchive == true)
- 								return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1 || obj.indexOf(textFilter) > -1);	
- 							else
- 								return (name.indexOf(textFilter) > -1 || address.indexOf(textFilter) > -1);		
- 						}
+ 	$scope.paginateFunctions = function(value){
+ 		var begin, end, index;
+ 		begin = ($scope.currentPageFunctions - 1) * $scope.numPerPage;
+ 		end = begin + $scope.numPerPage;
+ 		index = $scope.functionsList.indexOf(value);
+ 		return (begin <= index && index < end);
+ 	};
+
+ 	//search filters for functions
+ 	$scope.filterFunctionTable = function(){
+ 		var functionFilter = $scope.functionFilter.toLowerCase();
+ 		if($scope.functionFilter.length == 0){
+ 			$scope.functionsList = $scope.functionSource;
+ 		} else {
+ 			$scope.functionsList = $scope.functionSource.filter(
+ 				function(a){
+ 					var name = a.name.toLowerCase();
+ 					var address = a.address.toLowerCase();
+ 					if(a.obj){
+ 						var obj = a.obj.toLowerCase();
  					}
- 					);
- 			}
- 		};
+ 					try {
+ 						var regex = new RegExp(functionFilter);
+ 						return regex.test(name + address + obj);
+ 					} catch (e) {
+ 						if($scope.isCurrentFileArchive == true)
+ 							return (name.indexOf(functionFilter) > -1 || address.indexOf(functionFilter) > -1 || obj.indexOf(functionFilter) > -1);	
+ 						else
+ 							return (name.indexOf(functionFilter) > -1 || address.indexOf(functionFilter) > -1);		
+ 					}
+ 				}
+ 				);
+ 		}
+ 	};
+
+ 	//search filters for files
+ 	$scope.filterFileTable = function(fileFilter){
+ 		var fileFilter = fileFilter.toLowerCase();
+ 		if($scope.fileFilter.length == 0){
+ 			$scope.filesList = $scope.fileSource;
+ 		} else {
+ 			$scope.filesList = $scope.fileSource.filter(
+ 				function(name){
+ 					return name.indexOf(fileFilter) > -1;
+ 				}
+ 				);
+ 		}
+ 	};
 
 
- 	//diff drop box control
+
+
+ 	//diff box functions
  	$scope.showDiffBox = false;
  	$scope.diffList = [];
 

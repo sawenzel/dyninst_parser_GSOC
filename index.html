@@ -25,42 +25,42 @@
 
     <div class="header container">
         <ul class="nav nav-pills pull-right">
-            <li ng-class="currentController=='asm'?'active':''"><a ng-href="#/asm">ASM</a>
-                <li ng-class="currentController=='graph'?'active':''"><a ng-href="#/graph">Graph</a>
-                    <!-- <li ng-class="currentController=='diff'?'active':''"><a ng-href="#/diff">Diff</a> -->
-                </ul>
+            <li ng-class="currentController=='asm'?'active':''"><a ng-href="#/asm">ASM</a></li>
+            <li ng-class="currentController=='upload'?'active':''"><a ng-href="#/upload">Upload</a></li>
+            <!-- <li ng-class="currentController=='diff'?'active':''"><a ng-href="#/diff">Diff</a> -->
+        </ul>
 
-                <a style="font-size:30px" class="label label-info clickable" ng-href="#/asm">ASM Parser</a>
-            </div>
+        <a style="font-size:30px" class="label label-info clickable" ng-href="#/asm">ASM Parser</a>
+    </div>
 
-            <!-- Add your site or application content here -->
-            <div class="container">
-                <div ng-view=""></div>
-            </div>
-        </div>
+    <!-- Add your site or application content here -->
+    <div class="container">
+        <div ng-view=""></div>
+    </div>
+</div>
 
-        <!-- <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha3.js"></script> -->
+<!-- <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha3.js"></script> -->
 
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-        <!--<script>-->
-        <!--(function (i, s, o, g, r, a, m) {-->
-        <!--i['GoogleAnalyticsObject'] = r;-->
-        <!--i[r] = i[r] || function () {-->
-        <!--(i[r].q = i[r].q || []).push(arguments)-->
-        <!--}, i[r].l = 1 * new Date();-->
-        <!--a = s.createElement(o),-->
-        <!--m = s.getElementsByTagName(o)[0];-->
-        <!--a.async = 1;-->
-        <!--a.src = g;-->
-        <!--m.parentNode.insertBefore(a, m)-->
-        <!--})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');-->
-        <!---->
-        <!--ga('create', 'UA-XXXXX-X');-->
-        <!--ga('send', 'pageview');-->
-        <!--</script>-->
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+<!--<script>-->
+<!--(function (i, s, o, g, r, a, m) {-->
+<!--i['GoogleAnalyticsObject'] = r;-->
+<!--i[r] = i[r] || function () {-->
+<!--(i[r].q = i[r].q || []).push(arguments)-->
+<!--}, i[r].l = 1 * new Date();-->
+<!--a = s.createElement(o),-->
+<!--m = s.getElementsByTagName(o)[0];-->
+<!--a.async = 1;-->
+<!--a.src = g;-->
+<!--m.parentNode.insertBefore(a, m)-->
+<!--})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');-->
+<!---->
+<!--ga('create', 'UA-XXXXX-X');-->
+<!--ga('send', 'pageview');-->
+<!--</script>-->
 
-        <!-- build:js(.) scripts/oldieshim.js -->
+<!-- build:js(.) scripts/oldieshim.js -->
 <!--[if lt IE 9]>
 <script src="bower_components/es5-shim/es5-shim.js"></script>
 <script src="bower_components/json3/lib/json3.min.js"></script>
@@ -101,7 +101,7 @@
 
 <script src="scripts/app.js"></script>
 <script src="scripts/controllers/asm.js"></script>
-<script src="scripts/controllers/graph.js"></script>
+<script src="scripts/controllers/upload.js"></script>
 <script src="scripts/controllers/diff.js"></script>
 <script src="scripts/controllers/stats.js"></script>
 <script src="scripts/ng-google-chart.js"></script>

@@ -11,12 +11,32 @@ ul{
 <div class="panel panel-default">
   <div class="panel-heading">Binaries</div>
   <table class="table table-bordered table-hover">
-    <tr ng-repeat="entry in filesList">
-      <td class="clickable" ng-style="getBackgroundStyle(entry, 'files')" ng-click="setFile(entry, 'address', 'ascending')">
+    <thead>
+      <th colspan="3">      
+        <!-- pagination -->
+        <div style="margin-left: 5px; margin-bottom: -5px">
+          <pagination total-items="filesList.length" ng-model="currentPageFiles" max-size="5"
+          boundary-links="true"
+          items-per-page="numPerPage" class="pagination-sm" style="margin: 0px !important;">
+        </pagination>
+      </div>
+      <!-- search -->
+      <form style="margin-left: -10px" class="navbar-form navbar-left">
+        <input title="search for file names" class="form-control" type="text" ng-model="fileFilter" placeholder="search"
+        ng-change="filterFileTable(fileFilter)"/>
+        <span style="color: #868686"><span style="color: black; font-size: 15px; font-weight: bolder">{{filesList.length}}
+        </span> files matched</span>
+      </form>  
+    </th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="entry in filesList | filter : paginateFiles">
+      <td class="clickable" ng-style="getEntryStyle(entry, 'files')" ng-click="setFile(entry, 'address', 'ascending')">
         <a class="clickable">{{entry}}</a>
       </td>
-    </tr>
-  </table>
+    </tbody>
+  </tr>
+</table>
 </div>
 
 
@@ -47,7 +67,8 @@ ul{
         </div>
         <!-- search -->
         <form style="margin-left: -10px" class="navbar-form navbar-left">
-          <input title="{{isCurrentFileArchive ? 'search for function names, addresses or object names' : 'search for function names or addresses'}}" class="form-control" type="text" ng-model="textFilter" placeholder="search" ng-change="filterTableData()"/>
+          <input title="{{isCurrentFileArchive ? 'search for function names, addresses or object names' : 'search for function names or addresses'}}" class="form-control" type="text" ng-model="functionFilter" placeholder="search" 
+          ng-change="filterFunctionTable()"/>
           <span style="color: #868686"><span style="color: black; font-size: 15px; font-weight: bolder">{{functionsList.length}}
           </span> functions matched</span>
         </form>
@@ -78,7 +99,7 @@ ul{
     </th>
   </thead>
   <tbody>
-    <tr class="clickable" ng-click="setFunction(entry)" ng-repeat="entry in functionsList | filter : paginate track by $index">
+    <tr class="clickable" ng-click="setFunctionFromTable(entry)" ng-repeat="entry in functionsList | filter : paginateFunctions track by $index">
       <td style="width:1px; background-color: #dff0d8"
       id="address"
       title="drag to diff"
@@ -88,8 +109,8 @@ ul{
       ad-drag-end="onDataEnd($data, $dragElement, $event);">
       {{entry.address}}
     </td>
-    <td ng-style="getBackgroundStyle(entry, 'functions')" style="min-width: 1000px; max-width:1050px">
-      <a style="word-wrap: break-word;" class="clickable" ng-click="setFunction(entry)">{{entry.name}}</a>
+    <td ng-style="getEntryStyle(entry, 'functions')" style="min-width: 1000px; max-width:1050px">
+      <a style="word-wrap: break-word;" class="clickable" ng-click="setFunctionFromTable(entry)">{{entry.name}}</a>
       <span ng-show="entry.size < 100000" style="font-size: 10px">({{entry.size}} bytes)</span>
       <span popover="Warning! This function has a very big size and may block the current browser tab"
       popover-trigger="mouseenter" ng-show="entry.size >= 100000" style="font-size: 15px; color: red"
@@ -130,7 +151,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[0]">
         {{line.address}} :
-        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 1) : ''">{{format(line)}}</code>
+        <code ng-class="getInstructionStyle(line.name)" ng-click="line.destName ? setFunctionFromCall(line, 1) : ''">{{format(line)}}</code>
       </li>
     </ul>
   </div>
@@ -158,7 +179,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[1]">
         {{line.address}} :
-        <code ng-class="getCodeStyle(line.name)" ng-click="line.destName ? setFunction2(line, 2) : ''">{{format(line)}}</code>
+        <code ng-class="getInstructionStyle(line.name)" ng-click="line.destName ? setFunctionFromCall(line, 2) : ''">{{format(line)}}</code>
       </li>
     </ul>
   </div>
@@ -187,7 +208,7 @@ ul{
     <ul>
       <li ng-repeat="line in currentAssembly[2]">
         {{line.address}} :
-        <code style="cursor:auto" ng-class="getCodeStyle(line.name)">{{format(line)}}</code>
+        <code style="cursor:auto" ng-class="getInstructionStyle(line.name)">{{format(line)}}</code>
       </li>
     </ul>
   </div>

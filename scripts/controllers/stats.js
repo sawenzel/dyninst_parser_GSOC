@@ -11,9 +11,10 @@
  	$scope.prevFunction = prevFunction;
 
  	$scope.currentAssembly = {};
-
- 	branchChart = {};
+ 	
+ 	movChart = {};
  	logicChart = {};
+ 	branchChart = {};
  	arithmeticChart = {};
  	otherChart = {};
  	$scope.mainChart = {};
@@ -21,23 +22,15 @@
  	$scope.mainChartReady = false;
 
  	$scope.instrTypes = {
- 		'mov' : ['movsd', 'mov'],
+ 		'mov' : ['movsd', 'movapd', 'cmovnb', 'movzx', 'mov'],
  		'logic' : ['and', 'or', 'xorpd', 'xor'],
  		'branch' : ['jmp', 'jz', 'jnz', 'je', 'jne', 'jns', 'jnle', 'jle', 'jnl', 'js', 'jl', 'jnbe'],
- 		'arithmetic' : ['add', 'mul', 'div', 'sub', 'shl', 'shr', 'sar'],
+ 		'arithmetic' : ['mulsd', 'addsd', 'subsd', 'add', 'mul', 'div', 'sub', 'shl', 'shr', 'sar'],
  		'push' : ['push'],
  		'pop' : ['pop'],
  		'call' : ['call'],
  		'other' : ['other']
  	};
-
- 	//we don't have startsWith on safari
- 	if (!String.prototype.startsWith) {
- 		String.prototype.startsWith = function(searchString, position) {
- 			position = position || 0;
- 			return this.indexOf(searchString, position) === position;
- 		};
- 	}
 
  	$scope.exit = function() {
  		$modalInstance.close();
@@ -74,7 +67,7 @@
  		for (t in $scope.instrTypes[typeToCount]){
  			result[t] = 0;
  			for (i in instrArray){
- 				if(instrArray[i].startsWith($scope.instrTypes[typeToCount][t])){
+ 				if(instrArray[i].split(" ")[0] == $scope.instrTypes[typeToCount][t]){
  					result[t]++;
  				}
  			}	
@@ -87,7 +80,7 @@
  		for (key in $scope.instrTypes){
  			for(type in $scope.instrTypes[key]){
  				var crtType = $scope.instrTypes[key][type];
- 				if(instrName.startsWith(crtType))
+ 				if(instrName.split(" ")[0] == crtType)
  					return key;
  			}
  		}
@@ -127,18 +120,6 @@
 
  	$scope.mainChart.data.rows=[];
 
- 	setToolTipChartOptions = function(chart){
- 		chart.options = {
- 			legend: {
- 				position: 'none'
- 			},
- 			colors: ['#428BCA'],
- 			hAxis: {
- 				scaleType: "mirrorLog",
- 			},
- 		}
- 	}
-
  	setMainChartData = function(instrType){
  		$scope.mainChart.data.rows.push({c: [
  			{v: instrType},
@@ -148,7 +129,7 @@
  			]});
  	}
 
- 	setToolTipChartStructure = function(chart, name){
+ 	initToolTipChart = function(chart, name){
  		chart.name = name
  		chart.type = "BarChart";
 
@@ -160,6 +141,16 @@
  			],
  			"rows": []
  		};
+
+ 		chart.options = {
+ 			legend: {
+ 				position: 'none'
+ 			},
+ 			colors: ['#428BCA'],
+ 			hAxis: {
+ 				scaleType: "mirrorLog",
+ 			},
+ 		}
  	}
 
  	setToolTipChartData = function(namesList, chart, instrType){
@@ -177,8 +168,9 @@
  	}
 
  	updateData = function(data){
- 		if(data == undefined || data.length == 0)
+ 		if(data == undefined || data.length == 0){
  			return;
+ 		}
  		$scope.currentAssembly = data;
 
  		namesList = data.map(function (a){
@@ -188,12 +180,12 @@
  		$scope.allInstrs = namesList;
  		$scope.callDestinations = data.filter(function(x){return ('destName' in x)});
 
-
  		$scope.instTypeCount = {};
  		for (i in $scope.instrTypes){
  			$scope.instTypeCount[i] = namesList.filter(function(x){return (getInstrType(x) == i)}).length;
- 			if($scope.instTypeCount[i] > 0)
+ 			if($scope.instTypeCount[i] > 0){
  				setMainChartData(i);
+ 			}
  		}
 
  		var otherInstrCount = namesList.length;
@@ -201,91 +193,91 @@
  			otherInstrCount -= $scope.instTypeCount[i];
  		}
 
+ 		$scope.movTypeCount = getInstrCount(namesList, 'mov');
  		$scope.branchTypeCount = getInstrCount(namesList, 'branch');
  		$scope.arithmeticTypeCount = getInstrCount(namesList, 'arithmetic');
  		$scope.logicTypeCount = getInstrCount(namesList, 'logic');
 
- 		setToolTipChartStructure(branchChart, 'branchChart');
- 		setToolTipChartStructure(logicChart, 'logicChart');
- 		setToolTipChartStructure(arithmeticChart, 'arithmeticChart');
- 		setToolTipChartStructure(otherChart, 'otherChart');
+ 		initToolTipChart(movChart, 'movChart');
+ 		initToolTipChart(branchChart, 'branchChart');
+ 		initToolTipChart(logicChart, 'logicChart');
+ 		initToolTipChart(arithmeticChart, 'arithmeticChart');
+ 		initToolTipChart(otherChart, 'otherChart');
 
- 		setToolTipChartOptions(branchChart);
  		setToolTipChartData(namesList, branchChart, 'branch');
-
- 		setToolTipChartOptions(logicChart);
  		setToolTipChartData(namesList, logicChart, 'logic');
-
- 		setToolTipChartOptions(arithmeticChart);
  		setToolTipChartData(namesList, arithmeticChart, 'arithmetic');
+ 		setToolTipChartData(namesList, movChart, 'mov');
 
- 		setToolTipChartOptions(otherChart);
+		//yay for async loading: links to ng-google-chart are made only after all the fields of those objects
+ 		//have been set
+ 		$scope.movChart = movChart;
+ 		$scope.branchChart = branchChart;
+ 		$scope.logicChart = logicChart;
+ 		$scope.arithmeticChart = arithmeticChart;
+ 		$scope.otherChart = otherChart;
 
- 			//yay for async loading: links to ng-google-chart are made only after all the fields of those objects
- 			//have been set
- 			$scope.branchChart = branchChart;
- 			$scope.logicChart = logicChart;
- 			$scope.arithmeticChart = arithmeticChart;
- 			$scope.otherChart = otherChart;
+ 		//initialize chart with uncategorized isntructions
+ 		otherInstrs = namesList.filter(function(x){
+ 			return (getInstrType(x) == 'other');
+ 		}).map(function(x){
+ 			return x.split(" ")[0];
+ 		});
+ 		uniqueOthers = otherInstrs.filter(function(item, pos, self) {return self.indexOf(item) == pos;});
+ 		for (key in uniqueOthers){
+ 			$scope.otherChart.data.rows.push({c: [
+ 				{v: uniqueOthers[key]},
+ 				{v: otherInstrs.filter(function(x){return (x.split(" ")[0] == uniqueOthers[key])}).length},
+ 				{v: otherInstrs.filter(function(x){return (x.split(" ")[0] == uniqueOthers[key])}).length},
+ 				]});
+ 		}
+ 	}
 
- 			otherInstrs = namesList.filter(function(x){
- 				return (getInstrType(x) == 'other');
- 			}).map(function(x){
- 				return x.split(" ")[0];
+ 	$scope.init = function(){
+ 		var fileName = $scope.fileName;
+ 		var functionName = $scope.crtFunction.name;
+ 		var objectName = $scope.crtFunction.obj;
+ 		var functionAddr = $scope.crtFunction.address;
+
+ 		if($scope.isCurrentFileArchive == true){
+ 			$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: functionAddr, functionname: functionName}, cache:true}).success(function (data) {
+ 				updateData(data);
  			});
-
- 			uniqueOthers = otherInstrs.filter(function(item, pos, self) {return self.indexOf(item) == pos;});
-
- 			for (key in uniqueOthers){
- 				$scope.otherChart.data.rows.push({c: [
- 					{v: uniqueOthers[key]},
- 					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
- 					{v: otherInstrs.filter(function(x){return (x.startsWith(uniqueOthers[key]))}).length},
- 					]});
- 			}
+ 		} else {
+ 			$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
+ 				updateData(data);
+ 			});
  		}
 
- 		$scope.init = function(){
- 			var fileName = $scope.fileName;
- 			var functionName = $scope.crtFunction.name;
- 			var objectName = $scope.crtFunction.obj;
- 			var functionAddr = $scope.crtFunction.address;
+ 		console.log($rootScope.imageURI);
+ 	};
 
- 			if($scope.isCurrentFileArchive == true){
- 				$http.get($scope.archiveAssemblyEndpoint, {params:{filename:fileName, objectname:objectName, address: functionAddr, functionname: functionName}, cache:true}).success(function (data) {
- 					updateData(data);
- 				});
- 			} else {
- 				$http.get($scope.assemblyEndpoint, {params:{filename:fileName, functionname: functionName, address: functionAddr}, cache:true}).success(function (data) {
- 					updateData(data);
- 				});
+ 	getHtmlTooltip = function(tooltipName, title){
+ 		return '<div class="modal-header"><h4 class="modal-title">' +
+ 		title +
+ 		'</h4></div><div class="modal-body"><img src="' +
+ 		$rootScope.imageURI[tooltipName] + '"></div>';
+ 	}
+
+ 	$scope.setToolTipChartPNG = function(){
+ 		for (i in $scope.mainChart.data.rows){
+ 			if($scope.mainChart.data.rows[i].c[0]['v'] == 'mov'){
+ 				$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('movChart', 'mov instructions distribution')};
  			}
- 		};
-
- 		getHtmlTooltip = function(tooltipName, title){
- 			return '<div class="modal-header"><h4 class="modal-title">' +
- 			title +
- 			'</h4></div><div class="modal-body"><img src="' +
- 			$rootScope.imageURI[tooltipName] + '"></div>';
- 		}
-
- 		$scope.setToolTipChartPNG = function(){
- 			for (i in $scope.mainChart.data.rows){
- 				if($scope.mainChart.data.rows[i].c[0]['v'] == 'logic'){
- 					$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('logicChart', 'logic instructions distribution')};
- 				}
- 				if($scope.mainChart.data.rows[i].c[0]['v'] == 'branch'){
- 					$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('branchChart', 'branch instructions distribution')};
- 				}
- 				if($scope.mainChart.data.rows[i].c[0]['v'] == 'arithmetic'){
- 					$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('arithmeticChart', 'arithmetic instructions distribution')};
- 				}
- 				if($scope.mainChart.data.rows[i].c[0]['v'] == 'other'){
- 					$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('otherChart', 'other instructions distribution')};
- 				}
-
+ 			if($scope.mainChart.data.rows[i].c[0]['v'] == 'logic'){
+ 				$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('logicChart', 'logic instructions distribution')};
+ 			}
+ 			if($scope.mainChart.data.rows[i].c[0]['v'] == 'branch'){
+ 				$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('branchChart', 'branch instructions distribution')};
+ 			}
+ 			if($scope.mainChart.data.rows[i].c[0]['v'] == 'arithmetic'){
+ 				$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('arithmeticChart', 'arithmetic instructions distribution')};
+ 			}
+ 			if($scope.mainChart.data.rows[i].c[0]['v'] == 'other'){
+ 				$scope.mainChart.data.rows[i].c[2] = {v: getHtmlTooltip('otherChart', 'other instructions distribution')};
  			}
  		}
+ 	}
 
- 		$scope.init();
- 	});
+ 	$scope.init();
+ });
