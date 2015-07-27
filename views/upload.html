@@ -1,1 +1,49 @@
-Le file uploader
+<style>
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+</style>
+
+
+<span class="btn btn-primary btn-file">
+	Browse <input type="file" file-model="file">
+</span>
+
+
+<br>
+<br>
+
+<div>
+	<button ng-show="file" class="btn btn-success" ng-click="uploadFile()">upload</button>
+
+	<span>
+		<strong>{{file.name}}</strong>
+		{{formatSize(file.size)}}
+	</span>
+</div>
+
+
+<alert ng-repeat="alert in alerts track by $index" type="{{alert.type}}" close="closeAlert($index)">
+	{{alert.text}} <strong>{{alert.target}}</strong>
+</alert>
+
+<div ng-hide="uploadDone">
+	<br>
+	<ad-loading-icon loading-icon-size="20px"></ad-loading-icon>
+</div>
