@@ -91,7 +91,6 @@ public class ArchiveFuncsServlet extends HttpServlet {
 		String source = FileUtils.readFileToString(new File(cacheDirPath
 					+ fileName));
 
-		System.out.println(source);
 		if(source.startsWith("error"))
 			return source;
 
