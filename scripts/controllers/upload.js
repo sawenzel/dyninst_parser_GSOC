@@ -37,7 +37,6 @@
 
 
  	$scope.formatSize = function(size){
- 		console.log(size);
  		if(size == undefined){
  			return "";
  		}
@@ -59,7 +58,6 @@
 
  	$scope.uploadFile = function(){
  		$scope.uploadDone = false;
- 		/*
  		fileUpload.uploadFileToUrl($scope.file, $scope.uploadUrl)
  		.success(function(data){
  			$scope.uploadDone = true;
@@ -79,7 +77,6 @@
 
  			$scope.addAlert(alert);
  		});
-*/
 }
 
 $scope.closeAlert = function(index) {

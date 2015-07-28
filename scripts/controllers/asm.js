@@ -70,7 +70,6 @@
  				if((typeof data) == 'string' && data.startsWith("error")){
  					$scope.error = data;
  					$scope.assemblyDict = {};
- 					$scope.selectedFile = "";
  					$scope.functionsList = undefined;
  				} else {
  					$scope.functionsList = data;
@@ -86,7 +85,6 @@
  				if((typeof data) == 'string' && data.startsWith("error")){
  					$scope.error = data;
  					$scope.assemblyDict = {};
- 					$scope.selectedFile = "";
  					$scope.functionsList = undefined;
  				} else {
  					$scope.functionsList = data;

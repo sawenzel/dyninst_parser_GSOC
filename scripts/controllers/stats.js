@@ -248,8 +248,6 @@
  				updateData(data);
  			});
  		}
-
- 		console.log($rootScope.imageURI);
  	};
 
  	getHtmlTooltip = function(tooltipName, title){
