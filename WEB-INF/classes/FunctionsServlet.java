@@ -29,7 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class FunctionsServlet extends HttpServlet {
-	private native String getFunctionsJni(String fileName);
+	private native void getFunctionsJni(String binaryPath, String jsonPath);
 
 	// local:
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
@@ -82,20 +82,15 @@ public class FunctionsServlet extends HttpServlet {
 			final String sortDirection) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
 		if (isFunctionCached(fileName) == false) {
-			String binaryPath = binaryDirPath + fileName;
 
-			String content;
 			try {
-				content = new FunctionsServlet().getFunctionsJni(binaryPath);
-				FileUtils.writeStringToFile(new File(cacheDirPath + fileName),
-						content);
+				new FunctionsServlet().getFunctionsJni(binaryDirPath + fileName, cacheDirPath + fileName);
 			} catch (Exception e) {
 				return null;
 			}
 		}
 		// return the cached result
-		String source = FileUtils.readFileToString(new File(cacheDirPath
-				+ fileName));
+		String source = FileUtils.readFileToString(new File(cacheDirPath + fileName));
 
 		if(source.startsWith("error")){
 			return source;

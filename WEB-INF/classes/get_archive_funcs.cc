@@ -1,5 +1,5 @@
 #include <jni.h>
-#include <iostream>
+#include <fstream>
 #include "Symtab.h"
 #include "Archive.h"
 #include "CodeObject.h"
@@ -19,18 +19,25 @@ Address absDiff2(Address high, Address low){
 	return high - low;
 }
 
-JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
-(JNIEnv * env, jobject obj, jstring jFileName){
-	char *fileName = (char*) env->GetStringUTFChars(jFileName, 0);
+JNIEXPORT void JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
+(JNIEnv * env, jobject obj, jstring jArchivePath, jstring jJsonPath){
+	char *archivePath = (char*) env->GetStringUTFChars(jArchivePath, 0);
+	char *jsonPath = (char*) env->GetStringUTFChars(jJsonPath, 0);
+
+	stringstream outstream;
+	ofstream jsonStream;
+	jsonStream.open(jsonPath);
+
 	Instruction::Ptr instr;
 	Archive *ar = NULL;
 	vector<Symtab *> symTabs;
 
-	stringstream outstream;
-
-	Archive::openArchive(ar, fileName);
+	Archive::openArchive(ar, archivePath);
 	if(ar == NULL){
-		return env->NewStringUTF("error: archive empty");
+		const char *error = "error: archive empty";
+		jsonStream << error;
+		jsonStream.close();
+		return;
 	}
 
 	ar->getAllMembers(symTabs);
@@ -103,7 +110,10 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 	string resp = outstream.str();
 
 	if(resp.size() == 0){
-		return env->NewStringUTF("error: no functions parsed");
+		const char *error = "error: no functions parsed";
+		jsonStream << error;
+		jsonStream.close();
+		return;
 	}
 
 	resp.pop_back();
@@ -112,5 +122,6 @@ JNIEXPORT jstring JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 	resp.insert(0, "[");
 	resp.append("]");
 
-	return env->NewStringUTF(resp.c_str());
+	jsonStream << resp;
+	jsonStream.close();
 }

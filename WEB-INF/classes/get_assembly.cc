@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <sstream>
 #include <memory>
+#include <fstream>
 #include "CodeObject.h"
 #include "InstructionDecoder.h"
 #include "CFG.h"
@@ -15,10 +16,14 @@ using namespace Dyninst;
 using namespace ParseAPI;
 using namespace InstructionAPI;
 
-JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
-(JNIEnv * env, jobject obj, jstring jFileName){
-	char *fileName = (char*) env->GetStringUTFChars(jFileName, 0);
+JNIEXPORT void JNICALL Java_AssemblyServlet_getAssemblyJni
+(JNIEnv * env, jobject obj, jstring jBinaryPath, jstring jJsonPath){
+	char *binaryPath = (char*) env->GetStringUTFChars(jBinaryPath, 0);
+	char *jsonPath = (char*) env->GetStringUTFChars(jJsonPath, 0);
+
 	stringstream outstream;
+	ofstream jsonStream;
+	jsonStream.open(jsonPath);
 
 	vector<Function *> funcs;
 	vector<Block *> blist;
@@ -28,14 +33,17 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	Instruction::Ptr instr;
 
 	SymtabAPI::Symtab *symTab;
-	std::string fileNameStr(fileName);
-	bool isParsable = SymtabAPI::Symtab::openFile(symTab, fileNameStr);
+	std::string binaryPathStr(binaryPath);
+	bool isParsable = SymtabAPI::Symtab::openFile(symTab, binaryPathStr);
 
 	if(isParsable == false){
-		return env->NewStringUTF("error: file can not be parsed");
+		const char *error = "error: file can not be parsed";
+		jsonStream << error;
+		jsonStream.close();
+		return;
 	}
 
-	sts = new SymtabCodeSource(fileName);
+	sts = new SymtabCodeSource(binaryPath);
 	co = new CodeObject(sts);
 
 	//parse the binary given as a command line arg
@@ -44,7 +52,10 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	//get list of all functions in the binary
 	const CodeObject::funclist &all = co->funcs();
 	if(all.size() == 0){
-		return env->NewStringUTF("error: no functions in file");
+		const char *error = "error: no functions in file";
+		jsonStream << error;
+		jsonStream.close();
+		return;
 	}
 
 	Address crtAddr;
@@ -126,7 +137,10 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	string resp = outstream.str();
 
 	if(resp.size() == 0){
-		return env->NewStringUTF("error: no functions parsed");
+		const char *error = "error: no functions parsed";
+		jsonStream << error;
+		jsonStream.close();
+		return;
 	}
 
 	resp.pop_back();
@@ -135,5 +149,6 @@ JNIEXPORT jstring JNICALL Java_AssemblyServlet_getAssemblyJni
 	resp.insert(0, "[");
 	resp.append("]");
 
-	return env->NewStringUTF(resp.c_str());
+	jsonStream << resp;
+	jsonStream.close();
 }

@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class ArchiveFuncsServlet extends HttpServlet {
-	private native String getArchiveFuncsJni(String fileName);
+	private native void getArchiveFuncsJni(String binaryPath, String jsonPath);
 
 	// local:
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
@@ -75,14 +75,9 @@ public class ArchiveFuncsServlet extends HttpServlet {
 			final String sortDirection) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
 		if (isArchiveCached(fileName) == false) {
-			String binaryPath = binaryDirPath + fileName;
 
-			String content;
 			try {
-				content = new ArchiveFuncsServlet()
-					.getArchiveFuncsJni(binaryPath);
-				FileUtils.writeStringToFile(new File(cacheDirPath + fileName),
-						content);
+				new ArchiveFuncsServlet().getArchiveFuncsJni(binaryDirPath + fileName, cacheDirPath + fileName);
 			} catch (Exception e) {
 				return null;
 			}

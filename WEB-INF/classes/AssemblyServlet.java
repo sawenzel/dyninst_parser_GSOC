@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class AssemblyServlet extends HttpServlet {
-	private native String getAssemblyJni(String fileName);
+	private native void getAssemblyJni(String binaryPath, String jsonPath);
 
 	//local:
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
@@ -49,13 +49,9 @@ public class AssemblyServlet extends HttpServlet {
 	private static String getAssembly(String fileName) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
 		if (isAssemblyCached(fileName) == false) {
-			String binaryPath = binaryDirPath + fileName;
 
-			String content;
 			try {
-				content = new AssemblyServlet().getAssemblyJni(binaryPath);
-				FileUtils.writeStringToFile(new File(cacheDirPath + fileName),
-						content);
+				new AssemblyServlet().getAssemblyJni(binaryDirPath + fileName, cacheDirPath + fileName);
 			} catch (Exception e) {
 				return null;
 			}
