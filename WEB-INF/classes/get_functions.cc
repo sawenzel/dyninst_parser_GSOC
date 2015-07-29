@@ -14,12 +14,6 @@ using namespace std;
 using namespace Dyninst;
 using namespace ParseAPI;
 
-Address absDiff(Address high, Address low){
-	if(high < low)
-		return low - high;
-	return high - low;
-}
-
 JNIEXPORT void JNICALL Java_FunctionsServlet_getFunctionsJni
 (JNIEnv * env, jobject obj, jstring jBinaryPath, jstring jJsonPath){
 	char *binaryPath = (char*) env->GetStringUTFChars(jBinaryPath, 0);
@@ -71,11 +65,11 @@ JNIEXPORT void JNICALL Java_FunctionsServlet_getFunctionsJni
 			continue;
 		}
 
-		if(startAddr == lastAddr)
+		if(startAddr >= lastAddr)
 			continue;
 
 		outstream << "{\"address\":\"" << hex << f->addr() << "\",\"name\":\"" << f->name();
-		outstream << "\",\"size\":\"" << dec << absDiff(lastAddr, startAddr) << "\"}," << endl;
+		outstream << "\",\"size\":\"" << dec << lastAddr - startAddr << "\"}," << endl;
 	}
 
 	string resp = outstream.str();

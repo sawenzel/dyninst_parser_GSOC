@@ -13,12 +13,6 @@ using namespace SymtabAPI;
 using namespace ParseAPI;
 using namespace InstructionAPI;
 
-Address absDiff2(Address high, Address low){
-	if(high < low)
-		return low - high;
-	return high - low;
-}
-
 JNIEXPORT void JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 (JNIEnv * env, jobject obj, jstring jArchivePath, jstring jJsonPath){
 	char *archivePath = (char*) env->GetStringUTFChars(jArchivePath, 0);
@@ -91,7 +85,8 @@ JNIEXPORT void JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 				continue;
 			}
 
-			if(startAddr == lastAddr)
+			//parseAPI sometimes returns start address higher than last for sublime_text executable
+			if(startAddr >= lastAddr)
 				continue;
 
 			if(func_count != 0)
@@ -99,7 +94,7 @@ JNIEXPORT void JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
 			func_count++;
 
 			outstream << "{\"address\": \"" << hex << f->addr() << "\",\"name\":\"" << f->name();
-			outstream << "\",\"size\":\"" << dec << absDiff2(lastAddr, startAddr);
+			outstream << "\",\"size\":\"" << dec << lastAddr - startAddr;
 			outstream << "\",\"obj\":\"" << s->name() << "\"}";
 
 		}
