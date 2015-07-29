@@ -22,13 +22,6 @@
 	version="3.1"
 	metadata-complete="true">
 
-	<multipart-config>
-		<!--  100MB max  -->
-		<max-file-size>5104857600</max-file-size>
-		<max-request-size>5104857600</max-request-size>
-		<file-size-threshold>0</file-size-threshold>
-	</multipart-config>
-
 	<display-name>Welcome to Tomcat</display-name>
 	<description>
 		Welcome to Tomcat
