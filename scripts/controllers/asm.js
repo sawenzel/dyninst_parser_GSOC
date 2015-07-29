@@ -297,7 +297,7 @@
  		} else {
  			$scope.filesList = $scope.fileSource.filter(
  				function(name){
- 					return name.indexOf(fileFilter) > -1;
+ 					return name.toLowerCase().indexOf(fileFilter) > -1;
  				}
  				);
  		}
