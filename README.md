@@ -1,19 +1,21 @@
 ## Dino WebApp - GSoC 2015
 
-This is a technical overview of the webapp Dino created for GSoC 2015.
+####Overview:  
 
-It's main functionality is letting the user upload an executable file and
+Dino's main functionality is letting the user upload an executable file and
 showing functions and assembly code from that file, together with histograms
 and the possibility of getting a diff view (like git diff) of two functions.
 
-The Dyninst framework was used for parsing executable files: http://www.dyninst.org/
+The **Dyninst framework** was used for parsing executable files: http://www.dyninst.org/
 
 The webapp is based on the Apache web server, with the back-end written in
 Java (using JNI to link with the C++ Dyninst framework).
 
+####Source code:  
+
 All the servlets return JSON objects.
-They are:
-1. UploadServlet.java:
+
+1. **UploadServlet.java**:
     This implements a POST method which lets the user upload an executable on
     the server. The executable will be parsed only the first time when the user
     demands it, so the UploadServlet only has to save the file in a specified
@@ -22,7 +24,7 @@ They are:
 	The directory containing the executable files is:
 	ROOT/WEB-INF/classes/gsoc-binaries
 
-2. FilesServlet.java:
+2. **FilesServlet.java**:
     Implements a GET method which returns all the files in the gson-binaries
     directory.
 
@@ -41,7 +43,7 @@ They are:
 		of functions to the user. When the user selects one of those functions, one
 		of the assembly servlets is invoked to return the assembly code.
 
-3. FunctionsServlet: implements a GET method which returns a list of
+3. **FunctionsServlet**: implements a GET method which returns a list of
     functions and gets three parameters: file name, a string which represents
     how will the functions be sorted (one of 'name', 'size', or 'address'), and
     the sorting direction ('ascending' or 'descending').
@@ -53,19 +55,19 @@ They are:
     result is cached (written in a file in the cached-functions directory) before
     calling the JNI method.
 
-4. AssemblyServlet: implements a GET method which reads a file containing
+4. **AssemblyServlet**: implements a GET method which reads a file containing
     all the functions in the specified executable file, puts it in a map and
 		returns the assembly of the function with the desired name.
 
     It uses an 'isAssemblyCached' method with the same functionality as the
 		previous one.
 
-5. ArchiveFuncsServlet: implements a GET method which returns a list of
+5. **ArchiveFuncsServlet**: implements a GET method which returns a list of
     functions in an archive file. Functions in an archive file cand also be
 		sorted by object name, which is the object file (.o) containing the
 		respective function.
 
-6. ArchiveServlet: implements a GET method which reads a file containing all
+6. **ArchiveServlet**: implements a GET method which reads a file containing all
     the functions in the specified archive file, puts it in a map and returns the
     assembly of the function with the desired name. However, as in an archive
     file there can be more than one function with the same name, this servlet
@@ -81,10 +83,10 @@ For each servlet there is a C++ source file which contains the implementation
 of the native function. Those C++ sources are then compiled into a shared
 object and used when needed by Java:
 
-FunctionsServlet: get_functions.cc
-AssemblyServlet: get_assembly.cc
-ArchiveFuncsServlet: get_archive_funcs.cc
-ArchiveServlet: get_archive.cc
+* FunctionsServlet: **get_functions.cc**  
+* AssemblyServlet: **get_assembly.cc**  
+* ArchiveFuncsServlet: **get_archive_funcs.cc**  
+* ArchiveServlet: **get_archive.cc**  
 
 Mainly, each C++ program receives the name of an executable and the name of a
 file where to cache the result of the parsing in JSON format. The JSON
@@ -93,22 +95,26 @@ need to keep parsed data in a separate data structure inside the C++ program,
 each line read from the executable file is immediately printed in the output
 file.
 
-How to build:  
+####How to build:  
+
 1. install apache tomcat, preferably in /usr/local. If this path is not used for the directory containing the server, you have to change the paths in the servlet files  
 
 2. For the upload functionality to work:
-  * enable multipart parsing inside context.xml
-  * increase maxpostsize inside server.xml  
+ * enable multipart parsing inside context.xml
+ * increase maxpostsize inside server.xml  
 
-3. install the dyninst framework:
+3. install the dyninst framework:  
   1.libdyninst: Installing libdyninst and libdyninst-dev 8.1.2: http://www.dyninst.org/downloads/dyninst-8.x  
 
   2.boost: Download boost: http://sourceforge.net/projects/boost/files/boost/1.57.0/ Copy boost directory where libdyninst was installed:  
-```cp -r boost_1_57_0/boost/ /usr/include/dyninst/  ```
+```cp -r boost_1_57_0/boost/ /usr/include/dyninst/  ```  
 
   3.libelf, libdwarf:  
 ```sudo apt-get install libelf-dev```   
 Build libdwarf from sources and copy the dynamic library libdwarf.so (/dwarf-20130207/libdwarf/libdwarf.so) in /usr/lib:    
-http://askubuntu.com/questions/502749/install-libdwarf-so-on-ubuntu
+http://askubuntu.com/questions/502749/install-libdwarf-so-on-ubuntu  
+
+4. copy the WEB-INF directory into <apache_root>/webapps/ROOT/  
+5. run make all
 
 
