@@ -28,6 +28,10 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * @author alin
+ * 
+ */
 public class FunctionsServlet extends HttpServlet {
 	private native void getFunctionsJni(String binaryPath, String jsonPath);
 
@@ -44,8 +48,19 @@ public class FunctionsServlet extends HttpServlet {
 		System.loadLibrary("dyninstParser");
 	}
 
+	/**
+	 * @param fileName
+	 *            name of the executable
+	 * @return boolean meaning whether the executable's function list is cached
+	 *         or not
+	 */
 	private static Boolean isFunctionCached(String fileName) {
 		File cacheDir = new File(cacheDirPath);
+
+		if (!cacheDir.exists()) {
+			cacheDir.mkdir();
+		}
+
 		String[] cachedBinaries = cacheDir.list();
 
 		if (cachedBinaries == null)
@@ -60,7 +75,7 @@ public class FunctionsServlet extends HttpServlet {
 		return false;
 	}
 
-	class Func {
+	class FunctionModel {
 		private String address;
 		private String name;
 		private long size;
@@ -71,53 +86,58 @@ public class FunctionsServlet extends HttpServlet {
 	}
 
 	/**
+	 * Calls the native method getFunctionsJni, gets a list of functions for the
+	 * specified executable and sorts it
+	 * 
 	 * @param fileName
+	 *            name of the executable for which to get the function list
 	 * @param sortMode
+	 *            one of "address", "name", "size"
 	 * @param sortDirection
-	 * @return
+	 *            one of "ascending", "descending"
+	 * @return the list of functions as a JSON string
 	 * @throws IOException
+	 *             when the result file can not be read
 	 */
-
 	private static String getFunctions(String fileName, String sortMode,
 			final String sortDirection) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
 		if (isFunctionCached(fileName) == false) {
-
-			try {
-				new FunctionsServlet().getFunctionsJni(binaryDirPath + fileName, cacheDirPath + fileName);
-			} catch (Exception e) {
-				return null;
-			}
+			new FunctionsServlet().getFunctionsJni(binaryDirPath + fileName,
+					cacheDirPath + fileName);
 		}
-		// return the cached result
-		String source = FileUtils.readFileToString(new File(cacheDirPath + fileName));
 
-		if(source.startsWith("error")){
+		// return the cached result
+		String source = FileUtils.readFileToString(new File(cacheDirPath
+				+ fileName));
+
+		if (source.startsWith("error")) {
 			return source;
 		}
 
-		Gson gson = new Gson();
-		Type stringStringMap = new TypeToken<List<Func>>() {
+		Gson gsonSerializer = new Gson();
+		Type functionListType = new TypeToken<List<FunctionModel>>() {
 		}.getType();
-		List<Func> funcList = gson.fromJson(source, stringStringMap);
+		List<FunctionModel> funcList = gsonSerializer.fromJson(source,
+				functionListType);
 
 		if (sortMode.compareTo("size") == 0) {
-			Collections.sort(funcList, new Comparator<Func>() {
+			Collections.sort(funcList, new Comparator<FunctionModel>() {
 
 				@Override
-				public int compare(Func o1, Func o2) {
+				public int compare(FunctionModel o1, FunctionModel o2) {
 					if (sortDirection.compareTo("ascending") == 0) {
-						return (int)(o1.size - o2.size);
+						return (int) (o1.size - o2.size);
 					} else {
-						return (int)(o2.size - o1.size);
+						return (int) (o2.size - o1.size);
 					}
 				}
 			});
 		} else if (sortMode.compareTo("name") == 0) {
-			Collections.sort(funcList, new Comparator<Func>() {
+			Collections.sort(funcList, new Comparator<FunctionModel>() {
 
 				@Override
-				public int compare(Func o1, Func o2) {
+				public int compare(FunctionModel o1, FunctionModel o2) {
 					if (sortDirection.compareTo("ascending") == 0) {
 						return o1.name.compareTo(o2.name);
 					} else {
@@ -126,21 +146,22 @@ public class FunctionsServlet extends HttpServlet {
 				}
 			});
 		} else if (sortMode.compareTo("address") == 0) {
-			// sorted by default by address from c++
+			// by default, functions are returned by the Dyninst framework
+			// ordered by address
 		}
 
-		return gson.toJson(funcList);
+		return gsonSerializer.toJson(funcList);
 	}
 
-	public static void main(String[] args) throws IOException {
-		if(args.length != 3){
-			System.out.println("usage: java FunctionsServlet <filename> <sort by> <sort dir>");
-			return;
-		}
-
-		System.out.println(getFunctions(args[0], args[1], args[2]));
-	}
-
+	/**
+	 * Called automatically by the apache web server
+	 * 
+	 * @param request
+	 * @param response
+	 *            response used for writing the response for the GET method
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -149,7 +170,8 @@ public class FunctionsServlet extends HttpServlet {
 		String sortMode = request.getParameter("sortby");
 		String sortDirection = request.getParameter("sortdirection");
 		String fileName = request.getParameter("filename");
-		
-		response.getWriter().println(getFunctions(fileName, sortMode, sortDirection));
+
+		response.getWriter().println(
+				getFunctions(fileName, sortMode, sortDirection));
 	}
 }

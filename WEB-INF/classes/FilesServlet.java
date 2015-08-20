@@ -9,29 +9,33 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-public class FilesServlet extends HttpServlet {	
-	//local:
+public class FilesServlet extends HttpServlet {
+	// local:
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
 
-	//gsoc1:
-	//private static String binaryDirPath = "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-
-	public static void main(String[] args) {
-		File baseDir = new File("gsoc-binaries");
-		Gson gson = new Gson();
-		System.out.println(gson.toJson(baseDir.list()));
-	}
-
+	// gsoc1:
+	// private static String binaryDirPath =
+	// "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
+	
+	/**
+	 * Called automatically by the apache web server.
+	 * 
+	 * @param request
+	 * @param response
+	 *            response used for writing the response for the GET method
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
-		public void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-			response.setContentType("text/plain");
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/plain");
 
-			File baseDir = new File(binaryDirPath);
+		File baseDir = new File(binaryDirPath);
 
-			Gson gson = new Gson();
-			String result = gson.toJson(baseDir.list());
+		Gson gsonSerializer = new Gson();
+		String result = gsonSerializer.toJson(baseDir.list());
 
-			response.getWriter().println(result);
-		}
+		response.getWriter().println(result);
+	}
 }

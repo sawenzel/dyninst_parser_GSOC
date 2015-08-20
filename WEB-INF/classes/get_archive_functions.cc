@@ -6,14 +6,14 @@
 #include "CFG.h"
 #include "InstructionDecoder.h"
 #include "Instruction.h"
-#include "ArchiveFuncsServlet.h"
+#include "ArchiveFunctionsServlet.h"
 
 using namespace Dyninst;
 using namespace SymtabAPI;
 using namespace ParseAPI;
 using namespace InstructionAPI;
 
-JNIEXPORT void JNICALL Java_ArchiveFuncsServlet_getArchiveFuncsJni
+JNIEXPORT void JNICALL Java_ArchiveFunctionsServlet_getArchiveFunctionsJni
 (JNIEnv * env, jobject obj, jstring jArchivePath, jstring jJsonPath){
 	char *archivePath = (char*) env->GetStringUTFChars(jArchivePath, 0);
 	char *jsonPath = (char*) env->GetStringUTFChars(jJsonPath, 0);

@@ -22,6 +22,13 @@
 	version="3.1"
 	metadata-complete="true">
 
+	<multipart-config>
+		<!--  100MB max  -->
+		<max-file-size>5104857600</max-file-size>
+		<max-request-size>5104857600</max-request-size>
+		<file-size-threshold>0</file-size-threshold>
+	</multipart-config>
+
 	<display-name>Welcome to Tomcat</display-name>
 	<description>
 		Welcome to Tomcat
@@ -59,7 +66,7 @@
 
 	<servlet>
 		<servlet-name>Archive</servlet-name>
-		<servlet-class>ArchiveServlet</servlet-class>
+		<servlet-class>ArchiveAssemblyServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -69,7 +76,7 @@
 
 	<servlet>
 		<servlet-name>ArchiveFuncs</servlet-name>
-		<servlet-class>ArchiveFuncsServlet</servlet-class>
+		<servlet-class>ArchiveFunctionsServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

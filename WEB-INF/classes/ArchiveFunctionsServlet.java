@@ -17,8 +17,8 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class ArchiveFuncsServlet extends HttpServlet {
-	private native void getArchiveFuncsJni(String binaryPath, String jsonPath);
+public class ArchiveFunctionsServlet extends HttpServlet {
+	private native void getArchiveFunctionsJni(String binaryPath, String jsonPath);
 
 	// local:
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
@@ -34,16 +34,19 @@ public class ArchiveFuncsServlet extends HttpServlet {
 		System.loadLibrary("dyninstParser");
 	}
 
-	/*
-	 * private static String getMd5(String path) throws IOException {
-	 * FileInputStream fis = new FileInputStream(new File(path)); String md5 =
-	 * org.apache.commons.codec.digest.DigestUtils.md5Hex(fis); fis.close();
-	 * 
-	 * return md5; }
+	/**
+	 * @param fileName
+	 *            name of the executable
+	 * @return boolean meaning whether the archive's assembly content is cached
+	 *         or not
 	 */
-
-	private static Boolean isArchiveCached(String fileName) {
+	private static Boolean isArchiveFunctionCached(String fileName) {
 		File cacheDir = new File(cacheDirPath);
+
+		if (!cacheDir.exists()) {
+			cacheDir.mkdir();
+		}
+
 		String[] cachedBinaries = cacheDir.list();
 
 		if (cachedBinaries == null)
@@ -58,7 +61,7 @@ public class ArchiveFuncsServlet extends HttpServlet {
 		return false;
 	}
 
-	class Func {
+	class ArchiveFuncModel {
 		private String address;
 		private String name;
 		private String obj;
@@ -70,35 +73,45 @@ public class ArchiveFuncsServlet extends HttpServlet {
 		}
 	}
 
-
+	/**
+	 * Calls the native method getArchiveFuncsJni, gets a list of functions for
+	 * the specified archive and sorts it
+	 * 
+	 * @param fileName
+	 *            name of the executable for which to get the function list
+	 * @param sortMode
+	 *            one of "address", "name", "size"
+	 * @param sortDirection
+	 *            one of "ascending", "descending"
+	 * @return the list of functions as a JSON string
+	 * @throws IOException
+	 *             when the result file can not be read
+	 */
 	private static String getFunctions(String fileName, String sortMode,
 			final String sortDirection) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
-		if (isArchiveCached(fileName) == false) {
-
-			try {
-				new ArchiveFuncsServlet().getArchiveFuncsJni(binaryDirPath + fileName, cacheDirPath + fileName);
-			} catch (Exception e) {
-				return null;
-			}
+		if (isArchiveFunctionCached(fileName) == false) {
+			new ArchiveFunctionsServlet().getArchiveFunctionsJni(binaryDirPath
+					+ fileName, cacheDirPath + fileName);
 		}
 		// return the cached result
 		String source = FileUtils.readFileToString(new File(cacheDirPath
-					+ fileName));
+				+ fileName));
 
-		if(source.startsWith("error"))
+		if (source.startsWith("error"))
 			return source;
 
-		Gson gson = new Gson();
-		Type stringStringMap = new TypeToken<List<Func>>() {
+		Gson gsonSerializer = new Gson();
+		Type archiveFunctionListType = new TypeToken<List<ArchiveFuncModel>>() {
 		}.getType();
-		List<Func> funcList = gson.fromJson(source, stringStringMap);
+		List<ArchiveFuncModel> funcList = gsonSerializer
+				.fromJson(source, archiveFunctionListType);
 
 		if (sortMode.compareTo("size") == 0) {
-			Collections.sort(funcList, new Comparator<Func>() {
+			Collections.sort(funcList, new Comparator<ArchiveFuncModel>() {
 
 				@Override
-				public int compare(Func o1, Func o2) {
+				public int compare(ArchiveFuncModel o1, ArchiveFuncModel o2) {
 					if (sortDirection.compareTo("ascending") == 0) {
 						return o1.size - o2.size;
 					} else {
@@ -107,10 +120,10 @@ public class ArchiveFuncsServlet extends HttpServlet {
 				}
 			});
 		} else if (sortMode.compareTo("name") == 0) {
-			Collections.sort(funcList, new Comparator<Func>() {
+			Collections.sort(funcList, new Comparator<ArchiveFuncModel>() {
 
 				@Override
-				public int compare(Func o1, Func o2) {
+				public int compare(ArchiveFuncModel o1, ArchiveFuncModel o2) {
 					if (sortDirection.compareTo("ascending") == 0) {
 						return o1.name.compareTo(o2.name);
 					} else {
@@ -119,9 +132,9 @@ public class ArchiveFuncsServlet extends HttpServlet {
 				}
 			});
 		} else if (sortMode.compareTo("address") == 0) {
-			Collections.sort(funcList, new Comparator<Func>() {
+			Collections.sort(funcList, new Comparator<ArchiveFuncModel>() {
 				@Override
-				public int compare(Func o1, Func o2) {
+				public int compare(ArchiveFuncModel o1, ArchiveFuncModel o2) {
 					Integer i1 = Integer.parseInt(o1.address, 16);
 					Integer i2 = Integer.parseInt(o2.address, 16);
 					if (sortDirection.compareTo("ascending") == 0) {
@@ -131,11 +144,11 @@ public class ArchiveFuncsServlet extends HttpServlet {
 					}
 				}
 			});
-		} else if(sortMode.compareTo("objname") == 0){
-			Collections.sort(funcList, new Comparator<Func>() {
+		} else if (sortMode.compareTo("objname") == 0) {
+			Collections.sort(funcList, new Comparator<ArchiveFuncModel>() {
 
 				@Override
-				public int compare(Func o1, Func o2) {
+				public int compare(ArchiveFuncModel o1, ArchiveFuncModel o2) {
 					if (sortDirection.compareTo("ascending") == 0) {
 						return o1.obj.compareTo(o2.obj);
 					} else {
@@ -145,28 +158,29 @@ public class ArchiveFuncsServlet extends HttpServlet {
 			});
 		}
 
-		return gson.toJson(funcList);
+		return gsonSerializer.toJson(funcList);
 	}
 
-	public static void main(String[] args) throws IOException {
-		if(args.length != 3){
-			System.out.println("usage: java FunctionsServlet <filename> <sort by> <sort dir>");
-			return;
-		}
-
-		System.out.println(getFunctions(args[0], args[1], args[2]));
-	}
-
+	/**
+	 * Called automatically by the apache web server
+	 * 
+	 * @param request
+	 * @param response
+	 *            response used for writing the response for the GET method
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
-	// Set response content type
+			throws ServletException, IOException {
+		// Set response content type
 
-	response.setContentType("text/plain");
-	String sortMode = request.getParameter("sortby");
-	String sortDirection = request.getParameter("sortdirection");
-	String fileName = request.getParameter("filename");
+		response.setContentType("text/plain");
+		String sortMode = request.getParameter("sortby");
+		String sortDirection = request.getParameter("sortdirection");
+		String fileName = request.getParameter("filename");
 
-	response.getWriter().println(getFunctions(fileName, sortMode, sortDirection));
+		response.getWriter().println(
+				getFunctions(fileName, sortMode, sortDirection));
 	}
 }

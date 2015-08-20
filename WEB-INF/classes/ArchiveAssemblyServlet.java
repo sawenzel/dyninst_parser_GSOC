@@ -15,30 +15,39 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class AssemblyServlet extends HttpServlet {
-	private native void getAssemblyJni(String binaryPath, String jsonPath);
+public class ArchiveAssemblyServlet extends HttpServlet {
+	private native void getArchiveAssemblyJni(String archivePath, String jsonPath);
 
 	// local:
 	private static String binaryDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
-	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-assembly/";
+	private static String cacheDirPath = "/usr/local/apache-tomcat-8.0.23/webapps/ROOT/WEB-INF/classes/cached-archive/";
 
 	// gsoc1:
 	// private static String binaryDirPath =
 	// "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/gsoc-binaries/";
 	// private static String cacheDirPath =
-	// "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-assembly/";
+	// "/opt/tomcat8/webapps/ROOT/WEB-INF/classes/cached-archives/";
 
 	static {
 		System.loadLibrary("dyninstParser");
 	}
 
+	class Pair<T1, T2> {
+		public T1 first;
+		public T2 second;
+
+		public String toString() {
+			return first.toString() + ":" + second.toString();
+		}
+	}
+
 	/**
 	 * @param fileName
 	 *            name of the executable
-	 * @return boolean meaning whether the executable's assembly content is
-	 *         cached or not
+	 * @return boolean meaning whether the archive's assembly content is cached
+	 *         or not
 	 */
-	private static Boolean isAssemblyCached(String fileName) {
+	private static Boolean isArchiveAssemblyCached(String fileName) {
 		File cacheDir = new File(cacheDirPath);
 
 		if (!cacheDir.exists()) {
@@ -60,17 +69,16 @@ public class AssemblyServlet extends HttpServlet {
 	}
 
 	/**
-	 * Calls the native method getAssemblyJni and returns the plain result
+	 * Calls the native method getArchiveJni and returns the plain result
 	 * 
 	 * @param fileName
-	 *            name of the executable for which to get the assembly code
 	 * @return
 	 * @throws IOException
 	 */
-	private static String getAssembly(String fileName) throws IOException {
+	private static String getArchive(String fileName) throws IOException {
 		// if the functions are not cached, parse them and save them to cache
-		if (isAssemblyCached(fileName) == false) {
-			new AssemblyServlet().getAssemblyJni(binaryDirPath + fileName,
+		if (isArchiveAssemblyCached(fileName) == false) {
+			new ArchiveAssemblyServlet().getArchiveAssemblyJni(binaryDirPath + fileName,
 					cacheDirPath + fileName);
 		}
 
@@ -94,23 +102,25 @@ public class AssemblyServlet extends HttpServlet {
 		response.setContentType("text/plain");
 
 		String fileName = request.getParameter("filename");
+		String objectName = request.getParameter("objectname");
 		String functionName = request.getParameter("functionname");
 		String address = request.getParameter("address");
 
-		if (isAssemblyCached(fileName) == false)
-			getAssembly(fileName);
+		if (isArchiveAssemblyCached(fileName) == false)
+			getArchive(fileName);
 
-		if (getAssembly(fileName).startsWith("error")) {
-			response.getWriter().println(getAssembly(fileName));
+		if (getArchive(fileName).startsWith("error")) {
+			response.getWriter().println(getArchive(fileName));
 			return;
 		}
 
 		Gson gsonSerializer = new Gson();
-		Type assemblyMapType = new TypeToken<List<Map<String, String>>>() {
+		Type archiveAssemblyMapType = new TypeToken<Map<String, List<Map<String, String>>>>() {
 		}.getType();
-		List<Map<String, String>> funcsList = gsonSerializer.fromJson(new FileReader(
-				cacheDirPath + fileName), assemblyMapType);
+		Map<String, List<Map<String, String>>> map = gsonSerializer.fromJson(
+				new FileReader(cacheDirPath + fileName), archiveAssemblyMapType);
 
+		List<Map<String, String>> funcsList = map.get(objectName);
 		for (Map<String, String> funcMap : funcsList) {
 			if (funcMap.get(functionName) != null
 					&& funcMap.get(functionName).contains(address)) {

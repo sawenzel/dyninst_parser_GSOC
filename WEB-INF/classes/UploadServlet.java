@@ -11,6 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 public class UploadServlet extends HttpServlet {
+	private static final String SAVE_DIR = "WEB-INF/classes/gsoc-binaries";
+
+	/**
+	 * @param part
+	 *            part of a multipart/form-data POST request used for file
+	 *            uploading
+	 * @return name of the file containing the part
+	 */
 	private String extractFileName(Part part) {
 		String contentDisp = part.getHeader("content-disposition");
 		String[] items = contentDisp.split(";");
@@ -22,8 +30,15 @@ public class UploadServlet extends HttpServlet {
 		return "";
 	}
 
-	private static final String SAVE_DIR = "WEB-INF/classes/gsoc-binaries";
-	
+	/**
+	 * Called automatically by the apache web server
+	 * 
+	 * @param request
+	 * @param response
+	 *            response used for writing the response for the POST method
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// gets absolute path of the web application
@@ -31,8 +46,6 @@ public class UploadServlet extends HttpServlet {
 		// constructs path of the directory to save uploaded file
 		String savePath = appPath + File.separator + SAVE_DIR;
 
-		System.out.println(savePath);
-		
 		// creates the save directory if it does not exists
 		File fileSaveDir = new File(savePath);
 		if (!fileSaveDir.exists()) {
@@ -44,7 +57,7 @@ public class UploadServlet extends HttpServlet {
 			fileName = extractFileName(part);
 			part.write(savePath + File.separator + fileName);
 		}
-		
+
 		response.getWriter().println(fileName);
 	}
 }
