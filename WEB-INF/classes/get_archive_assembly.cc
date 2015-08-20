@@ -105,10 +105,9 @@ JNIEXPORT void JNICALL Java_ArchiveAssemblyServlet_getArchiveAssemblyJni
 
 				outstream << "\n\t{\\\"address\\\": \\\"" << hex << crtAddr << "\\\", ";
 				outstream << "\\\"name\\\": \\\"" << instr->format() << "\\\"";
-				//pentru instructiuni de tip call afisam adresa destinatie
 
+				//pentru instructiuni de tip call afisam adresa destinatie
 				if(instr->getCategory() == 0 && instr->size() == 5){
-					//aflam target-ul control flow-ului
 					Expression::Ptr expr = instr->getControlFlowTarget();
 					if(expr){
 						std::vector<Expression::Ptr> children1;
@@ -125,7 +124,7 @@ JNIEXPORT void JNICALL Java_ArchiveAssemblyServlet_getArchiveAssemblyJni
 
 							//get the destination function
 							ParseAPI::Function *dest = co->findFuncByEntry(f->region(), expr->eval().convert<unsigned long int>());
-							//pt cazurile in care al doilea node al AST-ului nu era RIP
+						//if the destination address could be decoded
 							if(dest){
 								outstream << ", \\\"destName\\\": \\\"" << dest->name() << "\\\"";
 								outstream << ", \\\"destAddr\\\": \\\"" << hex << dest->addr() << "\\\"";
