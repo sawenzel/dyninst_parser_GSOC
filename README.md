@@ -19,10 +19,7 @@ All the servlets return JSON objects.
     This implements a POST method which lets the user upload an executable on
     the server. The executable will be parsed only the first time when the user
     demands it, so the UploadServlet only has to save the file in a specified
-    directory.
-
-	The directory containing the executable files is:
-	ROOT/WEB-INF/classes/gsoc-binaries
+    directory. The directory containing the executable files is ```ROOT/WEB-INF/classes/gsoc-binaries```  
 
 2. **FilesServlet.java**:
     Implements a GET method which returns all the files in the gson-binaries
@@ -97,11 +94,11 @@ file.
 
 ####How to build:  
 
-1. install apache tomcat, preferably in /usr/local. If this path is not used for the directory containing the server, you have to change the paths in the servlet files  
+1. install apache tomcat, preferably in ```/usr/local```. If this path is not used for the directory containing the server, you have to change the paths in the servlet files  
 
 2. For the upload functionality to work:
- * enable multipart parsing inside context.xml
- * increase maxpostsize inside server.xml  
+ * enable multipart parsing inside ```context.xml```
+ * increase maxpostsize inside ```server.xml```  
 
 3. install the dyninst framework:  
   1.libdyninst: Installing libdyninst and libdyninst-dev 8.1.2: http://www.dyninst.org/downloads/dyninst-8.x  
@@ -114,7 +111,7 @@ file.
 Build libdwarf from sources and copy the dynamic library libdwarf.so (/dwarf-20130207/libdwarf/libdwarf.so) in /usr/lib:    
 http://askubuntu.com/questions/502749/install-libdwarf-so-on-ubuntu  
 
-4. copy the WEB-INF directory into <apache_root>/webapps/ROOT/  
-5. run make all
+4. copy the WEB-INF directory into ```<apache_root>/webapps/ROOT/```  
+5. run ```make all```
 
 
